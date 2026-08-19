@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400" width="1000" height="400" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6e7a82"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="400" fill="#0b0e10"/>
+
+  <!-- lane bands -->
+  <rect x="250" y="66" width="310" height="26" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.14)"/>
+  <text x="258" y="83" font-size="12.5" fill="#a9b4bc">FALSE-CALM WINDOW · conventional escalation − first detectable</text>
+
+  <rect x="330" y="106" width="230" height="26" rx="4" fill="rgba(53,198,222,0.16)" stroke="#35c6de"/>
+  <text x="338" y="123" font-size="12.5" fill="#7fe3f0" font-weight="600">PRE-ESCALATION WINDOW · sign not guaranteed</text>
+
+  <rect x="250" y="146" width="530" height="26" rx="4" fill="rgba(255,255,255,0.035)" stroke="rgba(255,255,255,0.10)"/>
+  <text x="258" y="163" font-size="12.5" fill="#a9b4bc">EXPOSURE WINDOW · service impact − first detectable</text>
+
+  <!-- arm lanes -->
+  <text x="70" y="206" font-size="11.5" fill="#6e7a82" letter-spacing="0.08em">DECISION LAYER</text>
+  <line x1="330" y1="202" x2="950" y2="202" stroke="#35c6de" stroke-width="2"/>
+  <circle cx="330" cy="202" r="5" fill="#35c6de"/>
+  <text x="342" y="197" font-size="11.5" fill="#7fe3f0">actionable — escalate / wait / recommend</text>
+
+  <text x="70" y="240" font-size="11.5" fill="#6e7a82" letter-spacing="0.08em">CONVENTIONAL</text>
+  <line x1="560" y1="236" x2="950" y2="236" stroke="#a9b4bc" stroke-width="2"/>
+  <circle cx="560" cy="236" r="5" fill="#a9b4bc"/>
+  <text x="572" y="231" font-size="11.5" fill="#a9b4bc">threshold + persistence + process delay satisfied</text>
+
+  <!-- axis -->
+  <line x1="70" y1="286" x2="960" y2="286" stroke="#6e7a82" stroke-width="1.2" marker-end="url(#ar)"/>
+  <text x="960" y="276" font-size="11" fill="#6e7a82" text-anchor="end">operational time</text>
+
+  <!-- ticks -->
+  <g stroke="rgba(255,255,255,0.18)" stroke-width="1">
+    <line x1="120" y1="60" x2="120" y2="286"/>
+    <line x1="250" y1="60" x2="250" y2="286"/>
+    <line x1="330" y1="100" x2="330" y2="286"/>
+    <line x1="560" y1="60" x2="560" y2="286"/>
+    <line x1="640" y1="140" x2="640" y2="286"/>
+    <line x1="780" y1="140" x2="780" y2="286"/>
+    <line x1="900" y1="196" x2="900" y2="286"/>
+  </g>
+
+  <g font-size="11.5" fill="#f2f5f7">
+    <text x="120" y="310" text-anchor="middle">physical onset</text>
+    <text x="232" y="332" text-anchor="middle">first detectable</text>
+    <text x="352" y="310" text-anchor="middle" fill="#7fe3f0">layer actionable</text>
+    <text x="560" y="332" text-anchor="middle" fill="#f2a83c">conventional escalation</text>
+    <text x="640" y="310" text-anchor="middle">ticket</text>
+    <text x="780" y="332" text-anchor="middle">service impact</text>
+    <text x="900" y="310" text-anchor="middle">recovery</text>
+  </g>
+
+  <g font-size="10.5" fill="#6e7a82">
+    <text x="120" y="326" text-anchor="middle">t_fault_onset</text>
+    <text x="232" y="348" text-anchor="middle">t_first_detectable</text>
+    <text x="360" y="326" text-anchor="middle">t_decision_layer_actionable</text>
+    <text x="560" y="348" text-anchor="middle">t_conventional_escalation</text>
+    <text x="640" y="326" text-anchor="middle">t_ticket</text>
+    <text x="780" y="348" text-anchor="middle">t_service_impact</text>
+  </g>
+
+  <text x="70" y="378" font-size="11" fill="#6e7a82">Conceptual. Spacing is illustrative, not to scale. The conventional mark moves with comparator tuning; under a degenerate comparator it can move left of the layer's mark, inverting the window.</text>
+  <text x="70" y="40" font-size="13" fill="#f2f5f7" font-weight="600">The interval before escalation — what is instrumented in every run</text>
+</svg>

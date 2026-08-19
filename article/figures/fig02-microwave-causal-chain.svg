@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 760" width="1000" height="760" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#35c6de"/>
+    </marker>
+    <marker id="a2g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6e7a82"/>
+    </marker>
+    <marker id="a2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#f2a83c"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="760" fill="#0b0e10"/>
+
+  <text x="30" y="34" font-size="14" fill="#f2f5f7" font-weight="600">Terrestrial microwave — fixed infrastructure, changing propagation</text>
+  <g font-size="11" letter-spacing="0.06em">
+    <text x="140" y="62" fill="#f2a83c" text-anchor="middle">DECISION EVIDENCE</text>
+    <text x="500" y="62" fill="#35c6de" text-anchor="middle">PHYSICAL MECHANISM</text>
+    <text x="855" y="62" fill="#a9b4bc" text-anchor="middle">WHAT MONITORING OBSERVES</text>
+  </g>
+
+  <!-- physics chain -->
+  <g>
+    <g fill="rgba(53,198,222,0.10)" stroke="#1ba3bd">
+      <rect x="340" y="82" width="320" height="44" rx="6"/>
+      <rect x="340" y="146" width="320" height="44" rx="6"/>
+      <rect x="340" y="210" width="320" height="44" rx="6"/>
+      <rect x="340" y="274" width="320" height="44" rx="6"/>
+      <rect x="340" y="338" width="320" height="44" rx="6"/>
+      <rect x="340" y="402" width="320" height="44" rx="6"/>
+      <rect x="340" y="466" width="320" height="44" rx="6"/>
+      <rect x="340" y="530" width="320" height="44" rx="6"/>
+      <rect x="340" y="594" width="320" height="44" rx="6"/>
+    </g>
+    <g font-size="12.5" fill="#f2f5f7" text-anchor="middle">
+      <text x="500" y="103">Rain rate R over the path</text>
+      <text x="500" y="167">Specific attenuation  γ = k·R^α</text>
+      <text x="500" y="231">Path attenuation  (effective path length)</text>
+      <text x="500" y="295">Received level ↓ · C/N ↓</text>
+      <text x="500" y="359">Fade margin consumed</text>
+      <text x="500" y="423">ACM downshift — modulation + coding</text>
+      <text x="500" y="487">Usable capacity ↓</text>
+      <text x="500" y="551">Service margin ↓</text>
+      <text x="500" y="615">Protection switch → outage</text>
+    </g>
+    <g font-size="10" fill="#6e7a82" text-anchor="middle">
+      <text x="500" y="118">environmental forcing · a cell crosses the path</text>
+      <text x="500" y="182">ITU-R P.838-3 · exponent α &gt; 1: fade grows faster than rain rate</text>
+      <text x="500" y="246">ITU-R P.530-18 reduction factor — a design rule, applied instantaneously</text>
+      <text x="500" y="310">noise floor unchanged — C/N falls dB-for-dB</text>
+      <text x="500" y="374">margin to the level where the profile stops working</text>
+      <text x="500" y="438">the link stays up and trades capacity for availability</text>
+      <text x="500" y="502">representative ACM ladder — not a vendor datasheet</text>
+      <text x="500" y="566">capacity falls below committed rate</text>
+      <text x="500" y="630">only here does an availability-only view see anything</text>
+    </g>
+    <g stroke="#35c6de" stroke-width="1.6" marker-end="url(#a2)">
+      <line x1="500" y1="126" x2="500" y2="142"/>
+      <line x1="500" y1="190" x2="500" y2="206"/>
+      <line x1="500" y1="254" x2="500" y2="270"/>
+      <line x1="500" y1="318" x2="500" y2="334"/>
+      <line x1="500" y1="382" x2="500" y2="398"/>
+      <line x1="500" y1="446" x2="500" y2="462"/>
+      <line x1="500" y1="510" x2="500" y2="526"/>
+      <line x1="500" y1="574" x2="500" y2="590"/>
+    </g>
+  </g>
+
+  <!-- telemetry column -->
+  <g>
+    <g fill="rgba(255,255,255,0.035)" stroke="rgba(255,255,255,0.12)">
+      <rect x="720" y="274" width="255" height="44" rx="6"/>
+      <rect x="720" y="338" width="255" height="44" rx="6"/>
+      <rect x="720" y="402" width="255" height="44" rx="6"/>
+      <rect x="720" y="466" width="255" height="44" rx="6"/>
+      <rect x="720" y="594" width="255" height="44" rx="6"/>
+    </g>
+    <g font-size="12" fill="#f2f5f7">
+      <text x="734" y="294">RSL, C/N, MSE</text>
+      <text x="734" y="358">TX power (ATPC)</text>
+      <text x="734" y="422">errored / severely errored seconds</text>
+      <text x="734" y="486">throughput</text>
+      <text x="734" y="614">alarm · availability</text>
+    </g>
+    <g font-size="10" fill="#6e7a82">
+      <text x="734" y="309">still inside threshold for most of the ramp</text>
+      <text x="734" y="373">ATPC masks RSL at the far end — evidence moves here</text>
+      <text x="734" y="437">appear before any threshold is crossed</text>
+      <text x="734" y="501">capacity drop with no cause attached</text>
+      <text x="734" y="629">the first thing an availability-only view sees</text>
+    </g>
+    <g stroke="#6e7a82" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#a2g)">
+      <line x1="662" y1="296" x2="716" y2="296"/>
+      <line x1="662" y1="300" x2="716" y2="360"/>
+      <line x1="662" y1="360" x2="716" y2="424"/>
+      <line x1="662" y1="488" x2="716" y2="488"/>
+      <line x1="662" y1="616" x2="716" y2="616"/>
+    </g>
+  </g>
+
+  <!-- decision column -->
+  <g>
+    <g fill="rgba(242,168,60,0.08)" stroke="rgba(242,168,60,0.45)">
+      <rect x="25" y="274" width="255" height="60" rx="6"/>
+      <rect x="25" y="354" width="255" height="60" rx="6"/>
+      <rect x="25" y="434" width="255" height="76" rx="6"/>
+    </g>
+    <g font-size="12" fill="#ffc978">
+      <text x="39" y="294">Symmetric across both directions?</text>
+      <text x="39" y="374">Do peer hops in the same weather agree?</text>
+      <text x="39" y="454">Independent environmental corroboration?</text>
+    </g>
+    <g font-size="10" fill="#a9b4bc">
+      <text x="39" y="311">asymmetry ⇒ directional hardware,</text>
+      <text x="39" y="325">symmetry ⇒ propagation</text>
+      <text x="39" y="391">isolated element ⇒ equipment,</text>
+      <text x="39" y="405">correlated group ⇒ shared cause</text>
+      <text x="39" y="471">rain feed agrees ⇒ RAIN_FADE,</text>
+      <text x="39" y="485">clear sky ⇒ look at the radio</text>
+      <text x="39" y="499">— evidence a threshold never uses</text>
+    </g>
+    <g stroke="#f2a83c" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#a2a)">
+      <line x1="336" y1="296" x2="284" y2="296"/>
+      <line x1="336" y1="360" x2="284" y2="376"/>
+      <line x1="336" y1="424" x2="284" y2="456"/>
+    </g>
+  </g>
+
+  <!-- self-clearing return -->
+  <rect x="25" y="660" width="950" height="58" rx="6" fill="rgba(53,198,222,0.09)" stroke="#1ba3bd" stroke-dasharray="5 4"/>
+  <text x="45" y="682" font-size="12.5" fill="#7fe3f0" font-weight="600">SELF-CLEARING RETURN ↑</text>
+  <text x="215" y="682" font-size="12" fill="#f2f5f7">the cell passes · attenuation falls · margin, ACM profile and capacity return to nominal with no intervention</text>
+  <text x="45" y="702" font-size="11" fill="#a9b4bc">An escalation raised anywhere along this chain is technically consistent with the telemetry and operationally unnecessary. Those two statements are not in conflict.</text>
+
+  <text x="500" y="742" font-size="11" fill="#6e7a82" text-anchor="middle">Conceptual. Simplifications are stated in Part XI. No operator data.</text>
+</svg>

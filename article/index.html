@@ -1,0 +1,2138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Pre-Escalation Window — research paper</title>
+<meta name="description" content="A comparative decision-intelligence study of pre-escalation windows in terrestrial microwave backhaul and LEO/NTN. Simulated networks, no operator data. Research paper, not a product page.">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="./article.css">
+</head>
+<body>
+<div class="paper-shell">
+  <nav class="paper-nav">
+    <a href="../demo/">&larr; The instrument</a>
+    <a href="../method/">Method, hypotheses &amp; limitations</a>
+    <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window">Data &amp; figures on GitHub</a>
+  </nav>
+  <header class="paper-header">
+    <p class="paper-eyebrow">Research paper &middot; AID Edge Inc.</p>
+    <h1>The Pre-Escalation Window</h1>
+    <h2>A comparative decision-intelligence study of terrestrial microwave backhaul and LEO/NTN</h2>
+    <p class="paper-lede">What a read-only decision layer can observe before conventional monitoring escalates &mdash; and where that advantage breaks.</p>
+    <p class="paper-meta">Version 1.0 &middot; Velorona research programme &middot; Simulated networks, no operator data</p>
+  </header>
+  <nav class="paper-toc" aria-label="Contents">
+    <p>Contents</p>
+    <ol>
+      <li><a href="#abstract">Abstract</a></li>
+      <li><a href="#part-i-the-operational-problem">PART I — The Operational Problem</a></li>
+      <li><a href="#part-ii-terrestrial-microwave-backhaul-how-degradation-propagates-through-the-link">PART II — Terrestrial Microwave Backhaul: How Degradation Propagates Through the Link</a></li>
+      <li><a href="#part-iii-leo-ntn-how-degradation-propagates-through-a-moving-network">PART III — LEO / NTN: How Degradation Propagates Through a Moving Network</a></li>
+      <li><a href="#part-iv-what-is-different-between-them">PART IV — What Is Different Between Them</a></li>
+      <li><a href="#part-v-the-pre-escalation-decision-model">PART V — The Pre-Escalation Decision Model</a></li>
+      <li><a href="#part-vi-simulation-design">PART VI — Simulation Design</a></li>
+      <li><a href="#part-vii-the-comparative-experiment">PART VII — The Comparative Experiment</a></li>
+      <li><a href="#part-viii-results">PART VIII — Results</a></li>
+      <li><a href="#part-ix-what-failed">PART IX — What Failed</a></li>
+      <li><a href="#part-x-what-survived">PART X — What Survived</a></li>
+      <li><a href="#part-xi-limitations">PART XI — Limitations</a></li>
+      <li><a href="#part-xii-field-validation-the-next-experiment">PART XII — Field Validation: The Next Experiment</a></li>
+      <li><a href="#part-xiii-conclusion">PART XIII — Conclusion</a></li>
+    </ol>
+  </nav>
+  <article class="paper-body">
+<p class="doc-banner"><strong>Read this first.</strong> The networks in this study are <strong>simulated</strong>. Ground truth is known by construction. <strong>No operator telemetry is used anywhere in this study.</strong> Every currency figure is ILLUSTRATIVE. The simulation engine is not published; what is published is the method, the results, the data needed to regenerate the figures, and the limitations. Nothing here is evidence about a real operator's network.</p>
+<h2 id="abstract">Abstract</h2>
+<p>A service-impacting network incident is rarely instantaneous. It usually begins as a change in propagation conditions, link margin, geometry, capacity or system state, and only later becomes an alarm, a ticket and a truck roll. Conventional monitoring responds when observed variables cross configured thresholds, persist for a configured number of intervals, and survive a process delay. The interval between the first observable change and conventional escalation is what this study calls the <strong>pre-escalation window</strong>.</p>
+<p>We examine that interval in two network classes whose physics differ fundamentally: terrestrial microwave backhaul (fixed infrastructure, changing propagation) and LEO/NTN (changing infrastructure <em>and</em> changing propagation). Synthetic scenarios are generated from simplified physical and operational models — rain attenuation, path loss, fade margin, adaptive coding and modulation and capacity degradation for microwave; orbital geometry, elevation, slant range, serving-satellite state, handover and capacity for LEO/NTN. In every run, the <em>same</em> telemetry stream is presented to two arms: a modelled conventional threshold monitor and a read-only decision layer.</p>
+<p><strong>The original hypothesis did not survive.</strong> H1 — that the decision layer provides a measurable earlier-detection advantage — held at the default comparator (pooled median window 13 min) and failed under comparator sensitivity analysis. Against a <em>degenerate</em> comparator (a perfect, instantaneous, unsmoothed threshold monitor, better than any real NMS), the pooled median window inverts to <strong>−146 min</strong>. Part of that deficit is a measured cold-start artefact; removing it moves the number to −34 min, still negative, and the effect is entirely in LEO/NTN (−191 min as run; +2 min for microwave in every variant).</p>
+<p><strong>A different result survived.</strong> Across the self-clearing population, the conventional arm escalated unnecessarily in 66.7% of runs at the default comparator and 100% under the degenerate one, while the decision layer's unnecessary-escalation rate stayed at 4.4% across all 11 comparator configurations, together with an unchanged escalation F1 of 0.953 and an escalation false-positive rate of ~0.00. Conventional monitoring can be made arbitrarily fast; the price is paid in unnecessary escalation, and the decision layer is not on that trade-off curve.</p>
+<p>The result therefore does not establish that intelligent monitoring is universally faster. It reframes the question:</p>
+<blockquote>
+<p>Can a decision layer distinguish a developing, operationally meaningful event from a transient condition <strong>before</strong> escalation becomes necessary?</p>
+</blockquote>
+<p>Within a simulation, the answer is yes with a measured residual. Whether it holds on real telemetry is unmeasured and is the next experiment.</p>
+<hr />
+<h2 id="how-to-read-this-study">How to read this study</h2>
+<p>The paper is organised so that the two network domains can be read <strong>independently before they are compared</strong>. Parts II and III are standalone technical sections; a transmission engineer can read Part II and skip Part III entirely, and a satellite engineer can do the reverse. The comparison (Part IV) deliberately comes after both, because most of the confusion in cross-domain monitoring arguments comes from comparing before understanding.</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Question it answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>I</td>
+<td>Why does the interval before escalation matter at all?</td>
+</tr>
+<tr>
+<td>II</td>
+<td>What happens physically in a microwave link when it degrades?</td>
+</tr>
+<tr>
+<td>III</td>
+<td>What happens physically in a LEO/NTN link when it degrades?</td>
+</tr>
+<tr>
+<td>IV</td>
+<td>Why are these two mechanisms not the same problem?</td>
+</tr>
+<tr>
+<td>V</td>
+<td>What is a pre-escalation decision layer, precisely?</td>
+</tr>
+<tr>
+<td>VI</td>
+<td>How was the simulation built, and what is assumed?</td>
+</tr>
+<tr>
+<td>VII</td>
+<td>What exactly was compared, in what populations?</td>
+</tr>
+<tr>
+<td>VIII</td>
+<td>What was observed, per domain and across domains?</td>
+</tr>
+<tr>
+<td>IX</td>
+<td>Which hypothesis failed, and how badly?</td>
+</tr>
+<tr>
+<td>X</td>
+<td>Which result survived the sensitivity analysis?</td>
+</tr>
+<tr>
+<td>XI</td>
+<td>What this study cannot claim.</td>
+</tr>
+<tr>
+<td>XII</td>
+<td>What has to be measured on real telemetry next.</td>
+</tr>
+<tr>
+<td>XIII</td>
+<td>Conclusion.</td>
+</tr>
+</tbody>
+</table>
+<p>Three labels are used throughout and are never mixed:</p>
+<ul>
+<li><strong>ESTABLISHED</strong> — physics, standards or prior work, cited. Not our contribution.</li>
+<li><strong>SIMULATED</strong> — produced by our simulation engine. Not measurement.</li>
+<li><strong>NOT MEASURED</strong> — a design hypothesis or an open question. Never reported as a result.</li>
+</ul>
+<hr />
+<h1 id="part-i-the-operational-problem">PART I — The Operational Problem</h1>
+<h2 id="1-1-the-outage-did-not-begin-when-the-ticket-was-created">1.1 The outage did not begin when the ticket was created</h2>
+<p>A ticket is an administrative event. It is created when a monitoring system's escalation criteria are met and a workflow fires. The physical event that eventually justified the ticket started earlier — sometimes minutes earlier, sometimes hours.</p>
+<p>The full chain, as modelled in this study, is:</p>
+<pre><code>physical / geometric change
+        ↓
+telemetry changes (still within thresholds)
+        ↓
+threshold crossing on a smoothed KPI
+        ↓
+M-of-N persistence satisfied
+        ↓
+alarm raised
+        ↓
+correlation and escalation delay
+        ↓
+ticket
+        ↓
+operational response  →  service impact  →  recovery
+</code></pre>
+<p>Every arrow in that chain is a delay, and three of them are <em>configured</em> delays rather than physical ones: the smoothing window, the persistence rule, and the escalation/process delay. This matters more than it first appears, and Part IX is about what happens when you set all three to zero.</p>
+<h2 id="1-2-defining-the-pre-escalation-window">1.2 Defining the pre-escalation window</h2>
+<blockquote>
+<p><strong>Definition.</strong> The pre-escalation window is the interval between the earliest state change that a decision layer considers actionable and the escalation point produced by <strong>a specified conventional monitoring configuration</strong>.</p>
+</blockquote>
+<pre><code>pre_escalation_window_min = t_conventional_escalation − t_decision_layer_actionable
+</code></pre>
+<p>The definition carries a consequence that this study takes seriously and that most vendor material does not:</p>
+<blockquote>
+<p><strong>A reported window without its comparator is not a result.</strong> "13 minutes earlier" is incomplete. Earlier than <em>what monitoring configuration</em>, tuned how, at what false-positive rate?</p>
+</blockquote>
+<p>That is why comparator sensitivity (Part VIII.4) sits in the main experiment and not in an appendix, and why every window figure in this paper is reported paired with the error rates of the arm it was measured against.</p>
+<h2 id="1-3-the-window-is-not-universally-positive-and-not-universally-available">1.3 The window is not universally positive, and not universally available</h2>
+<p>Three conditions must hold for a pre-escalation window to exist at all:</p>
+<ol>
+<li><strong>The degradation must have a finite ramp.</strong> A cut fibre, a sudden power loss or a hardware failure with no precursor has no observable pre-escalation state. Nothing in this study claims otherwise.</li>
+<li><strong>The telemetry must resolve the ramp.</strong> A 15-minute reporting interval cannot expose a 4-minute LEO pass geometry effect.</li>
+<li><strong>The comparator must be slower than the layer.</strong> This is a property of the <em>comparator</em>, not of the layer, and it is the point at which the original hypothesis failed.</li>
+</ol>
+<h2 id="1-4-escalation-is-not-free">1.4 Escalation is not free</h2>
+<p>The reason the window matters operationally is not that earlier is intrinsically better. It is that escalation consumes something scarce: an engineer, a maintenance window, a truck, a spares budget, or the operator's attention. Alarm-management practice has treated operator attention as the binding constraint for decades — ANSI/ISA-18.2 and EEMUA 191 both formalise alarm rationalisation precisely because an alarm system that raises everything raises nothing [R11, R12]. <strong>ESTABLISHED — this is prior work, not a Velorona finding.</strong></p>
+<p>The asymmetry is what makes the problem interesting:</p>
+<ul>
+<li>If escalation is cheap, aggressive thresholds are rational. Set the smoothing window to 1, the persistence rule to 1-of-1, the delay to 0, and accept the false alarms.</li>
+<li>If escalation is expensive, the objective is no longer <em>detect earlier</em> but <em>decide correctly</em>, which includes deciding <strong>not</strong> to act.</li>
+</ul>
+<p>This study measures both sides of that asymmetry, and only one of them turned out to be robust.</p>
+<h2 id="1-5-detection-diagnosis-and-decision-are-three-different-problems">1.5 Detection, diagnosis and decision are three different problems</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Question</th>
+<th>Output</th>
+<th>Failure mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Detection</strong></td>
+<td>Has an observable left its expected range?</td>
+<td>anomaly / no anomaly</td>
+<td>alarms on healthy physics</td>
+</tr>
+<tr>
+<td><strong>Diagnosis</strong></td>
+<td>What mechanism explains the observation?</td>
+<td>a fault class, with evidence</td>
+<td>confident wrong cause</td>
+</tr>
+<tr>
+<td><strong>Decision</strong></td>
+<td>Given the diagnosis and its cost of being wrong, is escalation justified now?</td>
+<td>escalate / wait / recommend</td>
+<td>escalating a condition that self-clears</td>
+</tr>
+</tbody>
+</table>
+<p>Conventional threshold monitoring is a detection system that is used as if it were a decision system. That substitution is invisible while conditions are either clearly healthy or clearly broken. It becomes expensive in the region in between — which is exactly the region this study samples.</p>
+<figure class="fig">
+<img src="./figures/fig01-pre-escalation-timeline.svg" alt="Operational timeline showing physical onset, first detectable change, decision-layer actionable point, conventional escalation, ticket, service impact and recovery, with the pre-escalation window and false-calm window marked between them.">
+<figcaption><span class="fig-num">Figure 1</span> <strong>The pre-escalation operational timeline.</strong> Conceptual, not data. Marks are the timeline events instrumented in every run of this study (<code>t_fault_onset</code>, <code>t_first_detectable</code>, <code>t_decision_layer_actionable</code>, <code>t_conventional_escalation</code>, <code>t_ticket</code>, <code>t_service_impact</code>). The pre-escalation window is the interval between the layer's actionable point and conventional escalation; its sign is not guaranteed and depends on how the comparator is configured (Part IX). <span class="fig-tag fig-tag-concept">CONCEPTUAL</span></figcaption>
+</figure>
+
+<hr />
+<h1 id="part-ii-terrestrial-microwave-backhaul-how-degradation-propagates-through-the-link">PART II — Terrestrial Microwave Backhaul: How Degradation Propagates Through the Link</h1>
+<p><em>This part is standalone. It can be read without Part III.</em></p>
+<p>A terrestrial microwave hop is a fixed geometry with a variable atmosphere. The antennas do not move, the path length does not change, the frequency does not change. What changes is what is in the path, and what the radio does about it. That single sentence is why microwave degradation is comparatively tractable — and why the conclusions from it do <strong>not</strong> transfer to LEO/NTN without modification.</p>
+<h2 id="2-1-the-link-budget-is-the-state-variable">2.1 The link budget is the state variable</h2>
+<p>For a line-of-sight hop, received power is, conceptually:</p>
+<pre><code>P_r = P_t + G_t + G_r − L_FS − L_atm − L_rain − L_other
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+<th>Behaviour on a fixed hop</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>P_t</code></td>
+<td>transmit power</td>
+<td>constant, unless ATPC is compensating</td>
+</tr>
+<tr>
+<td><code>G_t</code>, <code>G_r</code></td>
+<td>antenna gains</td>
+<td>constant, unless the antenna moves or the radome wets</td>
+</tr>
+<tr>
+<td><code>L_FS</code></td>
+<td>free-space path loss</td>
+<td><strong>constant</strong> — path length is fixed</td>
+</tr>
+<tr>
+<td><code>L_atm</code></td>
+<td>gaseous absorption (O₂, water vapour)</td>
+<td>slowly varying with humidity and temperature [R4]</td>
+</tr>
+<tr>
+<td><code>L_rain</code></td>
+<td>rain attenuation</td>
+<td>the dominant fast variable above ~10 GHz [R2, R3]</td>
+</tr>
+<tr>
+<td><code>L_other</code></td>
+<td>feeder, radome, misalignment, ageing</td>
+<td>slowly varying, or a step on a fault</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ESTABLISHED.</strong> The relationship and the propagation terms are standard; the terrestrial design framework is ITU-R P.530-18 [R1] and the rain-specific attenuation model is ITU-R P.838-3 [R2].</p>
+<p>The operationally important property is the one in the third column: on a terrestrial hop, <code>L_FS</code> is a constant. Everything that moves in the received level is either weather, hardware, or configuration. That is a small enough hypothesis space to be separable from telemetry. Part III shows what happens when it is not.</p>
+<h2 id="2-2-rain-attenuation-why-the-fast-variable-is-fast">2.2 Rain attenuation: why the fast variable is fast</h2>
+<p><strong>ESTABLISHED.</strong> Specific attenuation is modelled as a power law in rain rate:</p>
+<pre><code>γ_R = k · R^α        [dB/km]
+</code></pre>
+<p>where <code>R</code> is rain rate in mm/h and <code>k</code>, <code>α</code> are frequency- and polarisation-dependent coefficients tabulated in ITU-R P.838-3 [R2]. Path attenuation is obtained by multiplying by an <strong>effective</strong> path length, shorter than the geometric one, because heavy rain cells are spatially limited and do not fill a long hop uniformly — the reduction factor is part of the P.530 design method [R1], and the rain-rate statistics that feed it come from ITU-R P.837 [R3].</p>
+<p>Two consequences follow, and both are operational rather than academic.</p>
+<p><strong>First, the exponent.</strong> Because <code>α</code> is greater than 1 across the bands used for backhaul, attenuation grows <em>faster</em> than rain rate. A rain cell that doubles in intensity does not double the fade. The degradation therefore has a characteristic shape: slow at the leading edge of the cell, steep through the core, slow again at the trailing edge. That shape is the physical reason a ramp exists to be observed at all.</p>
+<p><strong>Second, the geometry of a rain cell moving across a path.</strong> A convective cell has a finite footprint and a translation velocity. It enters the path, crosses it, and leaves. The link's margin therefore falls and <em>recovers on its own</em>, with no intervention. This is the physical origin of the single most operationally relevant scenario class in this study: the <strong>self-clearing</strong> event (§2.8).</p>
+<p class="callout"><strong>Simplification, stated.</strong> Our simulation applies a P.530-style path reduction to an <em>instantaneous</em> wet path. The published reduction factor is a long-term statistical design rule, not an instantaneous physical model. This is a modelling simplification and is item 5 in Part XI. It affects the absolute depth of a simulated fade; it does not create or remove the ramp whose observability this study is about.</p>
+
+<h2 id="2-3-from-attenuation-to-the-numbers-on-the-nms">2.3 From attenuation to the numbers on the NMS</h2>
+<p>The chain from weather to telemetry has no shortcuts in it:</p>
+<p><strong>OBSERVATION.</strong> A rain cell approaches the path.</p>
+<p><strong>MECHANISM.</strong> <code>L_rain</code> rises → <code>P_r</code> falls. The receiver's noise floor is unchanged, so the carrier-to-noise ratio falls by the same number of dB. Fade margin — the difference between current received level and the level at which the current modulation stops working — is consumed.</p>
+<p><strong>TELEMETRY CONSEQUENCE.</strong> RSL falls. C/N or MSE degrades. If ATPC is enabled, transmit power rises to compensate, which <em>masks</em> the RSL change at the far end and moves the evidence into the TX-power telemetry instead. Errored seconds may appear before any threshold is crossed.</p>
+<p><strong>OPERATIONAL CONSEQUENCE.</strong> The link is still up. Traffic is still flowing. Nothing on the alarm list has changed. This is the state that gives the study its name.</p>
+<p><strong>DECISION IMPLICATION.</strong> The question at this point is not "is there an anomaly" — there is, and a control chart will show it — but "is this a rain cell that will pass, or a hardware fault that will not?" That is a <em>diagnosis</em> question, and it is answerable from evidence that a threshold does not use: whether the degradation is symmetric across both directions, whether adjacent hops in the same weather correlate, and whether an independent environmental signal corroborates it.</p>
+<h2 id="2-4-atpc-acm-and-the-shape-of-graceful-degradation">2.4 ATPC, ACM, and the shape of graceful degradation</h2>
+<p>A modern hop does not fail; it downshifts. Two control loops act before anything is lost:</p>
+<ul>
+<li><strong>ATPC (automatic transmit power control)</strong> trades headroom for margin, per direction, independently.</li>
+<li><strong>ACM (adaptive coding and modulation)</strong> reduces the modulation order and coding rate as C/N falls, preserving the link at lower capacity.</li>
+</ul>
+<p>The resulting operating trajectory:</p>
+<pre><code>4096QAM 5/6 (full capacity)
+        ↓  C/N falls
+lower-order modulation
+        ↓
+lower coding rate
+        ↓
+reduced throughput, link still &quot;up&quot;
+        ↓
+capacity below committed rate  →  service margin gone
+        ↓
+protection switch / reroute
+        ↓
+outage
+</code></pre>
+<p><strong>ESTABLISHED.</strong> ACM is standard practice in fixed microwave systems and in satellite links; the ETSI fixed-service framework [R5] and DVB-S2X [R6] are the reference points for how the profile ladder is defined. <strong>SIMULATED / representative:</strong> our ACM ladder is representative rather than transcribed from a specific vendor datasheet (Part XI, item 8), so absolute capacity numbers from this study must not be quoted as product performance.</p>
+<p>The operational point survives the simplification. <strong>ACM converts an RF problem into a capacity problem before it converts it into an outage.</strong> A monitoring system watching only availability sees nothing during the entire downshift sequence. A monitoring system watching only throughput sees a capacity drop with no cause attached. Both are correct and neither is sufficient.</p>
+<h2 id="2-5-protection-reroute-and-blast-radius">2.5 Protection, reroute and blast radius</h2>
+<p>Where a protected path exists, the failure of one hop is absorbed. In the modelled network, protection and hop topology are explicit: a 12-site demand region requires 22 radio hops, 11 relay sites, 56 radios and 6 protection hops, at an engineered hop length of 18.32 km limited by rain rather than terrain (terrain would allow 45 km) [derived, <code>data/coverage_comparison.csv</code>].</p>
+<p><strong>DECISION IMPLICATION.</strong> Blast radius changes the cost of being wrong, and therefore changes the decision, not just the diagnosis. A degrading hop that carries a protected path and a degrading hop that isolates eleven downstream sites produce the same RSL telemetry and are not the same operational decision. Our microwave model computes downstream isolation for this reason; the LEO model does not model beam-sharing contention (Part XI, item 21).</p>
+<h2 id="2-6-what-we-did-not-model-and-why-it-matters">2.6 What we did <em>not</em> model, and why it matters</h2>
+<p><strong>NOT MODELLED.</strong> Multipath fading and atmospheric ducting are absent from the simulation. They are real, they dominate outage statistics on long, flat, over-water paths, and their signature — deep, fast, frequency-selective fades under clear-sky conditions, often at night — is precisely the case where a rain-correlation test would return "no environmental corroboration" and a naive diagnostic layer could reach for a hardware hypothesis.</p>
+<p>Stating this plainly: <strong>our microwave results are conditioned on a rain-dominated impairment population.</strong> Any operator whose outage statistics are multipath-dominated should expect different diagnostic performance, and that is a reason to run the field validation in Part XII rather than to extrapolate from these numbers. Wet-radome effects are likewise not modelled.</p>
+<h2 id="2-7-terrain-and-hop-length-are-constraints-not-variables">2.7 Terrain and hop length are constraints, not variables</h2>
+<p>Hop length is set at design time by terrain, clearance and the rain-rate statistics of the region. In the modelled region, rain (42 mm/h at 0.01% exceedance, 18 GHz, 35 dB fade margin, 99.99% availability target) is the binding constraint at 18.32 km against a terrain limit of 45 km. This matters to the study for one reason only: it fixes the physical scale at which a rain cell is or is not able to affect several hops at once, which is what makes <strong>peer correlation across adjacent hops</strong> a usable discriminator.</p>
+<h2 id="2-8-the-self-clearing-event-defined-physically">2.8 The self-clearing event, defined physically</h2>
+<p>A self-clearing event is one whose ground-truth cause resolves without intervention. For microwave, the canonical case is a rain cell crossing the path:</p>
+<pre><code>cell approaches → attenuation rises → margin erodes → ACM downshifts
+        → cell passes → attenuation falls → margin restored → capacity restored
+</code></pre>
+<p>At no point in that sequence is a truck useful. An escalation raised during it is <em>technically consistent</em> with the telemetry and <em>operationally unnecessary</em> — those two statements are not in conflict, and keeping them apart is the analytical core of this study.</p>
+<h2 id="2-9-what-the-conventional-arm-sees-and-when">2.9 What the conventional arm sees, and when</h2>
+<p>The modelled conventional monitor applies: smoothing over N reporting intervals, an M-of-N persistence rule, fixed thresholds against a nominal reference, and an escalation/process delay. Its arithmetic is not in dispute:</p>
+<ul>
+<li>a rolling mean of window <em>W</em> lags a linear ramp by ≈ <em>W</em>/2 samples;</li>
+<li>an M-of-N persistence rule adds ≈ <em>M</em> more;</li>
+<li>the process delay adds its own, unconditionally.</li>
+</ul>
+<p>That lag is the <em>entire</em> mechanism behind a positive pre-escalation window at the default comparator. It is a property of the comparator's configuration, not evidence of intelligence in the other arm. Part IX is what happens when that lag is removed.</p>
+<h2 id="2-10-microwave-summarised-as-a-causal-chain">2.10 Microwave, summarised as a causal chain</h2>
+<figure class="fig">
+<img src="./figures/fig02-microwave-causal-chain.svg" alt="Causal chain from rain rate through specific attenuation, path attenuation, received signal level, C/N, fade margin, ACM downshift, capacity, service margin and telemetry to conventional escalation, with branch points for ATPC masking, protection switching and self-clearing recovery.">
+<figcaption><span class="fig-num">Figure 2</span> <strong>Terrestrial microwave: how a propagation change becomes an operational event.</strong> Blue path = physical mechanism; grey = what monitoring observes; amber = decision points. Two properties matter operationally: ATPC moves the evidence out of RSL and into TX-power telemetry, and a passing rain cell returns the link to nominal with no intervention at all. <span class="fig-tag fig-tag-concept">CONCEPTUAL</span></figcaption>
+</figure>
+
+<p>The chain in one line: <strong>fixed infrastructure, changing propagation, and a link that trades capacity for availability before it fails.</strong></p>
+<hr />
+<h1 id="part-iii-leo-ntn-how-degradation-propagates-through-a-moving-network">PART III — LEO / NTN: How Degradation Propagates Through a Moving Network</h1>
+<p><em>This part is standalone. It can be read without Part II.</em></p>
+<p>In a LEO system the serving infrastructure moves. That single difference propagates into every layer of the monitoring problem: what "nominal" means, what an anomaly is, what a baseline is computed over, and whether a degradation is a fault at all.</p>
+<h2 id="3-1-geometry-is-the-first-order-variable">3.1 Geometry is the first-order variable</h2>
+<p>For a circular orbit at altitude <code>h</code>, the elevation angle <code>ε</code> seen from a terminal changes continuously through a pass, and the slant range follows from it:</p>
+<pre><code>d(ε) = √( (R_E + h)² − (R_E·cos ε)² ) − R_E·sin ε
+</code></pre>
+<p>with <code>R_E</code> the Earth radius. <strong>ESTABLISHED</strong> — this is textbook orbital geometry [R7, R8]. The modelled constellation parameters, and what they produce:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Altitude</td>
+<td>550 km</td>
+<td>parameter</td>
+</tr>
+<tr>
+<td>Orbital period</td>
+<td>95.5 min</td>
+<td>derived from altitude</td>
+</tr>
+<tr>
+<td>Minimum service elevation</td>
+<td>25°</td>
+<td>parameter</td>
+</tr>
+<tr>
+<td>Maximum pass duration</td>
+<td>4.49 min</td>
+<td>derived</td>
+</tr>
+<tr>
+<td>Handovers per hour (per terminal)</td>
+<td>13.4</td>
+<td>derived</td>
+</tr>
+<tr>
+<td>Footprint radius at min elevation</td>
+<td>940.5 km</td>
+<td>derived</td>
+</tr>
+<tr>
+<td>Satellites over the region at a time</td>
+<td>1</td>
+<td>derived</td>
+</tr>
+</tbody>
+</table>
+<p>[<code>data/coverage_comparison.csv</code>]</p>
+<p>Read the third and fourth rows together. <strong>A terminal changes serving satellite roughly every four and a half minutes.</strong> Any statistic computed over a window longer than a pass is a statistic computed across multiple spacecraft.</p>
+<h2 id="3-2-free-space-path-loss-is-no-longer-a-constant">3.2 Free-space path loss is no longer a constant</h2>
+<p>On a microwave hop, <code>L_FS</code> is fixed and can be calibrated out once. In LEO it varies continuously within a single pass, because the slant range varies from its minimum at the zenith point of the pass to its maximum at the horizon-side service limit. At 550 km with a 25° elevation mask, the range ratio across a pass is large enough that the geometry-driven component of received level dominates every other effect in the link budget except a deep fade.</p>
+<p><strong>TELEMETRY CONSEQUENCE.</strong> Received level, C/N and — through link adaptation — throughput all trace a repeating arc over each pass. That arc is <strong>healthy</strong>. It is what a correctly functioning link looks like.</p>
+<p><strong>OPERATIONAL CONSEQUENCE.</strong> A fixed threshold applied to received level alarms once per pass, on every terminal, forever. A control limit computed without a geometry model does the same, more slowly.</p>
+<p><strong>DECISION IMPLICATION.</strong> For LEO, the geometry-predicted component of received level must be removed <em>before</em> anything is treated as anomalous. This is not an optimisation. It is the difference between a usable monitoring signal and a per-pass alarm generator. In our method it is one of the two LEO-specific choices (Part V.6).</p>
+<h2 id="3-3-doppler">3.3 Doppler</h2>
+<p><strong>ESTABLISHED, NOT MODELLED.</strong> A 550 km LEO pass produces a Doppler shift that sweeps through zero at closest approach, at rates that dominate NTN synchronisation design — the reason 3GPP's NTN work items specify Doppler pre-compensation and enlarged timing-advance handling [R9, R10]. Our simulation does <strong>not</strong> model Doppler, carrier recovery or synchronisation loss. It is named here because a reader from the satellite side will otherwise assume it is in the model, and because it is a real degradation mechanism whose absence bounds the generality of our LEO results.</p>
+<h2 id="3-4-the-atmosphere-on-a-slant-path">3.4 The atmosphere on a slant path</h2>
+<p><strong>ESTABLISHED.</strong> The Earth-space case is ITU-R P.618 [R13], which composes rain attenuation from the same specific-attenuation model as the terrestrial case [R2] but along a slant path, with an effective path length that depends on elevation, rain-height statistics and a horizontal reduction treatment. Gaseous attenuation follows P.676 [R4]. Tropospheric scintillation — rapid, shallow fluctuation from refractive-index turbulence — matters most at low elevation and is also covered by P.618.</p>
+<p class="callout"><strong>Simplification, stated.</strong> Our LEO slant-path rain model omits the full P.618 reduction-factor treatment and therefore <strong>over-estimates fade at low elevation</strong> (Part XI, item 6). Since low elevation is exactly where the <code>leo_low_elevation</code> and <code>leo_ground_rain</code> scenarios live, this simplification is conservative in the direction that makes the decision problem <em>harder</em>, not easier — but it is still a simplification, and any absolute fade number from this study should be treated accordingly. Scintillation is not separately modelled.</p>
+
+<h2 id="3-5-the-serving-satellite-is-part-of-the-state-not-part-of-the-background">3.5 The serving satellite is part of the state, not part of the background</h2>
+<p>A terminal's link statistics are only comparable against observations taken under the same spacecraft. The modelled space segment:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Satellite capacity</td>
+<td>12,000 Mbps</td>
+</tr>
+<tr>
+<td>Beams per satellite</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Beams needed to cover the demand region</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Region share of the satellite footprint</td>
+<td>0.0036</td>
+</tr>
+<tr>
+<td>Capacity attributable to the region</td>
+<td>43.3 Mbps</td>
+</tr>
+</tbody>
+</table>
+<p>[<code>data/coverage_comparison.csv</code>; EIRP, G/T, beam count and footprint are <strong>parameters, not measurements</strong> — Part XI, item 9]</p>
+<p><strong>MECHANISM.</strong> A spacecraft-side impairment — an RF subsystem degradation, a pointing/attitude drift — affects <em>every terminal served by that satellite, while it is serving them</em>, and no terminal afterwards. A ground-side impairment affects one terminal regardless of which satellite is overhead. A gateway/feeder impairment follows the gateway across handovers.</p>
+<p><strong>TELEMETRY CONSEQUENCE.</strong> Three physically distinct faults produce time series that, aggregated over an hour, look similar: intermittent degradation with partial recovery. The information that separates them is not in the KPI values. It is in <em>which spacecraft, which beam and which gateway was serving at each sample.</em></p>
+<p><strong>DECISION IMPLICATION.</strong> Statistical baselines must be conditioned on the serving context. Without it, a spacecraft fault is smeared across the pass schedule and becomes statistically invisible. This is the second LEO-specific method choice, and it is the one with the largest measured effect in the entire study (Part VIII.6).</p>
+<h2 id="3-6-handover-and-the-gateway-path">3.6 Handover and the gateway path</h2>
+<p>Each handover is a discontinuity in every RF observable and in the end-to-end path simultaneously: new spacecraft, new slant range, potentially new beam, potentially new gateway and therefore new terrestrial backhaul segment.</p>
+<pre><code>serving satellite sets → handover → new geometry → new link margin
+                                  → possible new gateway → new feeder path
+                                  → RTT step, brief loss, throughput transient
+</code></pre>
+<p><strong>OPERATIONAL CONSEQUENCE.</strong> A step in RTT or a short loss burst at a handover boundary is expected behaviour. The same step at a non-handover moment is not. <strong>The same observation carries opposite meaning depending on where in the pass schedule it falls</strong> — which is the LEO-specific form of the general point this study keeps arriving at.</p>
+<h2 id="3-7-coverage-is-not-capacity-and-neither-is-availability">3.7 Coverage is not capacity, and neither is availability</h2>
+<p>Three quantities are routinely collapsed into one number in satellite discussions, and they are not the same:</p>
+<table>
+<thead>
+<tr>
+<th>Quantity</th>
+<th>Modelled value</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Geographic coverage</td>
+<td>2,774,093 km²</td>
+<td>area under the footprint at the elevation mask</td>
+</tr>
+<tr>
+<td>Instantaneous service coverage</td>
+<td>10,000 km²</td>
+<td>the demand region actually being served</td>
+</tr>
+<tr>
+<td>Capacity attributable to the region</td>
+<td>43.3 Mbps</td>
+<td>share of satellite capacity over the region</td>
+</tr>
+<tr>
+<td>Capacity vs. demand ratio</td>
+<td>0.012</td>
+<td>how much of the demand that share covers</td>
+</tr>
+<tr>
+<td>Satellites for continuous coverage</td>
+<td>307</td>
+<td><strong>geometric lower bound</strong>, not a constellation design</td>
+</tr>
+</tbody>
+</table>
+<p>[<code>data/coverage_comparison.csv</code>; the microwave counterpart, for the same 12-site region, is an aggregate edge capacity of 12,073.6 Mbps and a capacity/demand ratio of 3.35]</p>
+<p>The 307-satellite figure is a street-of-coverage packing lower bound (Part XI, item 10). It answers "how many spacecraft must exist for one to always be above the elevation mask over this region", not "how many satellites does a real constellation need", which additionally involves capacity, traffic distribution, inter-satellite links and regulatory constraints, none of which are modelled.</p>
+<p><strong>No fixed microwave-to-satellite equivalence is asserted anywhere in this study.</strong> The two technologies are compared as <em>decision problems</em>, not as substitutes.</p>
+<h2 id="3-8-what-we-did-not-model">3.8 What we did <em>not</em> model</h2>
+<p><strong>NOT MODELLED</strong>, and each of these bounds the generality of the LEO results:</p>
+<ul>
+<li>inter-satellite links, and therefore any routing effect above the access link;</li>
+<li>beam-shape roll-off (a terminal at the beam edge is not distinguished from one at boresight);</li>
+<li>traffic-dependent congestion, and therefore capacity-driven degradation from demand rather than from physics;</li>
+<li>Doppler, carrier recovery and synchronisation loss (§3.3);</li>
+<li>J2 perturbation and Earth rotation in pass timing; orbits are circular and the Earth is spherical (Part XI, item 7) — adequate for elevation-driven link behaviour across a single pass, inadequate for any availability claim.</li>
+</ul>
+<h2 id="3-9-what-is-physics-what-is-parameter-what-is-simplification">3.9 What is physics, what is parameter, what is simplification</h2>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Orbital geometry, elevation, slant range, pass timing</td>
+<td>derived from <strong>ESTABLISHED</strong> circular-orbit mechanics [R7, R8]</td>
+</tr>
+<tr>
+<td>Free-space path loss vs. elevation</td>
+<td>derived</td>
+</tr>
+<tr>
+<td>Rain attenuation coefficients</td>
+<td><strong>ESTABLISHED</strong>, ITU-R P.838-3 [R2] — transcribed, not independently verified (Part XI, item 4)</td>
+</tr>
+<tr>
+<td>Slant-path reduction</td>
+<td><strong>simplified</strong>, omits P.618 reduction factors [R13]</td>
+</tr>
+<tr>
+<td>Satellite EIRP, G/T, beam count, footprint</td>
+<td><strong>parameters</strong></td>
+</tr>
+<tr>
+<td>Capacity ladder / link adaptation</td>
+<td><strong>representative</strong>, not vendor-specific</td>
+</tr>
+<tr>
+<td>Handover cadence</td>
+<td>derived from geometry</td>
+</tr>
+<tr>
+<td>Doppler, ISL, beam roll-off, congestion</td>
+<td><strong>not modelled</strong></td>
+</tr>
+<tr>
+<td>Every telemetry value in the study</td>
+<td><strong>SIMULATED</strong> — no operator data</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-10-leo-ntn-summarised-as-a-causal-chain">3.10 LEO/NTN, summarised as a causal chain</h2>
+<figure class="fig">
+<img src="./figures/fig03-leo-causal-chain.svg" alt="Causal chain from orbital geometry through elevation and slant range, propagation, link margin, serving satellite and beam state, handover and gateway state, to RTT, loss, throughput and capacity, then telemetry and conventional escalation, with branches for geometry-explained variation and serving-context conditioning.">
+<figcaption><span class="fig-num">Figure 3</span> <strong>LEO/NTN: how geometry, propagation and serving state combine into an operational event.</strong> Cyan path = physical mechanism; grey = what monitoring observes; amber = decision points. The two branches that have no microwave equivalent are marked: <em>geometry-explained</em> variation, which must be removed before anything is called anomalous, and <em>serving-context</em> changes, which make an unconditioned baseline statistically blind to spacecraft-side faults. <span class="fig-tag fig-tag-concept">CONCEPTUAL</span></figcaption>
+</figure>
+
+<p>The chain in one line: <strong>changing infrastructure, changing propagation, and a link whose nominal behaviour is itself a moving target.</strong></p>
+<hr />
+<h1 id="part-iv-what-is-different-between-them">PART IV — What Is Different Between Them</h1>
+<p>Parts II and III described two mechanisms. This part states the difference, and it is not a difference of degree.</p>
+<blockquote>
+<p><strong>Microwave: fixed infrastructure, changing propagation.</strong>
+<strong>LEO/NTN: changing infrastructure <em>and</em> changing propagation.</strong></p>
+</blockquote>
+<p>Everything below follows from that.</p>
+<h2 id="4-1-dimension-by-dimension">4.1 Dimension-by-dimension</h2>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Terrestrial microwave</th>
+<th>LEO / NTN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Topology</strong></td>
+<td>fixed; the same two antennas for the life of the hop</td>
+<td>time-varying; the serving spacecraft changes every ~4.5 min at 550 km / 25° mask</td>
+</tr>
+<tr>
+<td><strong>Primary geometry</strong></td>
+<td>fixed path length, fixed clearance</td>
+<td>orbital: elevation and slant range vary continuously within one pass</td>
+</tr>
+<tr>
+<td><strong>Dominant propagation variables</strong></td>
+<td>rain attenuation, gaseous absorption; multipath/ducting in reality (not modelled here)</td>
+<td>geometry-driven path loss first, then slant-path rain, gases, scintillation</td>
+</tr>
+<tr>
+<td><strong>Typical degradation mechanisms</strong></td>
+<td>rain fade, directional hardware degradation, interference, configuration change</td>
+<td>pass geometry, ground-side fade, spacecraft RF subsystem, pointing/attitude drift, gateway/feeder impairment</td>
+</tr>
+<tr>
+<td><strong>Serving-path state</strong></td>
+<td>stable; "which link" is a constant</td>
+<td>part of the state; "which spacecraft, which beam, which gateway" changes within an hour</td>
+</tr>
+<tr>
+<td><strong>Handover</strong></td>
+<td>absent at link level; protection switching is an event, not a cadence</td>
+<td>fundamental and periodic; ~13.4 per terminal per hour in the modelled case</td>
+</tr>
+<tr>
+<td><strong>Rain sensitivity</strong></td>
+<td>dominant fast variable; sets hop length (18.32 km rain-limited vs 45 km terrain-limited in the modelled region)</td>
+<td>present, but second to geometry; worst at low elevation, where our model over-estimates it</td>
+</tr>
+<tr>
+<td><strong>Capacity behaviour</strong></td>
+<td>ACM downshift on a fixed path; capacity falls before availability does</td>
+<td>capacity depends on beam and satellite share; a footprint may cover 2.77M km² while attributing 43.3 Mbps to the demand region</td>
+</tr>
+<tr>
+<td><strong>Telemetry interpretation</strong></td>
+<td>a level change is a change in the path or the radio</td>
+<td>a level change may be the spacecraft, the path, the beam, the gateway — or the orbit doing exactly what it should</td>
+</tr>
+<tr>
+<td><strong>Main source of ambiguity</strong></td>
+<td>is the cause environmental or in the equipment?</td>
+<td>is the cause a fault at all, or expected geometry / an expected handover?</td>
+</tr>
+<tr>
+<td><strong>Recovery behaviour</strong></td>
+<td>the cell passes; margin returns; no intervention needed</td>
+<td>the pass ends; a new spacecraft takes over; the symptom may disappear for reasons unrelated to the fault</td>
+</tr>
+<tr>
+<td><strong>Correlation groups available</strong></td>
+<td>one: adjacent hops sharing weather</td>
+<td>two independent ones: terminals sharing a satellite, terminals sharing a gateway — a space-vs-ground discriminator with no microwave analogue</td>
+</tr>
+<tr>
+<td><strong>Time constraint on the decision</strong></td>
+<td>none intrinsic; the link is there tomorrow</td>
+<td>"can this wait for the next pass?" is a first-class question with a hard, geometry-set deadline</td>
+</tr>
+<tr>
+<td><strong>Operational decision context</strong></td>
+<td>dispatch a truck to a site; switch to a protection path</td>
+<td>there is no truck for the space segment; the decision is which side of the link to investigate, and whether the evidence survives the handover</td>
+</tr>
+</tbody>
+</table>
+<p>The table is deliberately asymmetric in places. Forcing symmetry between two systems that fail differently is how monitoring architectures acquire the wrong abstractions.</p>
+<h2 id="4-2-the-same-telemetry-opposite-meaning">4.2 The same telemetry, opposite meaning</h2>
+<p>Consider four observations that any NOC would recognise:</p>
+<pre><code>RTT ↑        loss ↑        throughput ↓        received level ↓
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Interpretation</th>
+<th>Microwave</th>
+<th>LEO / NTN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Received level falling steadily for 3 minutes</td>
+<td>fade developing, or hardware degrading — a real state change either way</td>
+<td>possibly the pass approaching the elevation mask: <strong>healthy</strong></td>
+</tr>
+<tr>
+<td>Short loss burst with an RTT step</td>
+<td>path change or protection event — worth explaining</td>
+<td>handover boundary: <strong>expected</strong></td>
+</tr>
+<tr>
+<td>Throughput down 40%, availability nominal</td>
+<td>ACM downshift; the cause is in the RF chain</td>
+<td>could be ACM, beam share, spacecraft state, or a handover to a spacecraft with different loading</td>
+</tr>
+<tr>
+<td>Several terminals degrading together</td>
+<td>shared weather, or a shared node</td>
+<td>shared spacecraft, shared gateway, or shared geometry — three different faults, one signature</td>
+</tr>
+</tbody>
+</table>
+<p>This is the study's most portable conclusion, and it is not a claim about any product:</p>
+<blockquote>
+<p><strong>Telemetry without state is incomplete evidence.</strong></p>
+</blockquote>
+<p>A threshold evaluates a value. A decision needs the value <em>and</em> the state that value was produced in. In microwave the state is nearly constant, which is why threshold monitoring works as well as it does there. In LEO the state changes faster than most reporting intervals, which is why the same approach degrades — and why, in our results, the LEO domain is where every comparator effect is concentrated (Part VIII.4, Part IX).</p>
+<h2 id="4-3-what-generalises-and-what-does-not">4.3 What generalises, and what does not</h2>
+<p><strong>Does not generalise:</strong> the physics, the fault catalogue, the discriminators, the timescales, the meaning of "nominal", the cost and even the <em>possibility</em> of physical intervention.</p>
+<p><strong>Does generalise:</strong> the shape of the decision. In both domains the operator is asking the same three questions in the same order — <em>what changed, what explains it, is acting justified now</em> — and in both domains a threshold answers only the first.</p>
+<p>That is the claim tested by H4 (Part X), using one shared feature extractor, one shared decision layer and one shared metric set across both domains, with only the physics models and the hypothesis catalogue differing.</p>
+<figure class="fig">
+<img src="./figures/fig04-domain-comparison.svg" alt="Side-by-side conceptual comparison: microwave shown as fixed endpoints with a changing atmosphere between them; LEO/NTN shown as moving spacecraft, changing elevation, handover boundaries and a gateway path, with a shared decision layer below both.">
+<figcaption><span class="fig-num">Figure 4</span> <strong>Fixed infrastructure with changing propagation, versus changing infrastructure with changing propagation.</strong> The upper halves show what varies in each domain; the lower band shows what the two share — one decision pipeline, one feature vocabulary, one metric set, applied unmodified to both. <span class="fig-tag fig-tag-concept">CONCEPTUAL</span></figcaption>
+</figure>
+
+<hr />
+<h1 id="part-v-the-pre-escalation-decision-model">PART V — The Pre-Escalation Decision Model</h1>
+<p>This part describes what the decision layer does, at the level needed to interpret the results, without publishing how it does it. The simulation engine and the decision layer's implementation are not published.</p>
+<h2 id="5-1-what-it-is-not">5.1 What it is not</h2>
+<p>The decision layer is <strong>read-only by construction</strong>. It does not modify RF parameters, change routing, control subscribers, inspect payload traffic or execute remediation. Its strongest output is a recommendation carried to a human with an audit trail. There is no code path that writes to a network.</p>
+<p>It is also not a learned model. No machine-learned component is included anywhere in this study (Part XI, item 15). That is deliberate: the interpretable baseline is established first, so that any future learned component has something to be compared against other than nothing.</p>
+<blockquote>
+<p><strong>Automation executes. Decision intelligence establishes whether execution is justified.</strong></p>
+</blockquote>
+<h2 id="5-2-the-seven-stage-pipeline">5.2 The seven-stage pipeline</h2>
+<p>Every recommendation passes through the same named stages:</p>
+<pre><code>OBSERVE → DETECT → CORRELATE → DIAGNOSE → ESTIMATE DECISION RISK
+        → WAIT / ESCALATE / RECOMMEND ACTION → VERIFY
+</code></pre>
+<ul>
+<li><strong>OBSERVE</strong> — feature extraction from telemetry and peer-group context.</li>
+<li><strong>DETECT</strong> — is the element outside its <em>own</em> statistical control limits, sustained rather than a single noisy sample?</li>
+<li><strong>CORRELATE</strong> — does the anomaly co-occur with peers in the same correlation group, or is it isolated to one element?</li>
+<li><strong>DIAGNOSE</strong> — evidence-based differential diagnosis across candidate fault classes (§5.5).</li>
+<li><strong>ESTIMATE DECISION RISK</strong> — what does acting cost if the diagnosis is wrong, given the blast radius of the affected element?</li>
+<li><strong>WAIT / ESCALATE / RECOMMEND ACTION</strong> — the decision gate: a list of <em>named</em> checks, each with a pass/fail and a human-readable reason.</li>
+<li><strong>VERIFY</strong> — did the recommendation hold up against what actually happened?</li>
+</ul>
+<p>Stages 2, 4 and 6 map onto the three problems separated in Part I.5: detection, diagnosis, decision. Conventional threshold monitoring implements stage 2 and treats its output as if it were stage 6.</p>
+<h2 id="5-3-control-limits-whose-normal">5.3 Control limits: whose "normal"?</h2>
+<p>Per-element control limits are Shewhart 3-sigma limits [R14] computed from a <strong>robust baseline</strong> — the median and median absolute deviation (MAD) of the element's own history over a warm-up window, then <strong>frozen</strong>, not recomputed as a rolling window.</p>
+<p>Two choices, both consequential:</p>
+<p><strong>Median/MAD rather than mean/standard deviation.</strong> MAD is a robust scale estimator [R15]; it is not distorted by the fault itself once a fault is in progress, which a mean-based baseline is.</p>
+<p><strong>Frozen rather than rolling.</strong> A rolling baseline adapts to the fault and eventually accepts it as normal. Freezing after warm-up preserves the robustness property for the whole run rather than only for the first sample of a fault.</p>
+<p>The cost of that choice is stated rather than hidden: the layer needs a <strong>120-minute warm-up</strong> before it has a baseline at all. A fixed threshold needs none. In a 600-minute run with warm-up included, the comparison is therefore biased <em>against</em> the layer — a bias we measured rather than assumed (Part IX.3).</p>
+<h2 id="5-4-the-two-leo-specific-choices">5.4 The two LEO-specific choices</h2>
+<p>These are the reason LEO/NTN is not "microwave with a longer path" (Part III):</p>
+<ul>
+<li><strong>Geometry correction.</strong> The geometry-predicted component of received level — the part explained by elevation changing continuously over a pass — is removed before anything is treated as anomalous. Without it, healthy orbital physics produces an alarm every pass.</li>
+<li><strong>Context-conditioned baselines.</strong> Statistical baselines are conditioned on the serving context — for LEO, the serving satellite — because a terminal's statistics are only comparable against observations taken under the same spacecraft.</li>
+</ul>
+<p>Both were tested, not assumed. The ablation result is in Part VIII.6 and it is the largest single effect measured in this study.</p>
+<h2 id="5-5-hypothesis-cards-and-the-right-to-say-ambiguous">5.5 Hypothesis cards, and the right to say "ambiguous"</h2>
+<p>Each candidate fault class is a <strong>condition card</strong> with three kinds of condition evaluated against the extracted features:</p>
+<ul>
+<li><strong>required</strong> — must all hold for the hypothesis to be considered at all; together they define the fault's physical signature;</li>
+<li><strong>supporting</strong> — corroborate and raise confidence, but never create a verdict alone;</li>
+<li><strong>refuting</strong> — take the hypothesis off the table entirely.</li>
+</ul>
+<p>When two hypotheses reach the same top confidence tier the result is reported as <code>AMBIGUOUS</code> rather than resolved by an arbitrary tie-break. Ambiguity is a <strong>measured outcome</strong>, not a failure: <code>n_ambiguous_decisions</code> is a reported metric. A system that always produces an answer is not more useful than one that says the evidence does not separate two causes; it is less honest about the same evidence.</p>
+<p>The specific conditions, predicates and thresholds are part of the unpublished engine.</p>
+<h2 id="5-6-confidence-is-ordinal-not-probabilistic">5.6 Confidence is ordinal, not probabilistic</h2>
+<p>Confidence is reported as one of a small number of ordered tiers (LOW / MEDIUM / HIGH). The evidence a telemetry stream supplies supports an <em>ordering</em> of certainty, not a calibrated probability. <strong>A confidence tier must never be read or reported as a probability of correctness</strong> (Part XI, item 16).</p>
+<h2 id="5-7-the-decision-gate">5.7 The decision gate</h2>
+<p>The gate is the part that distinguishes this from a better detector. It asks, in order:</p>
+<ol>
+<li>Is the anomaly sustained and outside the element's own control limits?</li>
+<li>Does the correlation structure match the diagnosed class rather than a shared external cause?</li>
+<li>Is there a refuting condition on the table?</li>
+<li>What is the blast radius of this element, and therefore the cost of a wrong action?</li>
+<li>Is there a hard deadline (for LEO: remaining pass time) that makes waiting itself a decision with a cost?</li>
+<li>Given all of the above — <strong>escalate, wait, or recommend a specific non-dispatch action?</strong></li>
+</ol>
+<p>Each check is named and carries a human-readable reason. That is a requirement rather than a feature: an operational recommendation a VP cannot audit is an operational recommendation a VP cannot sign.</p>
+<figure class="fig">
+<img src="./figures/fig05-decision-architecture.svg" alt="Architecture diagram: telemetry sources feed a read-only ingestion layer, then feature extraction with context conditioning and geometry correction, then detection against frozen robust control limits, correlation across peer groups, differential diagnosis against hypothesis cards, decision-risk estimation, and a decision gate producing observe, wait, escalate or recommend outputs to a human operator, with verification feeding back.">
+<figcaption><span class="fig-num">Figure 5</span> <strong>Decision architecture, read-only by construction.</strong> Signal → context → state → evidence → decision boundary → observe / wait / escalate / recommend. The dashed boundary marks the read-only edge: nothing to the right of it writes to a network. Confidence is ordinal at every stage that reports it. <span class="fig-tag fig-tag-concept">CONCEPTUAL</span></figcaption>
+</figure>
+
+<hr />
+<h1 id="part-vi-simulation-design">PART VI — Simulation Design</h1>
+<h2 id="6-1-what-a-run-is">6.1 What a run is</h2>
+<p>A <strong>run</strong> is one (domain, scenario, seed) triple. Within a run:</p>
+<pre><code>scenario generator → baseline network state → physical model → telemetry stream
+        ↓                                                            ↓
+  fault injection (class, onset, ramp, hold, recovery)     ┌──────────┴──────────┐
+                                                    conventional arm      decision layer
+                                                           └──────────┬──────────┘
+                                                             outcome metrics
+</code></pre>
+<p><strong>Both arms see identical telemetry.</strong> The same stream is presented to a modelled conventional vendor/NMS monitor and to the decision layer, so any difference in outcome is attributable to the arm, not to a difference in what each arm was shown. This is the single most important design property of the experiment.</p>
+<h2 id="6-2-clock-seeds-and-reproducibility">6.2 Clock, seeds and reproducibility</h2>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Value / property</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Simulation clock</td>
+<td>1-minute resolution, <code>duration = 600 min</code> default (2,400 min in one warm-up variant)</td>
+</tr>
+<tr>
+<td>Feature warm-up</td>
+<td>120 min before the decision layer has a baseline</td>
+</tr>
+<tr>
+<td>Seeds</td>
+<td>30 per (domain, scenario) in the default sweep; 15 per configuration in every sensitivity sweep</td>
+</tr>
+<tr>
+<td>Random streams</td>
+<td>every stochastic component draws from a <em>named</em>, seed-derived stream, so changing the number of draws in one component does not perturb another</td>
+</tr>
+<tr>
+<td>Reproducibility</td>
+<td>runs are bit-reproducible; a dedicated reproducibility test enforces it</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-3-fault-injection">6.3 Fault injection</h2>
+<p>Each scenario declares a ground-truth fault class, an onset time, a ramp duration, a hold duration, a severity and whether the cause is <strong>self-clearing</strong>. Severity is swept across a 7-point multiplier grid (0.4, 0.6, 0.8, 1.0, 1.3, 1.7, 2.2 × declared severity) in the severity sensitivity experiment, so the window is reported as a curve rather than at a single chosen severity.</p>
+<p><strong>Onset time, ramp duration and hold duration are chosen, not sampled</strong> (Part XI, item 11). This remains open and is a real limitation: a scenario whose onset always falls at the same point in the run cannot expose an interaction between onset timing and warm-up, or between onset timing and a LEO pass boundary.</p>
+<h2 id="6-4-the-conventional-comparator-is-a-model-and-it-is-parameterised">6.4 The conventional comparator is a model, and it is parameterised</h2>
+<p>The conventional arm implements: KPI smoothing over N reporting intervals, an M-of-N persistence rule, fixed thresholds against a nominal reference, escalation and ticket process delays, and <strong>no geometry model</strong>.</p>
+<p>It is parameterised to be fair — real smoothing windows, real persistence rules, real process delays — but it is <strong>not any specific vendor's product</strong>, and no claim about any commercial NMS is made or implied anywhere in this study. Its configuration is swept rather than assumed (Part VII.4), because the alternative is to publish a result that is an artefact of one chosen baseline.</p>
+<h2 id="6-5-ground-truth-and-why-it-is-a-ceiling">6.5 Ground truth, and why it is a ceiling</h2>
+<p>The simulation constructs the ground truth. It therefore knows exactly when each fault began, what class it was, and whether it would have cleared on its own.</p>
+<p>This is a strength for experimentation and a hard ceiling on interpretation:</p>
+<blockquote>
+<p><strong>Every precision, recall and F1 figure in this study is an upper bound on what is achievable with real, ambiguous, partially-labelled operational telemetry. None of them is a field measurement.</strong></p>
+</blockquote>
+<p>Real degradation has no label, no onset marker and no counterfactual. An operator dataset does not tell you what would have happened had nobody dispatched.</p>
+<h2 id="6-6-provenance-of-every-value">6.6 Provenance of every value</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Examples</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Established physics</strong></td>
+<td>rain specific attenuation [R2], terrestrial LOS design method [R1], Earth-space method [R13], gaseous attenuation [R4], orbital geometry [R7, R8]</td>
+<td>cited prior work — <strong>not our contribution</strong></td>
+</tr>
+<tr>
+<td><strong>Derived</strong></td>
+<td>slant range, pass duration, handover cadence, hop count, footprint radius, per-region capacity share</td>
+<td>computed from parameters + physics</td>
+</tr>
+<tr>
+<td><strong>Parameters</strong></td>
+<td>550 km altitude, 25° elevation mask, 18 GHz, 35 dB fade margin, 42 mm/h rain rate at 0.01%, satellite EIRP/G-T/beam count, ACM ladder</td>
+<td>chosen, stated, not measured</td>
+</tr>
+<tr>
+<td><strong>Simplifications</strong></td>
+<td>instantaneous use of a statistical path-reduction rule, omitted P.618 reduction factors, circular orbits, spherical Earth, no J2</td>
+<td>stated in Part XI</td>
+</tr>
+<tr>
+<td><strong>Simulated results</strong></td>
+<td>every metric, every timeline, every F1, every window</td>
+<td><strong>SIMULATED — not measured</strong></td>
+</tr>
+<tr>
+<td><strong>Illustrative</strong></td>
+<td>every currency figure</td>
+<td>parametric model, no operator cost inputs</td>
+</tr>
+<tr>
+<td><strong>Measured from real data</strong></td>
+<td><em>(none)</em></td>
+<td>no operator telemetry is used anywhere</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-7-attribution-boundary">6.7 Attribution boundary</h2>
+<p>Stated explicitly because it is easy to blur, and blurring it is how research pages lose credibility:</p>
+<ul>
+<li><strong>Not ours:</strong> rain attenuation, path loss, adaptive coding and modulation, orbital mechanics, handover, statistical process control, alarm rationalisation. All established, all cited, none invented here.</li>
+<li><strong>Ours:</strong> the decision architecture, the pre-escalation experiment design, the comparator sensitivity analysis, and the specific observations reported in Part VIII.</li>
+<li><strong>Nobody's yet:</strong> whether any of it holds on an operator's live telemetry (Part XII).</li>
+</ul>
+<h2 id="6-8-scenarios">6.8 Scenarios</h2>
+<h3>Microwave</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Ground-truth class</th>
+<th>Self-clearing</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mw_rain_cell</code></td>
+<td>RAIN_FADE</td>
+<td>yes</td>
+<td>Correct answer is WAIT. Measures unnecessary dispatch.</td>
+</tr>
+<tr>
+<td><code>mw_directional_hardware</code></td>
+<td>HARDWARE_DIRECTIONAL</td>
+<td>no</td>
+<td>Clean directional signature on a dry path.</td>
+</tr>
+<tr>
+<td><code>mw_hidden_in_storm</code></td>
+<td>HARDWARE_DIRECTIONAL</td>
+<td>no</td>
+<td><strong>Hard case.</strong> Directional fault begins inside an active fade.</td>
+</tr>
+<tr>
+<td><code>mw_interference</code></td>
+<td>INTERFERENCE</td>
+<td>no</td>
+<td>Level healthy, C/(N+I) degraded. Recommend a spectrum scan, not a truck.</td>
+</tr>
+<tr>
+<td><code>mw_config_change</code></td>
+<td>CONFIG_CHANGE</td>
+<td>no</td>
+<td>Symmetric step on a dry path with a change-log entry.</td>
+</tr>
+</tbody>
+</table>
+<h3>LEO / NTN</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Ground-truth class</th>
+<th>Self-clearing</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>leo_low_elevation</code></td>
+<td>LOW_ELEVATION_GEOMETRY</td>
+<td>yes</td>
+<td><strong>No fault injected.</strong> Pure orbital geometry. Measures false-positive behaviour.</td>
+</tr>
+<tr>
+<td><code>leo_ground_rain</code></td>
+<td>PROPAGATION_FADE</td>
+<td>yes</td>
+<td>Local Ka-band fade at one terminal.</td>
+</tr>
+<tr>
+<td><code>leo_rf_subsystem</code></td>
+<td>RF_SUBSYSTEM</td>
+<td>no</td>
+<td>Spacecraft TX chain: directional, common to all terminals on that satellite.</td>
+</tr>
+<tr>
+<td><code>leo_pointing</code></td>
+<td>POINTING_ATTITUDE</td>
+<td>no</td>
+<td>Attitude drift, corroborated by housekeeping telemetry.</td>
+</tr>
+<tr>
+<td><code>leo_gateway_side</code></td>
+<td>GATEWAY_SIDE</td>
+<td>no</td>
+<td>Feeder/gateway impairment: follows the gateway across handovers.</td>
+</tr>
+<tr>
+<td><code>leo_hidden_in_rain</code></td>
+<td>RF_SUBSYSTEM</td>
+<td>no</td>
+<td>LEO analogue of the hidden-fault case.</td>
+</tr>
+</tbody>
+</table>
+<p>Scenario classes, grouped by what they test:</p>
+<ul>
+<li><strong>Normal / no fault</strong> — <code>leo_low_elevation</code> (geometry only).</li>
+<li><strong>Persistent degradation</strong> — continues until service impact.</li>
+<li><strong>Self-clearing degradation</strong> — develops and resolves without intervention: <code>mw_rain_cell</code>, <code>leo_ground_rain</code>, <code>leo_low_elevation</code>.</li>
+<li><strong>Context-dependent</strong> — the same observable carries a different meaning depending on serving state; concentrated in LEO.</li>
+<li><strong>Composite / hidden</strong> — a directional fault beginning inside an active environmental event: <code>mw_hidden_in_storm</code>, <code>leo_hidden_in_rain</code>.</li>
+</ul>
+<h2 id="6-9-metric-definitions">6.9 Metric definitions</h2>
+<h3>Timeline windows (minutes)</h3>
+<pre><code>false_calm_window        = conventional escalation − first detectable
+pre_escalation_window    = conventional escalation − decision-layer actionable
+exposure_window          = service impact − first detectable
+decision_margin          = service impact − decision-layer actionable
+conventional_margin      = service impact − conventional escalation
+time_to_correct_diagnosis = first correct verdict − first detectable
+</code></pre>
+<h3>Detection and escalation quality</h3>
+<p>Per-sample confusion matrices against three separate ground truths:</p>
+<ol>
+<li><code>detect_*</code> — predicted = sustained control-limit breach; truth = any fault active.</li>
+<li><code>layer_esc_*</code> — predicted = layer escalated; truth = a <strong>persistent</strong> fault active.</li>
+<li><code>conv_esc_*</code> — predicted = conventional escalated; same truth.</li>
+</ol>
+<p>Ground truths (2) and (3) deliberately treat escalating on a self-clearing cause as a <strong>false positive</strong>, because operationally it is one.</p>
+<h3>Decision quality</h3>
+<p><code>n_ambiguous_decisions</code>, <code>n_wait_decisions</code>, <code>layer_unnecessary_dispatch</code>, <code>conv_unnecessary_dispatch</code>.</p>
+<h3>Economics — ILLUSTRATIVE</h3>
+<p><code>exposure_conventional</code>, <code>exposure_decision_layer</code>, <code>exposure_delta</code>, reported with sensitivity bounds attached. The provenance string <code>ILLUSTRATIVE - not derived from operator financial data</code> is carried in every row of the published results files. No monetary claim may be read from this study.</p>
+<hr />
+<h1 id="part-vii-the-comparative-experiment">PART VII — The Comparative Experiment</h1>
+<p>Every number in Part VIII belongs to exactly one of the populations defined here. Metrics are not pooled across populations, and rates are not carried from one to another.</p>
+<h2 id="7-1-populations">7.1 Populations</h2>
+<table>
+<thead>
+<tr>
+<th>Population</th>
+<th>Composition</th>
+<th>Runs</th>
+<th>Published file</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>P1 — default sweep</strong></td>
+<td>11 scenarios × 30 seeds, default comparator, declared severity</td>
+<td><strong>330</strong></td>
+<td><code>data/runs.csv</code>, aggregated in <code>data/summary.csv</code></td>
+</tr>
+<tr>
+<td><strong>P1-SC — self-clearing subset of P1</strong></td>
+<td>3 self-clearing scenarios × 30 seeds</td>
+<td><strong>90</strong></td>
+<td>subset of <code>data/runs.csv</code></td>
+</tr>
+<tr>
+<td><strong>P2 — comparator sweep</strong></td>
+<td>11 comparator configurations × (11 scenarios × 15 seeds)</td>
+<td><strong>1,815</strong> (165 per configuration)</td>
+<td><code>data/sensitivity_comparator.csv</code></td>
+</tr>
+<tr>
+<td><strong>P2-SC — self-clearing subset of P2</strong></td>
+<td>3 self-clearing scenarios × 15 seeds, per configuration</td>
+<td><strong>45 per configuration</strong></td>
+<td>subset of the same file</td>
+</tr>
+<tr>
+<td><strong>P3 — severity sweep</strong></td>
+<td>10 scenarios × 15 seeds × 7 severity multipliers</td>
+<td><strong>1,050</strong></td>
+<td><code>data/sensitivity_severity.csv</code></td>
+</tr>
+<tr>
+<td><strong>P4 — warm-up variants</strong></td>
+<td>3 clock treatments × 165 runs at the degenerate comparator</td>
+<td><strong>495</strong></td>
+<td><code>data/sensitivity_warmup.csv</code></td>
+</tr>
+<tr>
+<td><strong>P5 — residual diagnosis</strong></td>
+<td>full feature/hypothesis capture on the 3 runs where the layer escalated unnecessarily in P1-SC</td>
+<td><strong>3</strong></td>
+<td><code>data/sensitivity_residual_trace.csv</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>leo_low_elevation</code> is excluded from P3 because its declared severity is zero — it is pure orbital geometry, so there is nothing to scale.</p>
+<p>Note on P2: the published file contains 2,145 rows rather than 1,815, because the default configuration is the shared centre point of all three one-factor sweeps and appears once per axis. There are <strong>11 distinct comparator configurations</strong>, not 13.</p>
+<h2 id="7-2-the-comparator-grid-is-not-a-factorial">7.2 The comparator grid is not a factorial</h2>
+<p>The sweep is <strong>three one-factor-at-a-time sweeps around a shared default, plus one degenerate point</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Values</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Smoothing window (reporting intervals averaged)</td>
+<td>1, 3, 5, 10</td>
+<td><strong>5</strong></td>
+</tr>
+<tr>
+<td>Persistence (M-of-N)</td>
+<td>1/1, 2/5, 3/5, 4/5</td>
+<td><strong>3/5</strong></td>
+</tr>
+<tr>
+<td>Escalation delay (min)</td>
+<td>0, 4, 8, 15</td>
+<td><strong>8</strong></td>
+</tr>
+<tr>
+<td>Degenerate point</td>
+<td>smoothing 1 + persistence 1-of-1 + delay 0, simultaneously</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>degenerate</strong> configuration is a perfect, instantaneous, unsmoothed threshold monitor — deliberately <em>better than any real NMS</em>. It exists to answer the hardest version of the question: does the pre-escalation window survive against a comparator no vendor could actually ship?</p>
+<p>Because the grid is not a full factorial, no interpolation between configurations is valid. A point that was not run does not exist, and reporting one would be fabrication.</p>
+<h2 id="7-3-metric-vocabulary-four-rates-that-are-not-interchangeable">7.3 Metric vocabulary — four rates that are not interchangeable</h2>
+<p>This study reports four different "false alarm" quantities. Conflating them is the most common way a monitoring comparison becomes meaningless, so they are named separately and never substituted:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Unit of analysis</th>
+<th>Population</th>
+<th>Question it answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Escalation false-positive rate</strong> (<code>conv_esc_fpr</code>, <code>layer_esc_fpr</code>)</td>
+<td>per <strong>sample</strong></td>
+<td>all runs in the population</td>
+<td>across all telemetry samples, how often did the arm signal escalation while no persistent fault was active?</td>
+</tr>
+<tr>
+<td><strong>Unnecessary-escalation (dispatch) rate</strong></td>
+<td>per <strong>run</strong></td>
+<td>self-clearing runs only (P1-SC, P2-SC)</td>
+<td>on causes that would have resolved by themselves, how often did the arm escalate at all?</td>
+</tr>
+<tr>
+<td><strong>Detection false-positive rate</strong> (<code>detect_fpr</code>)</td>
+<td>per <strong>sample</strong></td>
+<td>all runs</td>
+<td>how often did the detector flag a sustained control-limit breach with no fault active?</td>
+</tr>
+<tr>
+<td><strong>Escalation F1</strong> (<code>*_esc_f1</code>)</td>
+<td>per <strong>sample</strong>, per run, then median across seeds</td>
+<td>runs containing a persistent fault</td>
+<td>how well did escalation track a real, persistent fault?</td>
+</tr>
+</tbody>
+</table>
+<p>Escalation F1 is <strong>undefined</strong> for a run whose ground truth contains no persistent fault — by construction there is nothing to escalate about. Those rows report <code>n/a</code> and their meaningful column is the unnecessary-escalation one. This is why the self-clearing scenarios and the persistent-fault scenarios are reported separately throughout Part VIII rather than pooled into a single quality score.</p>
+<h2 id="7-4-comparisons-actually-run">7.4 Comparisons actually run</h2>
+<ol>
+<li><strong>Per-domain, per-scenario, at the default comparator</strong> (P1) — the reference table.</li>
+<li><strong>Cross-domain distribution comparison</strong> (P1) — window, time-to-correct-diagnosis, ambiguity count.</li>
+<li><strong>Comparator sensitivity</strong> (P2) — window and its paired error rates across all 11 configurations, pooled and per domain.</li>
+<li><strong>Self-clearing behaviour</strong> (P1-SC, P2-SC) — unnecessary escalation for both arms, and its stability under comparator tuning.</li>
+<li><strong>Severity sensitivity</strong> (P3) — where the window opens and where it closes as severity scales.</li>
+<li><strong>Cold-start fairness</strong> (P4) — three clock treatments of the same degenerate-comparator comparison.</li>
+<li><strong>Residual diagnosis</strong> (P5) — what exactly happened on the runs where the layer was wrong.</li>
+<li><strong>Context-conditioning ablation</strong> — decision layer with and without serving-satellite conditioning, on <code>leo_rf_subsystem</code>. Single-scenario ablation; see the labelling in Part VIII.6.</li>
+</ol>
+<h2 id="7-5-the-pairing-rule">7.5 The pairing rule</h2>
+<p>One reporting rule is enforced throughout, in the private engine's code and in this paper:</p>
+<blockquote>
+<p><strong>A pre-escalation window is never reported without the escalation error rates of the arms it was measured against.</strong></p>
+</blockquote>
+<p>A window is a latency measurement. Latency without precision is not a performance claim; it is half of one, and the missing half is the half that would have contradicted it.</p>
+<hr />
+<h1 id="part-viii-results">PART VIII — Results</h1>
+<p>All results are <strong>SIMULATED</strong>. Ground truth is known by construction, so every quality metric is an upper bound (Part VI.5). Every window is reported with the comparator it was measured against.</p>
+<h2 id="8-1-microwave-results">8.1 Microwave results</h2>
+<p>Population <strong>P1</strong> (30 seeds per scenario), default comparator, declared severity.</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Window (min, median)</th>
+<th>Layer esc. F1</th>
+<th>Conv. esc. F1</th>
+<th>Layer unnecessary esc.</th>
+<th>Conv. unnecessary esc.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mw_interference</code></td>
+<td>20</td>
+<td>0.99</td>
+<td>0.97</td>
+<td>0%</td>
+<td>0%</td>
+</tr>
+<tr>
+<td><code>mw_rain_cell</code></td>
+<td>16</td>
+<td>n/a¹</td>
+<td>n/a¹</td>
+<td>7% (2/30)</td>
+<td><strong>100% (30/30)</strong></td>
+</tr>
+<tr>
+<td><code>mw_directional_hardware</code></td>
+<td>13</td>
+<td>0.92</td>
+<td>0.90</td>
+<td>0%</td>
+<td>0%</td>
+</tr>
+<tr>
+<td><code>mw_hidden_in_storm</code></td>
+<td>13</td>
+<td>0.95</td>
+<td>0.98</td>
+<td>0%</td>
+<td>0%</td>
+</tr>
+<tr>
+<td><code>mw_config_change</code></td>
+<td>11</td>
+<td>1.00</td>
+<td>0.98</td>
+<td>0%</td>
+<td>0%</td>
+</tr>
+</tbody>
+</table>
+<p>¹ Escalation F1 is undefined where the ground truth contains no persistent fault. The meaningful column for that row is unnecessary escalation.</p>
+<p><strong>What happened.</strong> Every microwave scenario produced a positive window at the default comparator, between 11 and 20 minutes. Both arms diagnosed the persistent-fault scenarios well; on <code>mw_hidden_in_storm</code> and <code>mw_config_change</code> the conventional arm's escalation F1 is actually <em>higher</em> than the layer's (0.98 vs 0.95, 0.98 vs 1.00 respectively — the layer leads on <code>mw_config_change</code>), which is reported rather than smoothed over. On a clean, dry-path, symmetric step, a threshold is a perfectly good instrument.</p>
+<p><strong>Why it happened.</strong> The mechanism behind the window is the comparator's own arithmetic (Part II.9): smoothing lags the ramp, persistence adds more, the process delay adds the rest. The mechanism behind the <em>diagnosis</em> differences is evidence the threshold does not use — per-direction asymmetry, peer correlation across hops sharing weather, and change-log corroboration.</p>
+<p><strong>What telemetry changed.</strong> Received level and C/N fall through the fade; per-direction asymmetry separates a directional hardware fault from a symmetric propagation event; on <code>mw_interference</code> the level stays healthy while C/(N+I) degrades, which is why the correct recommendation is a spectrum scan and not a truck.</p>
+<p><strong>What the conventional arm saw.</strong> A smoothed KPI crossing a fixed threshold, M-of-N times, then a delay. On <code>mw_rain_cell</code> it saw exactly that — and escalated, in <strong>all 30 seeds</strong>.</p>
+<p><strong>What the decision layer saw.</strong> The same telemetry, plus: the event was symmetric across both directions, it correlated with peer hops in the same weather, and an independent environmental signal corroborated it. Diagnosis: RAIN_FADE, self-clearing. Decision: WAIT.</p>
+<p><strong>Operational consequence.</strong> On the one microwave scenario where the correct action was to do nothing, the conventional arm generated 30 unnecessary escalations out of 30 and the layer generated 2.</p>
+<figure class="fig">
+<img src="./figures/fig06-timeline-microwave.png" alt="Timeline of one simulated microwave run, mw_hidden_in_storm, seed 1, showing fault onset, first detectable, decision-layer actionable, conventional escalation, ticket and service impact marks along an operational-time axis.">
+<figcaption><span class="fig-num">Figure 6</span> <strong>One simulated microwave incident: <code>mw_hidden_in_storm</code>, seed 1.</strong> A directional hardware fault beginning inside an active fade — the hard case, because the environmental event masks the directional signature. Single run, not an aggregate; it illustrates the timeline vocabulary, it is not evidence of typical behaviour. Regenerated from <code>data/runs.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
+</figure>
+
+<h2 id="8-2-leo-ntn-results">8.2 LEO / NTN results</h2>
+<p>Population <strong>P1</strong> (30 seeds per scenario), default comparator, declared severity.</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Window (min, median)</th>
+<th>Layer esc. F1</th>
+<th>Conv. esc. F1</th>
+<th>Layer unnecessary esc.</th>
+<th>Conv. unnecessary esc.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>leo_pointing</code></td>
+<td>250 <strong>(n = 6/30)</strong>³</td>
+<td>0.95</td>
+<td>0.30</td>
+<td>0%</td>
+<td>0%</td>
+</tr>
+<tr>
+<td><code>leo_rf_subsystem</code></td>
+<td>189 (n = 28/30)</td>
+<td>0.94</td>
+<td>0.34</td>
+<td>0%</td>
+<td>0%</td>
+</tr>
+<tr>
+<td><code>leo_gateway_side</code></td>
+<td>9</td>
+<td>0.98</td>
+<td>0.97</td>
+<td>0%</td>
+<td>0%</td>
+</tr>
+<tr>
+<td><code>leo_ground_rain</code></td>
+<td>7</td>
+<td>n/a¹</td>
+<td>n/a¹</td>
+<td>0%</td>
+<td><strong>100% (30/30)</strong></td>
+</tr>
+<tr>
+<td><code>leo_hidden_in_rain</code></td>
+<td>7</td>
+<td>0.89</td>
+<td>0.39</td>
+<td>0%</td>
+<td>0%</td>
+</tr>
+<tr>
+<td><code>leo_low_elevation</code></td>
+<td>— ²</td>
+<td>n/a¹</td>
+<td>n/a¹</td>
+<td>3% (1/30)</td>
+<td>0%</td>
+</tr>
+</tbody>
+</table>
+<p>² Neither arm escalated in any seed. Reported as a null result, not omitted.
+³ The conventional arm escalated in only 6 of 30 seeds, so this window is conditioned on a small subsample and <strong>must never be quoted without its n</strong>.</p>
+<p><strong>What happened.</strong> The LEO results split into two groups, and the split is physical rather than statistical.</p>
+<p><em>Group 1 — faults the conventional arm can see</em> (<code>leo_gateway_side</code>): both arms perform similarly (F1 0.98 vs 0.97, window 9 min). A gateway-side impairment follows the gateway across handovers and produces a persistent, threshold-visible degradation.</p>
+<p><em>Group 2 — faults distributed across the pass schedule</em> (<code>leo_rf_subsystem</code>, <code>leo_pointing</code>, <code>leo_hidden_in_rain</code>): the layer's escalation F1 is 0.89–0.95 while the conventional arm's is 0.30–0.39. The large windows (189, 250 min) are not evidence of a fast layer; they are evidence that <strong>the conventional arm frequently never escalated at all</strong>, which is why they are reported with n and why they are not treated as a headline.</p>
+<p><strong>Why it happened.</strong> A spacecraft-side fault is only observable while that spacecraft is serving. Aggregated across a pass schedule, its signature is intermittent degradation with full recovery — which is also what healthy geometry looks like, and what a passing rain cell looks like. Threshold monitoring, applied to unconditioned aggregates, cannot separate them.</p>
+<p><strong>What telemetry changed.</strong> Received level and throughput trace their per-pass arcs; the fault adds a component that appears and disappears with the serving satellite. In <code>leo_hidden_in_rain</code> a spacecraft fault begins during a ground-side fade, so two mechanisms overlap in the same observables.</p>
+<p><strong>What the conventional arm saw.</strong> Repeated partial degradations that individually failed persistence, or crossed threshold and then recovered at handover. Result: escalation F1 0.30–0.39 on real, persistent faults — it is not that it alarmed too much here, it is that it <em>could not hold a verdict</em> against a signal chopped up by the pass schedule.</p>
+<p><strong>What the decision layer saw.</strong> The same telemetry with the geometry-predicted component removed and baselines conditioned on the serving satellite. Under conditioning, the fault stops being intermittent and becomes what it physically is: a persistent degradation of one spacecraft's RF chain, present whenever that spacecraft serves.</p>
+<p><strong>Operational consequence.</strong> For the space segment there is no truck. The decision is <em>which side of the link to investigate</em> and <em>whether the evidence survives the next handover</em>. A monitoring arm with escalation F1 of 0.34 on a real spacecraft fault does not support that decision; it produces intermittent tickets that close themselves.</p>
+<figure class="fig">
+<img src="./figures/fig07-timeline-leo.png" alt="Timeline of one simulated LEO/NTN run, leo_rf_subsystem, seed 1, showing fault onset, first detectable, decision-layer actionable, conventional escalation, ticket and service impact marks along an operational-time axis.">
+<figcaption><span class="fig-num">Figure 7</span> <strong>One simulated LEO/NTN incident: <code>leo_rf_subsystem</code>, seed 1.</strong> A spacecraft RF-chain degradation, common to every terminal that satellite serves and invisible between its passes. Single run, not an aggregate. Regenerated from <code>data/runs.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
+</figure>
+
+<h2 id="8-3-cross-domain-comparison">8.3 Cross-domain comparison</h2>
+<figure class="fig">
+<img src="./figures/fig08-window-by-scenario.png" alt="Horizontal box plot of pre-escalation window by scenario, microwave and LEO scenarios coloured separately, with a zero reference line.">
+<figcaption><span class="fig-num">Figure 8</span> <strong>Pre-escalation window by scenario, default comparator.</strong> Box = IQR, line = median, whiskers = 1.5 IQR; values below zero mean the conventional baseline escalated first. Population P1, 30 seeds per scenario. This figure describes the <em>default comparator's</em> behaviour as much as the layer's — read it together with Figure 11. Regenerated from <code>data/runs.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
+</figure>
+
+<figure class="fig">
+<img src="./figures/fig09-cross-domain.png" alt="Three box plots comparing microwave and LEO/NTN distributions of pre-escalation window, time to correct diagnosis, and ambiguous decisions per run.">
+<figcaption><span class="fig-num">Figure 9</span> <strong>The physics change; the decision problem persists.</strong> Cross-domain comparison of the <em>decision</em> problem — window, time to correct diagnosis, ambiguity count — not of the technologies. Population P1. Regenerated from <code>data/runs.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
+</figure>
+
+<p>Pooled medians at the default comparator (population P1): <strong>microwave 14 min, LEO/NTN 7 min, pooled 13 min</strong> (n = 274 of 330 runs where a window is defined; a window is undefined where the conventional arm never escalated).</p>
+<p>The distribution shapes differ more than the medians do. Microwave windows are tight and positive; LEO windows are bimodal — small where the conventional arm escalates normally, very large where it effectively never does.</p>
+<figure class="fig">
+<img src="./figures/fig10-coverage-derivation.png" alt="Derivation chart comparing microwave and LEO/NTN infrastructure for the same demand region: hops, radios, relay sites and aggregate capacity versus footprint area, instantaneous service coverage, satellites for continuous coverage and capacity attributable to the region.">
+<figcaption><span class="fig-num">Figure 10</span> <strong>Infrastructure and capacity derivation for the same demand region.</strong> Geographic coverage, instantaneous service coverage, capacity and continuity are reported <em>separately</em> and must not be collapsed into a single ratio. The 307-satellite figure is a geometric lower bound for continuous coverage, not a constellation design. Regenerated from <code>data/coverage_comparison.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
+</figure>
+
+<h2 id="8-4-comparator-sensitivity-the-central-result">8.4 Comparator sensitivity — the central result</h2>
+<p>Population <strong>P2</strong>: 11 configurations × 165 runs. Window is pooled across all scenarios; unnecessary-escalation rates are on <strong>P2-SC</strong> (45 self-clearing runs per configuration). Computed for this paper from <code>data/sensitivity_comparator.csv</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Comparator configuration</th>
+<th>Window (min, pooled median)</th>
+<th>Conv. esc. FPR (median / mean)</th>
+<th>Conv. unnecessary esc. (P2-SC)</th>
+<th>Layer unnecessary esc. (P2-SC)</th>
+<th>Layer esc. F1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>smoothing 1</td>
+<td>10</td>
+<td>0.00 / 0.20</td>
+<td>66.7%</td>
+<td>4.4%</td>
+<td>0.953</td>
+</tr>
+<tr>
+<td>smoothing 3</td>
+<td>12</td>
+<td>0.00 / 0.20</td>
+<td>66.7%</td>
+<td>4.4%</td>
+<td>0.953</td>
+</tr>
+<tr>
+<td><strong>smoothing 5 · persistence 3/5 · delay 8 (DEFAULT)</strong></td>
+<td><strong>13</strong></td>
+<td><strong>0.00 / 0.22</strong></td>
+<td><strong>66.7%</strong></td>
+<td><strong>4.4%</strong></td>
+<td><strong>0.953</strong></td>
+</tr>
+<tr>
+<td>smoothing 10</td>
+<td>15</td>
+<td>0.00 / 0.25</td>
+<td>66.7%</td>
+<td>4.4%</td>
+<td>0.953</td>
+</tr>
+<tr>
+<td>persistence 1/1</td>
+<td>11</td>
+<td>0.00 / 0.22</td>
+<td>66.7%</td>
+<td>4.4%</td>
+<td>0.953</td>
+</tr>
+<tr>
+<td>persistence 2/5</td>
+<td>12</td>
+<td>0.00 / 0.27</td>
+<td>68.9%</td>
+<td>4.4%</td>
+<td>0.953</td>
+</tr>
+<tr>
+<td>persistence 4/5</td>
+<td>12</td>
+<td>0.00 / 0.19</td>
+<td>64.4%</td>
+<td>4.4%</td>
+<td>0.953</td>
+</tr>
+<tr>
+<td>escalation delay 0</td>
+<td>3</td>
+<td>0.00 / 0.30</td>
+<td>68.9%</td>
+<td>4.4%</td>
+<td>0.953</td>
+</tr>
+<tr>
+<td>escalation delay 4</td>
+<td>8</td>
+<td>0.00 / 0.29</td>
+<td>68.9%</td>
+<td>4.4%</td>
+<td>0.953</td>
+</tr>
+<tr>
+<td>escalation delay 15</td>
+<td>18</td>
+<td>0.00 / 0.14</td>
+<td>42.2%</td>
+<td>4.4%</td>
+<td>0.953</td>
+</tr>
+<tr>
+<td><strong>DEGENERATE</strong> (smoothing 1 + persistence 1/1 + delay 0)</td>
+<td><strong>−146</strong></td>
+<td><strong>1.00 / 0.61</strong></td>
+<td><strong>100%</strong></td>
+<td><strong>4.4%</strong></td>
+<td><strong>0.953</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Read the last two columns first. <strong>Nothing in them moves.</strong> The decision layer's unnecessary-escalation rate is 4.4% (2 of 45) and its escalation F1 is 0.953 in every configuration, because the comparator's configuration has no effect on it. Everything that moves in this table belongs to the conventional arm.</p>
+<p>Per domain, the same sweep:</p>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>Window, microwave (min)</th>
+<th>Window, LEO/NTN (min)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>smoothing 1 → 10</td>
+<td>12 → 17</td>
+<td>7 → 11</td>
+</tr>
+<tr>
+<td>persistence 1/1 → 4/5</td>
+<td>12 → 15</td>
+<td>7 → 7</td>
+</tr>
+<tr>
+<td>escalation delay 0 → 15</td>
+<td>6 → 20</td>
+<td>2 → 7</td>
+</tr>
+<tr>
+<td><strong>DEGENERATE</strong></td>
+<td><strong>+2</strong></td>
+<td><strong>−191</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>One-factor-at-a-time, the window moves modestly.</strong> Each axis alone shifts the pooled median by a few minutes in the direction arithmetic predicts: less smoothing, weaker persistence and shorter delay all make the comparator faster and the window smaller.</p>
+<p><strong>All three at once, it inverts.</strong> The degenerate configuration collapses the pooled median from 13 min to −146 min. That is not a small extrapolation of the one-factor results; it is a qualitative change, and it is the reason the original hypothesis is reported as failed (Part IX).</p>
+<p><strong>And it is bought, not earned.</strong> In the same configuration, conventional escalation FPR rises from a median of 0.00 to 1.00 (mean 0.22 → 0.61) and conventional unnecessary escalation rises from 66.7% to 100%. The degenerate comparator escalates on everything — it is "earlier" in the same sense that a smoke detector triggered by toast is early.</p>
+<figure class="fig">
+<img src="./figures/fig11-comparator-sensitivity.png" alt="Three panels of box plots showing pre-escalation window distribution against smoothing window, persistence rule and escalation delay, with the degenerate configuration shown as a separate box far below zero.">
+<figcaption><span class="fig-num">Figure 11</span> <strong>Does the window survive a more aggressive comparator?</strong> All scenarios pooled, 15 seeds per configuration, declared severity. The degenerate box is the answer. Window shown here <em>without</em> its paired error rates for space — see Figure 12 and the table above for the pairing this study requires. Regenerated from <code>data/sensitivity_comparator.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
+</figure>
+
+<figure class="fig">
+<img src="./figures/fig12-latency-precision.png" alt="Scatter of pre-escalation window against escalation false-positive rate for each comparator configuration, per domain, with the decision layer plotted as a separate point off the conventional curve.">
+<figcaption><span class="fig-num">Figure 12</span> <strong>Latency versus precision.</strong> Each conventional point is one comparator configuration; the layer is a single point that does not move as the comparator is tuned. No conventional configuration reaches the layer's combination of near-zero escalation FPR and a non-negative window. Regenerated from <code>data/sensitivity_comparator.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
+</figure>
+
+<h2 id="8-5-self-clearing-scenarios">8.5 Self-clearing scenarios</h2>
+<p>Population <strong>P1-SC</strong>: 90 runs (3 self-clearing scenarios × 30 seeds), default comparator.</p>
+<table>
+<thead>
+<tr>
+<th>Arm</th>
+<th>Unnecessary escalations</th>
+<th>Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Conventional</td>
+<td>60 of 90</td>
+<td><strong>66.7%</strong></td>
+</tr>
+<tr>
+<td>Decision layer</td>
+<td>3 of 90</td>
+<td><strong>3.3%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>By scenario: conventional escalated in 30/30 on <code>mw_rain_cell</code> and 30/30 on <code>leo_ground_rain</code>, and in 0/30 on <code>leo_low_elevation</code>. The layer escalated in 2/30 on <code>mw_rain_cell</code> and 1/30 on <code>leo_low_elevation</code>.</p>
+<p>In population <strong>P2-SC</strong> (45 runs per configuration, 15 seeds), the layer's rate is 4.4% (2 of 45) at every one of the 11 comparator configurations. The two rates — 3.3% on 90 runs and 4.4% on 45 runs — are different populations and are not interchangeable.</p>
+<p><strong>Why it happened.</strong> For <code>mw_rain_cell</code> and <code>leo_ground_rain</code> the fade is real, sustained and threshold-crossing. A detector is <em>supposed</em> to fire on it. The question the detector cannot ask is whether the cause will resolve on its own, which requires symmetry, peer correlation and environmental corroboration — evidence, not a value.</p>
+<p><strong>The residual is real and is not tuned away.</strong> All three layer failures were re-run with full feature and hypothesis capture (population P5):</p>
+<ul>
+<li><code>mw_rain_cell</code> <strong>seeds 12 and 21</strong> fired the HARDWARE_DIRECTIONAL hypothesis: per-direction asymmetry (3.72 dB and 3.75 dB) crossed both the element's own control limit and the 3.0 dB nominal directional-imbalance floor for 5 consecutive samples, during an active, symmetric rain event. ATPC compensates each direction independently, and its compensation noise occasionally produces a directional signature by chance. In both cases the asymmetry cleared the floor by only 0.7–0.75 dB.</li>
+<li><code>leo_low_elevation</code> <strong>seed 1</strong> fired GATEWAY_SIDE at HIGH confidence: co-located terminals sharing a gateway co-degraded from orbital geometry alone — all terminals on a gateway see similar elevation over a pass — which the gateway-correlation condition cannot distinguish from a real feeder-side fault without an independent gateway-health signal.</li>
+</ul>
+<p>Both diagnoses point at a specific, nameable evidence gap rather than at a tuning constant. <strong>Tuning against three known seeds is exactly the overfitting this study exists to avoid</strong>, so the residual is published instead.</p>
+<figure class="fig">
+<img src="./figures/fig13-escalation-quality.png" alt="Grouped bar chart of escalation quality metrics per scenario for the conventional arm and the decision layer.">
+<figcaption><span class="fig-num">Figure 13</span> <strong>Escalation quality: is the escalation about a real, persistent fault?</strong> Population P1. Escalating on a self-clearing cause is scored as a false positive, because operationally it is one. Regenerated from <code>data/runs.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
+</figure>
+
+<figure class="fig">
+<img src="./figures/fig14-residual-diagnosis.png" alt="Three stacked time-series panels showing the feature traces of the three self-clearing runs where the decision layer escalated unnecessarily.">
+<figcaption><span class="fig-num">Figure 14</span> <strong>The three self-clearing runs on which the decision layer escalated unnecessarily.</strong> Feature traces for <code>mw_rain_cell</code> seeds 12 and 21 and <code>leo_low_elevation</code> seed 1 (population P5). Published because a residual that is only summarised is a residual that cannot be checked. Regenerated from <code>data/sensitivity_residual_trace.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
+</figure>
+
+<h2 id="8-6-leo-ntn-context-conditioning">8.6 LEO/NTN context conditioning</h2>
+<p>This is the largest single effect measured in the study, and the strictest labelling in the paper applies to it.</p>
+<p><strong>The ablation.</strong> The decision layer was run on <code>leo_rf_subsystem</code> with and without conditioning each element's statistical baseline on its serving satellite.</p>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>Escalation F1 on <code>leo_rf_subsystem</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>With serving-satellite conditioning</td>
+<td><strong>0.94</strong></td>
+</tr>
+<tr>
+<td>Without conditioning</td>
+<td><strong>≈0.05</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why.</strong> A spacecraft-side fault is present only while that spacecraft serves. Pooled across a pass schedule, the fault's samples are mixed with samples taken under healthy spacecraft. The pooled distribution's median and MAD absorb the fault; the element never leaves its own control limits; the fault becomes <strong>statistically invisible</strong> rather than merely hard to see.</p>
+<p><strong>Operational consequence, stated as a design principle rather than a product claim:</strong></p>
+<blockquote>
+<p><strong>Aggregate telemetry can hide the state that actually matters.</strong></p>
+</blockquote>
+<p><strong>Labelling — read this before quoting the number.</strong></p>
+<ul>
+<li>This is a <strong>single-scenario ablation</strong>, on one scenario, from the hypothesis set (H5). It is not a cross-domain measurement.</li>
+<li>There is <strong>no microwave equivalent</strong>, because microwave has no serving-satellite analogue.</li>
+<li>It was a <strong>design decision that was tested</strong>, not an emergent discovery — the requirement was found by the simulation failing without it.</li>
+<li>The generalisation "aggregate telemetry hides serving-state-dependent faults in operational networks" is <strong>NOT MEASURED</strong>. It is a hypothesis supported by one simulated ablation.</li>
+</ul>
+<h2 id="8-7-severity-sensitivity">8.7 Severity sensitivity</h2>
+<p>Population <strong>P3</strong>: 10 scenarios × 15 seeds × 7 severity multipliers (0.4 → 2.2).</p>
+<p>The window is reported as a curve rather than at one chosen severity, because a single-severity result is a chosen point on an unpublished curve. The qualitative shape: the window opens where degradation is severe enough to be observable but not so severe that it crosses the conventional threshold immediately, and closes at both ends — at very low severity neither arm escalates, and at very high severity both escalate almost together.</p>
+<figure class="fig">
+<img src="./figures/fig15-severity-sensitivity.png" alt="Two panels, one per domain, plotting median pre-escalation window with interquartile band against severity multiplier for each scenario.">
+<figcaption><span class="fig-num">Figure 15</span> <strong>Where does the pre-escalation window open, and where does it close?</strong> 15 seeds per point; <code>leo_low_elevation</code> excluded (declared severity is zero — pure orbital geometry, nothing to scale). Regenerated from <code>data/sensitivity_severity.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
+</figure>
+
+<hr />
+<h1 id="part-ix-what-failed">PART IX — What Failed</h1>
+<p>A hypothesis with no falsification condition is a marketing claim. This one had a falsification condition, and it was met.</p>
+<h2 id="9-1-h1-original-not-supported">9.1 H1 (ORIGINAL) — not supported</h2>
+<blockquote>
+<p><strong>Claim.</strong> For degradation with a finite ramp, there is a non-zero interval between the first sample that leaves the element's own statistical control limits and the moment conventional threshold monitoring escalates.</p>
+<p><strong>Falsified if.</strong> The median window is ≤ 0, or its IQR straddles 0, for the majority of scenarios.</p>
+</blockquote>
+<p><strong>Status at the default comparator (P1, 30 seeds).</strong> Not falsified in isolation: median 7–20 min for scenarios where both arms escalate, and 189–250 min for LEO space-segment faults where the conventional arm frequently never escalates at all.</p>
+<p><strong>Status against the comparator range (P2, 15 seeds per configuration).</strong> <strong>NOT SUPPORTED AS STATED.</strong></p>
+<p>The falsification condition was written expecting to be tested against <em>one</em> comparator. Tested against a comparator <em>range</em>, it fails: the degenerate configuration collapses the pooled median window from <strong>13 min to −146 min</strong>, and does so on the majority of scenarios.</p>
+<p>Per scenario, at the degenerate comparator (population P2, 15 seeds):</p>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Scenario</th>
+<th>Window (min, median)</th>
+<th>n with a defined window</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>microwave</td>
+<td><code>mw_interference</code></td>
+<td><strong>+8</strong></td>
+<td>15</td>
+</tr>
+<tr>
+<td>microwave</td>
+<td><code>mw_rain_cell</code></td>
+<td><strong>+4</strong></td>
+<td>15</td>
+</tr>
+<tr>
+<td>microwave</td>
+<td><code>mw_directional_hardware</code></td>
+<td><strong>+1</strong></td>
+<td>15</td>
+</tr>
+<tr>
+<td>microwave</td>
+<td><code>mw_hidden_in_storm</code></td>
+<td><strong>+1</strong></td>
+<td>15</td>
+</tr>
+<tr>
+<td>microwave</td>
+<td><code>mw_config_change</code></td>
+<td><strong>−2</strong></td>
+<td>15</td>
+</tr>
+<tr>
+<td>leo_ntn</td>
+<td><code>leo_ground_rain</code></td>
+<td><strong>−155</strong></td>
+<td>15</td>
+</tr>
+<tr>
+<td>leo_ntn</td>
+<td><code>leo_hidden_in_rain</code></td>
+<td><strong>−155</strong></td>
+<td>15</td>
+</tr>
+<tr>
+<td>leo_ntn</td>
+<td><code>leo_gateway_side</code></td>
+<td><strong>−195</strong></td>
+<td>15</td>
+</tr>
+<tr>
+<td>leo_ntn</td>
+<td><code>leo_low_elevation</code></td>
+<td><strong>−204</strong></td>
+<td><strong>2</strong> — small subsample, do not quote without n</td>
+</tr>
+<tr>
+<td>leo_ntn</td>
+<td><code>leo_pointing</code></td>
+<td><strong>−217</strong></td>
+<td>15</td>
+</tr>
+<tr>
+<td>leo_ntn</td>
+<td><code>leo_rf_subsystem</code></td>
+<td><strong>−225</strong></td>
+<td>15</td>
+</tr>
+</tbody>
+</table>
+<p>Two things are visible here that a pooled number hides:</p>
+<ol>
+<li><strong>Microwave is essentially unaffected</strong> — every scenario lands between −2 and +8 minutes. Against a perfect instantaneous monitor, the microwave window is approximately zero, which is exactly what the arithmetic of Part II.9 predicts once the comparator's lag is removed.</li>
+<li><strong>Every LEO scenario inverts, deeply.</strong> The entire pooled deficit is a LEO effect.</li>
+</ol>
+<p><strong>The honest summary:</strong> the raw lead-time claim, as originally stated, is not supported. The original H1 does not survive its own sensitivity analysis.</p>
+<h2 id="9-2-why-the-failure-is-a-result-and-not-an-error">9.2 Why the failure is a result and not an error</h2>
+<p>It would have been possible to publish the 13-minute number. It is a real measurement, at a real comparator configuration, with a documented method. It would also have been misleading, for one reason:</p>
+<blockquote>
+<p>The number describes <strong>the comparator's slowness</strong> at least as much as it describes the layer's speed. Change the comparator and the number changes. Publish it alone and a reader cannot tell which of those two things they are being sold.</p>
+</blockquote>
+<p>That is why the sensitivity sweep is part of the main experiment rather than an appendix, and why the pairing rule (Part VII.5) exists.</p>
+<h2 id="9-3-cold-start-asymmetry-measured-material-and-not-sufficient">9.3 Cold-start asymmetry — measured, material, and not sufficient</h2>
+<p>The decision layer needs a <strong>120-minute warm-up</strong> to learn a per-element robust baseline. A fixed threshold needs none. In a 600-minute run with warm-up included in the comparison, the layer is charged for 20% of the run in which it could not have acted at all.</p>
+<p>This is a bias in favour of the comparator, so it was measured rather than assumed away. A <strong>25% threshold was fixed in advance</strong> for calling this term material. Population <strong>P4</strong>, degenerate comparator, three clock treatments of the same comparison:</p>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Treatment</th>
+<th>Pooled median window</th>
+<th>Microwave</th>
+<th>LEO/NTN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>W_a</strong></td>
+<td>as run — 600 min, warm-up included</td>
+<td><strong>−146 min</strong></td>
+<td>+2</td>
+<td>−191</td>
+</tr>
+<tr>
+<td><strong>W_b</strong></td>
+<td>comparison clock started at <em>t</em> = warm-up for <strong>both</strong> arms</td>
+<td><strong>−34 min</strong></td>
+<td>+2</td>
+<td>−71</td>
+</tr>
+<tr>
+<td><strong>W_c</strong></td>
+<td>4× longer run, 2,400 min (warm-up is 5% of the run rather than 20%)</td>
+<td><strong>−154 min</strong></td>
+<td>+2</td>
+<td>−191</td>
+</tr>
+</tbody>
+</table>
+<p><strong>W_b differs from W_a by 77%</strong> — far outside the 25% band. <strong>Cold-start bias is therefore a material term</strong>, and this study says so rather than burying it.</p>
+<p><strong>And it does not reverse the finding.</strong> Even crediting the layer with the full 120 minutes in which it could not possibly have acted:</p>
+<ul>
+<li>LEO's window under a perfect comparator remains <strong>substantially negative</strong> (−71 min);</li>
+<li>microwave is <strong>+2 min in all three variants</strong>, entirely unaffected by warm-up;</li>
+<li>the long-run variant W_c stays within 5% of W_a, confirming the effect is a fixed-cost artefact rather than a scaling one.</li>
+</ul>
+<p>So: cold start explains <strong>part</strong> of the deficit, not all of it. Both halves of that sentence are load-bearing.</p>
+<h2 id="9-4-what-else-did-not-resolve">9.4 What else did not resolve</h2>
+<p><strong>H6 — the economics — is deliberately UNRESOLVED.</strong> Lead time converts to avoided exposure only through an <em>actionable fraction</em> and an <em>avoidance probability</em>, both less than 1, and it saturates. Acting on a self-clearing cause has strictly negative value. The model is parametric and every currency figure is labelled ILLUSTRATIVE, with the provenance string carried into every row of the results files.</p>
+<p><strong>No monetary claim may be published from this study until at least one operator supplies real cost inputs.</strong> This is the single largest open gap in the work, and it is a gap that no amount of additional simulation can close.</p>
+<figure class="fig">
+<img src="./figures/fig16-economic-exposure.png" alt="Box plot of modelled operational exposure per incident for the conventional arm and the decision layer, labelled illustrative.">
+<figcaption><span class="fig-num">Figure 16</span> <strong>Modelled operational exposure — ILLUSTRATIVE.</strong> Currency units are arbitrary and the assumptions are parametric. This figure is published to show that the economics model exists and is sensitive to its assumptions, not to support any value claim. Regenerated from <code>data/runs.csv</code>. <span class="fig-tag fig-tag-illustrative">ILLUSTRATIVE — NOT A VALUE CLAIM</span></figcaption>
+</figure>
+
+<hr />
+<h1 id="part-x-what-survived">PART X — What Survived</h1>
+<p>Two findings survive the sensitivity analysis. Neither is a lead-time claim.</p>
+<h2 id="10-1-h1-revised-the-trade-off-is-real-and-the-layer-is-not-on-it">10.1 H1 (REVISED) — the trade-off is real, and the layer is not on it</h2>
+<blockquote>
+<p><strong>Claim.</strong> A conventional threshold monitor's escalation latency can be reduced arbitrarily by reducing smoothing, persistence and process delay — but its false-positive and unnecessary-escalation rates rise as it does. The decision layer's error rates are invariant to that tuning.</p>
+<p><strong>Falsified if.</strong> A comparator configuration exists that matches the decision layer's false-positive and unnecessary-escalation rates while escalating at least as early — a point at or below the layer's escalation FPR <em>and</em> at or above its window.</p>
+</blockquote>
+<p><strong>Status: not falsified</strong>, across all 11 swept configurations (population P2).</p>
+<ul>
+<li>The conventional arm's escalation FPR ranges from 0.00 (the least aggressive configurations) to 1.00 (degenerate), and its window moves accordingly, from modest positive values to −146 min pooled.</li>
+<li>The decision layer's escalation FPR does not move (~0.00 everywhere), nor does its unnecessary-escalation rate (4.4%), nor its escalation F1 (0.953).</li>
+<li><strong>No configuration reaches both conditions at once.</strong> The configurations with FPR near 0.00 are the least aggressive ones, whose windows are smaller than the layer's at the default comparator. The only configuration whose absolute detection speed beats the layer — the degenerate one — buys it with FPR 1.00 and 100% unnecessary escalation.</li>
+</ul>
+<p>This is a stronger and more defensible claim than the original H1, for a specific reason: <strong>it does not depend on which comparator you assume.</strong> It depends only on the shape of conventional monitoring's own trade-off curve, and on the layer not being subject to it.</p>
+<p>The mechanism is not mysterious. The conventional arm's tuning parameters are all <em>latency</em> parameters — smoothing, persistence, delay. None of them adds evidence. Moving along that curve trades waiting time against certainty because waiting <em>is</em> the only evidence a threshold has. The layer's error rates are unaffected by that tuning because they are produced by a different quantity: differential evidence across peers, directions, environment and serving context.</p>
+<h2 id="10-2-h3-the-correct-decision-is-sometimes-to-do-nothing-and-that-is-measurable">10.2 H3 — the correct decision is sometimes to do nothing, and that is measurable</h2>
+<blockquote>
+<p><strong>Claim.</strong> For self-clearing causes, escalation is a false positive with a real cost. An early-warning layer that cannot say WAIT is not an improvement.</p>
+<p><strong>Falsified if.</strong> The decision layer escalates on <code>mw_rain_cell</code>, <code>leo_ground_rain</code> or <code>leo_low_elevation</code> at a rate comparable to the conventional arm.</p>
+</blockquote>
+<p><strong>Status: not falsified, with a measured residual.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Population</th>
+<th>Conventional</th>
+<th>Decision layer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1-SC (90 runs, default comparator)</td>
+<td>60 (66.7%)</td>
+<td>3 (3.3%)</td>
+</tr>
+<tr>
+<td>P2-SC (45 runs per configuration, all 11 configurations)</td>
+<td>64.4% – 100%</td>
+<td>4.4%, invariant</td>
+</tr>
+</tbody>
+</table>
+<p>The layer is <strong>not claimed to be perfect on this failure mode</strong> — roughly an order of magnitude better than the comparator, with three diagnosed failures published in full (Part VIII.5).</p>
+<p><strong>This is the single most operationally relevant result in the study, and it is not a lead-time result.</strong> It says: on causes that resolve by themselves, the modelled conventional monitor dispatched two times out of three, and under aggressive tuning every time; the decision layer dispatched about one time in twenty-three, and that rate did not move when the comparator was tuned.</p>
+<h2 id="10-3-the-other-hypotheses">10.3 The other hypotheses</h2>
+<p><strong>H2 — environmental and persistent causes are separable <em>before</em> the event ends. Not falsified.</strong> On <code>mw_hidden_in_storm</code> — a directional fault beginning inside an active fade — the layer's escalation F1 is 0.95. The LEO composite <code>leo_hidden_in_rain</code> reaches 0.89 against a conventional 0.39. The separation happens <em>during</em> the composite event, not after the environmental cause clears; a rule that only worked afterwards would be "wait and see", not diagnosis.</p>
+<p><strong>H4 — the decision problem generalises across domains; the physics does not. Not falsified</strong>, with the caveat in H5. One shared feature extractor, one shared decision layer and one shared metric set were applied to both domains; only the physics models and the hypothesis catalogue differ. Neither domain required a bespoke pipeline.</p>
+<p><strong>H5 — LEO adds discriminators and constraints that microwave does not have. Points 1, 2 and 4 supported.</strong></p>
+<ol>
+<li><em>Geometry is a legitimate cause of degradation.</em> A fixed threshold alarms on healthy physics; the layer removes the geometry-predicted component first.</li>
+<li><em>Two independent correlation groups</em> (serving satellite, serving gateway) versus microwave's one (adjacent links) — a strictly richer space-versus-ground discriminator.</li>
+<li><em>A hard time constraint.</em> "Can this wait for the next pass?" is a first-class question with no microwave equivalent, surfaced as a named gate check on remaining pass time.</li>
+<li><em>Statistics must be conditioned on the serving satellite</em> — the ablation in Part VIII.6 (F1 0.94 → ≈0.05).</li>
+</ol>
+<p><strong>H6 — economics. UNRESOLVED by design</strong> (Part IX.4).</p>
+<h2 id="10-4-what-survived-stated-in-full">10.4 What survived, stated in full</h2>
+<ol>
+<li>Pre-escalation information <strong>can</strong> exist in simulated network trajectories with a finite degradation ramp.</li>
+<li>The apparent lead-time advantage is <strong>strongly dependent on the conventional baseline</strong> and is not a property of the layer alone.</li>
+<li>Conventional monitoring <strong>can be made faster</strong>, at a measured cost in unnecessary escalation.</li>
+<li>The decision layer's unnecessary-escalation behaviour was <strong>substantially more stable</strong> across the tested comparator configurations — invariant, in this population.</li>
+<li><strong>Network context materially affects interpretation</strong>, most sharply in LEO/NTN, where an unconditioned baseline made a real spacecraft fault statistically invisible.</li>
+<li>The value of a decision signal depends on <strong>operational consequence</strong>, not merely detection time.</li>
+</ol>
+<p>Everything on that list is a statement about a simulation. None of it is a statement about an operator's network.</p>
+<hr />
+<h1 id="part-xi-limitations">PART XI — Limitations</h1>
+<p>Stated in full, not summarised. Every item is a question a reviewer or a VP of network operations will ask. <strong>Item numbers are preserved from <code>docs/LIMITATIONS.md</code></strong> so that references from elsewhere in this paper, and from the repository, remain valid.</p>
+<h2 id="11-1-fundamental">11.1 Fundamental</h2>
+<ol>
+<li><strong>The networks are simulated.</strong> No result here is evidence about a real operator's network. The study establishes that a decision architecture is <em>coherent and testable</em>, not that it works in production. Only an operator pilot on real telemetry can do that.</li>
+<li><strong>Ground truth is known by construction.</strong> Real degradation has no label. Every reported precision/recall figure is an upper bound on what is achievable with real, ambiguous, partially-labelled operational data.</li>
+<li><strong>Single-fault scenarios.</strong> Except for the two <code>hidden_in_*</code> composites, each run contains one fault. Real incidents overlap far more.</li>
+</ol>
+<h2 id="11-2-physics-microwave">11.2 Physics — microwave</h2>
+<ol start="4">
+<li><strong>ITU-R P.838-3 coefficients are transcribed, not verified.</strong> They must be re-checked against the official publication before appearing in a peer-reviewed paper.</li>
+<li><strong>Design-rule and instantaneous attenuation are different quantities.</strong> The P.530-18 effective path length is a long-term statistical design rule. Using the same reduction on an instantaneous wet path is a modelling simplification, labelled in the source.</li>
+<li><strong>The ACM ladder is representative, not from a vendor datasheet.</strong> Absolute capacity figures must be re-derived from a cited profile table before being quoted.</li>
+<li><strong>No multipath or ducting</strong>, no wet-radome effect. Multipath dominates outage statistics on long, flat and over-water paths; its absence means our microwave results are conditioned on a rain-dominated impairment population (Part II.6).</li>
+<li><strong>Blast radius is element-local.</strong> The microwave model computes downstream isolation; the LEO model does not model beam-sharing contention.</li>
+</ol>
+<h2 id="11-3-physics-leo-ntn">11.3 Physics — LEO / NTN</h2>
+<ol start="6">
+<li><strong>LEO slant-path rain omits ITU-R P.618 reduction factors</strong> and therefore over-estimates fade at low elevation.</li>
+<li><strong>Orbits are circular, the Earth is spherical, no J2 perturbation and no Earth rotation</strong> in pass timing. Adequate for elevation-driven link behaviour across one pass; inadequate for any availability claim.</li>
+<li><strong>Satellite EIRP, G/T, beam count and beam footprint are parameters, not measurements.</strong> Any published number must state them.</li>
+<li><strong>Constellation size is a geometric lower bound</strong> using a street-of-coverage packing efficiency. It is not a constellation design.</li>
+<li><em>(continued)</em> <strong>No inter-satellite links, no beam-shape roll-off, no traffic-dependent congestion</strong> in the LEO domain. Doppler, carrier recovery and synchronisation loss are also not modelled (Part III.3).</li>
+</ol>
+<h2 id="11-4-method">11.4 Method</h2>
+<ol start="11">
+<li><strong>Scenario onset times are chosen, not sampled; severity is swept, not chosen.</strong> Severity is swept across a 7-point multiplier grid per scenario, so the window is reported as a curve rather than a single chosen point. Onset time, ramp duration and hold duration remain fixed per scenario. That remains open.</li>
+<li><strong>The conventional baseline is a <em>model</em> of vendor monitoring, and its sensitivity is measured, not assumed — and the headline window does not survive it.</strong> It is parameterised to be fair (real smoothing windows, real M-of-N rules, real process delays) but it is not any specific vendor's product. Under the degenerate comparator the pooled median window falls from 13 to −146 min while conventional escalation FPR rises from 0.00 to 1.00 (median) and unnecessary escalation from 66.7% to 100% — it buys the apparent lead with false alarms, not with earlier detection. The decision layer's own error rates do not move.</li>
+<li><strong>Part of the degenerate-comparator deficit is a cold-start artefact — part, not all.</strong> Measured, not assumed: −146 min as run, −34 min with the comparison clock started at warm-up for both arms, −154 min over a 4× longer run. Excluding warm-up moves the number by 77%, over the 25% threshold fixed in advance, so cold-start bias <strong>is</strong> material. By domain it is entirely a LEO effect (−191 as-run vs −71 warm-up-excluded) and absent from microwave (+2 in all three variants).</li>
+<li><strong><code>leo_pointing</code> conventional escalation occurred in only 6 of 30 seeds.</strong> Its window statistic is conditioned on a small subsample and must always be reported with n. The same caution applies to <code>leo_low_elevation</code> in the degenerate-comparator table (n = 2).</li>
+<li><strong>No learned model is included.</strong> The study deliberately establishes the interpretable baseline first. Any future learned component must be compared against this baseline, not against nothing.</li>
+<li><strong>Confidence is ordinal, not calibrated.</strong> LOW / MEDIUM / HIGH is honest about what the evidence supports. It is not a probability and must not be reported as one.</li>
+<li><strong>The decision layer has a small, diagnosed false-positive residual</strong> — 3 of 90 self-clearing runs (3.3%) versus 60 of 90 (66.7%) for the conventional arm. Not zero. All three are diagnosed in Part VIII.5: two <code>mw_rain_cell</code> seeds where ATPC compensation noise produced a directional signature clearing the 3.0 dB imbalance floor by 0.7–0.75 dB, and one <code>leo_low_elevation</code> seed where terminals sharing a gateway co-degraded from orbital geometry alone. <strong>The residual was diagnosed, not tuned away.</strong></li>
+</ol>
+<h2 id="11-5-economics">11.5 Economics</h2>
+<ol start="18">
+<li><strong>Every currency figure is ILLUSTRATIVE.</strong> The model is parametric and its provenance string is carried into the results files. Until an operator supplies real cost inputs, no monetary claim may be published. This is the single largest gap in the study.</li>
+<li><strong>Actionable-fraction and avoidance-probability are assumptions</strong>, bounded but not measured.</li>
+</ol>
+<h2 id="11-6-the-not-measured-register">11.6 The NOT-MEASURED register</h2>
+<p>Claims that this study does <strong>not</strong> establish, listed so that nobody has to infer them from silence:</p>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Production detection accuracy</td>
+<td><strong>NOT MEASURED</strong></td>
+</tr>
+<tr>
+<td>Operator-level false-positive performance</td>
+<td><strong>NOT MEASURED</strong></td>
+</tr>
+<tr>
+<td>Real dispatch or truck-roll reduction</td>
+<td><strong>NOT MEASURED</strong></td>
+</tr>
+<tr>
+<td>Real outage prediction</td>
+<td><strong>NOT MEASURED</strong></td>
+</tr>
+<tr>
+<td>Production network availability impact</td>
+<td><strong>NOT MEASURED</strong></td>
+</tr>
+<tr>
+<td>Commercial ROI or cost saving</td>
+<td><strong>NOT MEASURED — illustrative model only</strong></td>
+</tr>
+<tr>
+<td>Generalisation to arbitrary constellations</td>
+<td><strong>NOT MEASURED</strong></td>
+</tr>
+<tr>
+<td>Generalisation to arbitrary microwave systems or to multipath-dominated paths</td>
+<td><strong>NOT MEASURED</strong></td>
+</tr>
+<tr>
+<td>That aggregate telemetry hides serving-state faults <em>in real networks</em></td>
+<td><strong>NOT MEASURED</strong> — one simulated single-scenario ablation</td>
+</tr>
+<tr>
+<td>Performance against any specific commercial NMS</td>
+<td><strong>NOT MEASURED — and not claimed</strong></td>
+</tr>
+<tr>
+<td>Performance of any learned/ML component</td>
+<td><strong>NOT MEASURED — none is included</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="part-xii-field-validation-the-next-experiment">PART XII — Field Validation: The Next Experiment</h1>
+<p>The next experiment is not another simulation.</p>
+<h2 id="12-1-the-objective-is-falsification-not-confirmation">12.1 The objective is falsification, not confirmation</h2>
+<blockquote>
+<p>The objective of field validation is <strong>not to prove the simulation correct. It is to determine where the simulation is wrong.</strong></p>
+</blockquote>
+<p>A simulation that survives contact with operator telemetry unchanged has almost certainly not been tested hard enough. The specific things expected to break, in order of likelihood:</p>
+<ol>
+<li><strong>Telemetry resolution.</strong> A 15-minute polling interval erases most of the pre-escalation structure this study measures at 1-minute resolution. If an operator's data is 15-minute averaged, the first real finding will be about resolution, not about decisions.</li>
+<li><strong>Labelling.</strong> There is no ground truth. Fault class, onset and self-clearing status must be reconstructed from tickets, change logs and engineer recollection — all of which are late, incomplete and partly wrong.</li>
+<li><strong>Multi-fault reality.</strong> Overlapping incidents, maintenance windows and configuration changes co-occur constantly. Single-fault scenarios are the study's most optimistic assumption after ground truth.</li>
+<li><strong>Multipath.</strong> Where multipath dominates, the environmental-corroboration evidence that carries the microwave diagnosis is weaker or absent.</li>
+</ol>
+<h2 id="12-2-the-evidence-layers-and-what-each-can-answer">12.2 The evidence layers, and what each can answer</h2>
+<p>Four layers, answering four different questions. <strong>They must not be collapsed into a single claim of "validation".</strong></p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Source</th>
+<th>Question it can answer</th>
+<th>Question it cannot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L1 — real telemetry, own testbed</strong></td>
+<td>physical microwave testbed</td>
+<td>can the telemetry be captured, ingested and reconstructed into element state at usable resolution?</td>
+<td>whether the decisions are right</td>
+</tr>
+<tr>
+<td><strong>L2 — independent real dataset</strong></td>
+<td>published third-party dataset</td>
+<td>does the pipeline generalise beyond locally generated telemetry?</td>
+<td>operational value</td>
+</tr>
+<tr>
+<td><strong>L3 — simulation</strong></td>
+<td>this study</td>
+<td>how does the architecture behave under controlled faults, sensitivity sweeps and configurations too expensive or unsafe to create on a live network?</td>
+<td>anything about real networks</td>
+</tr>
+<tr>
+<td><strong>L4 — operator validation</strong></td>
+<td>production telemetry, operator review</td>
+<td>does the decision signal have operational value?</td>
+<td>nothing else can answer this</td>
+</tr>
+</tbody>
+</table>
+<p>This paper is <strong>L3 only.</strong></p>
+<h2 id="12-3-the-validation-sequence">12.3 The validation sequence</h2>
+<pre><code>real microwave telemetry
+        ↓
+telemetry ingestion (read-only)
+        ↓
+state reconstruction
+        ↓
+decision signal, retrospective
+        ↓
+operator review of the decisions, not the metrics
+        ↓
+prospective validation on live telemetry
+</code></pre>
+<p>Terrestrial microwave is the first target for a specific reason: a physical testbed provides direct access to real observations, and the microwave domain is where this study's own results are most stable across comparator configurations (Part IX.1). The LEO/NTN domain is where the simulation's claims are most sensitive, which makes it the more interesting second target and the less honest first one.</p>
+<h2 id="12-4-what-an-operator-has-to-supply-for-the-open-questions-to-close">12.4 What an operator has to supply for the open questions to close</h2>
+<ul>
+<li><strong>Real cost inputs</strong> — dispatch cost, engineering hours, exposure per incident. Without these, H6 stays unresolved and no economic claim can be made.</li>
+<li><strong>Real escalation configuration</strong> — the actual smoothing, persistence and delay in their NMS. This study's comparator is a model; an operator's own configuration is the only comparator that matters to them.</li>
+<li><strong>Retrospective incident labels</strong> — enough to reconstruct approximate ground truth on a bounded window of history.</li>
+<li><strong>A defined decision to evaluate against</strong> — dispatch / no dispatch, escalate / hold. Metrics are not the deliverable; decisions are.</li>
+</ul>
+<hr />
+<h1 id="part-xiii-conclusion">PART XIII — Conclusion</h1>
+<p>A network does not become operationally interesting when it crosses an alarm threshold. It usually becomes interesting earlier. But "earlier" turned out not to be the useful part.</p>
+<p>This study began with a simple hypothesis: that a read-only decision layer identifies degradation before conventional monitoring escalates. At one comparator configuration, it did — a pooled median of 13 minutes. Then the comparator itself was swept, and the claim came apart. Against a perfect, instantaneous, unsmoothed threshold monitor, the pooled median window inverts to −146 minutes; even after crediting the layer with the entire 120-minute warm-up it could not have acted in, the LEO domain stays at −71 minutes. The lead-time claim, as originally written, is not supported.</p>
+<p>What is left is more useful than what was lost.</p>
+<p>A monitoring system can be made arbitrarily fast. The cost of doing so is measurable and, in this simulation, steep: conventional unnecessary escalation rises from 66.7% to 100% on causes that would have resolved on their own, and per-sample escalation FPR rises from a median of 0.00 to 1.00. The decision layer's equivalents — 4.4% unnecessary escalation, ~0.00 escalation FPR, 0.953 escalation F1 — did not move under any comparator configuration tested. The trade-off is real, and one of the two arms is not on it.</p>
+<p>The two domains also answered differently, in a way their physics predicts. Microwave — fixed infrastructure, changing propagation — is stable across comparator configurations; against a perfect monitor its window is approximately zero, and nothing about the result depends on tuning. LEO/NTN — changing infrastructure <em>and</em> changing propagation — is where every sensitivity effect concentrates, and where an unconditioned statistical baseline made a real spacecraft fault statistically invisible (escalation F1 0.94 → ≈0.05 in a single-scenario ablation). The general principle behind both: <strong>telemetry without state is incomplete evidence.</strong></p>
+<p>So the decision problem is not:</p>
+<blockquote>
+<p>How early can we detect something?</p>
+</blockquote>
+<p>It is:</p>
+<blockquote>
+<p>How early can we establish that something deserves action — and how often do we act when nothing did?</p>
+</blockquote>
+<p>That boundary cannot be established by simulation. Everything above is an upper bound produced by a system that knows its own ground truth, on networks that were designed to be legible. The next experiment has to run on telemetry from a network that was never designed to make the answer easy, with labels reconstructed after the fact, at whatever resolution the operator's collection actually provides.</p>
+<p>That experiment is the one that decides whether any of this matters.</p>
+<hr />
+<h2 id="references">References</h2>
+<p>Cited work is <strong>established prior art</strong>. None of the physics, standards or statistical methods below were developed by AID Edge Inc. Where this study applies them, it applies them with the simplifications recorded in Part XI.</p>
+<p><strong>Terrestrial propagation and fixed radio systems</strong></p>
+<ul>
+<li><strong>[R1]</strong> Recommendation ITU-R P.530-18 (09/2021), <em>Propagation data and prediction methods required for the design of terrestrial line-of-sight systems.</em> International Telecommunication Union.</li>
+<li><strong>[R2]</strong> Recommendation ITU-R P.838-3 (03/2005), <em>Specific attenuation model for rain for use in prediction methods.</em> ITU.</li>
+<li><strong>[R3]</strong> Recommendation ITU-R P.837, <em>Characteristics of precipitation for propagation modelling</em> (P.837-8, 09/2025, current at the time of writing). ITU.</li>
+<li><strong>[R4]</strong> Recommendation ITU-R P.676-13 (08/2022), <em>Attenuation by atmospheric gases and related effects.</em> ITU.</li>
+<li><strong>[R5]</strong> ETSI EN 302 217-2, <em>Fixed Radio Systems; Characteristics and requirements for point-to-point equipment and antennas; Part 2: Digital systems operating in frequency bands from 1 GHz to 86 GHz.</em> (V3.4.1, 2025-07 at the time of writing.)</li>
+<li><strong>[R6]</strong> ETSI EN 302 307-2, <em>Digital Video Broadcasting (DVB); Second generation framing structure, channel coding and modulation systems...; Part 2: DVB-S2 Extensions (DVB-S2X).</em> Cited as a reference point for how adaptive coding-and-modulation ladders are specified.</li>
+</ul>
+<p><strong>Earth-space propagation, orbital mechanics and NTN</strong></p>
+<ul>
+<li><strong>[R13]</strong> Recommendation ITU-R P.618-14 (08/2023), <em>Propagation data and prediction methods required for the design of Earth-space telecommunication systems.</em> ITU.</li>
+<li><strong>[R7]</strong> D. A. Vallado, <em>Fundamentals of Astrodynamics and Applications.</em> Microcosm Press / Springer.</li>
+<li><strong>[R8]</strong> G. Maral and M. Bousquet, <em>Satellite Communications Systems: Systems, Techniques and Technology.</em> Wiley.</li>
+<li><strong>[R9]</strong> 3GPP TR 38.811, <em>Study on New Radio (NR) to support non-terrestrial networks.</em></li>
+<li><strong>[R10]</strong> 3GPP TR 38.821, <em>Solutions for NR to support non-terrestrial networks (NTN).</em></li>
+</ul>
+<p><strong>Statistical process control</strong></p>
+<ul>
+<li><strong>[R14]</strong> W. A. Shewhart, <em>Economic Control of Quality of Manufactured Product.</em> Van Nostrand, 1931.</li>
+<li><strong>[R15]</strong> P. J. Rousseeuw and C. Croux, "Alternatives to the Median Absolute Deviation," <em>Journal of the American Statistical Association</em>, 88(424), 1273–1283, 1993.</li>
+</ul>
+<p><strong>Alarm management and operational practice</strong></p>
+<ul>
+<li><strong>[R11]</strong> ANSI/ISA-18.2, <em>Management of Alarm Systems for the Process Industries</em> (2016 edition).</li>
+<li><strong>[R12]</strong> EEMUA Publication 191, <em>Alarm Systems: A Guide to Design, Management and Procurement.</em></li>
+</ul>
+<p><strong>A note on what citation means here.</strong> ITU-R recommendations are cited for the models this study uses or simplifies, not as endorsement of the simulation. ISA-18.2 and EEMUA 191 are cited because alarm rationalisation — the observation that an alarm system which raises everything raises nothing — is decades-old operational practice from process industries, not a new insight from this work. The contribution claimed here is narrower: placing a read-only decision layer inside a controlled pre-escalation experiment and subjecting <strong>the comparator itself</strong> to sensitivity analysis.</p>
+<hr />
+<h2 id="appendix-a-figure-index">Appendix A — Figure index</h2>
+<p>Figures 1–5 are conceptual diagrams drawn for this paper. Figures 6–16 are regenerated from the published data by <code>replot.py</code> and carry the repository filenames listed below.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Figure</th>
+<th>Source</th>
+<th>Repository file</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Pre-escalation operational timeline</td>
+<td>conceptual</td>
+<td>—</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Microwave causal chain</td>
+<td>conceptual</td>
+<td>—</td>
+</tr>
+<tr>
+<td>3</td>
+<td>LEO/NTN causal chain</td>
+<td>conceptual</td>
+<td>—</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Microwave vs LEO/NTN comparison</td>
+<td>conceptual</td>
+<td>—</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Decision architecture</td>
+<td>conceptual</td>
+<td>—</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Example simulated microwave incident</td>
+<td>P1, single run</td>
+<td><code>fig06_timeline_microwave_mw_hidden_in_storm.png</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Example simulated LEO/NTN incident</td>
+<td>P1, single run</td>
+<td><code>fig06_timeline_leo_ntn_leo_rf_subsystem.png</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Pre-escalation window by scenario</td>
+<td>P1</td>
+<td><code>fig01_pre_escalation_window.png</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td>Cross-domain distributions</td>
+<td>P1</td>
+<td><code>fig02_cross_domain.png</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td>Infrastructure and capacity derivation</td>
+<td>derived</td>
+<td><code>fig05_coverage_derivation.png</code></td>
+</tr>
+<tr>
+<td>11</td>
+<td>Comparator sensitivity sweep</td>
+<td>P2</td>
+<td><code>fig08_comparator_sensitivity.png</code></td>
+</tr>
+<tr>
+<td>12</td>
+<td>Latency–precision trade-off</td>
+<td>P2</td>
+<td><code>fig10_latency_precision_tradeoff.png</code></td>
+</tr>
+<tr>
+<td>13</td>
+<td>Escalation quality</td>
+<td>P1</td>
+<td><code>fig03_escalation_quality.png</code></td>
+</tr>
+<tr>
+<td>14</td>
+<td>Residual diagnosis</td>
+<td>P5</td>
+<td><code>fig09_residual_diagnosis.png</code></td>
+</tr>
+<tr>
+<td>15</td>
+<td>Severity sensitivity</td>
+<td>P3</td>
+<td><code>fig07_severity_sensitivity.png</code></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Modelled economic exposure (ILLUSTRATIVE)</td>
+<td>P1</td>
+<td><code>fig04_economic_exposure.png</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="appendix-b-reproduction">Appendix B — Reproduction</h2>
+<p><strong>Published:</strong> every figure in <code>figures/</code>, the data needed to regenerate them (<code>data/runs.csv</code>, <code>data/summary.csv</code>, <code>data/coverage_comparison.csv</code>, <code>data/sensitivity_*.csv</code>), the research hypotheses and their falsification conditions, the experiment design, the limitations, and a method description at the level needed to interpret the results.</p>
+<p><strong>Not published:</strong> the simulation engine — the network models, the physics implementation, the conventional-monitoring model, and the decision layer's feature extraction, rule engine and hypothesis cards; any threshold constant, condition predicate or hypothesis-card content.</p>
+<pre><code>python replot.py           # regenerates every result figure from the published CSVs alone
+python build_readme_table.py
+python build_article_page.py   # regenerates this page from docs/ARTICLE.md
+</code></pre>
+<p>Reproducing the underlying runs requires the private simulation engine. Reproducing every published <em>figure and table</em> does not.</p>
+<h2 id="appendix-c-relationship-to-the-other-published-documents">Appendix C — Relationship to the other published documents</h2>
+<p>This paper is a <strong>reorganisation, not a replacement</strong>. Every claim, caveat, number and limitation in it comes from the same source documents that remain published in this repository:</p>
+<table>
+<thead>
+<tr>
+<th>Source document</th>
+<th>Where it appears in this paper</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docs/METHOD.md</code></td>
+<td>Part V</td>
+</tr>
+<tr>
+<td><code>docs/EXPERIMENT_MATRIX.md</code></td>
+<td>Parts VI and VII, Part VIII.1–8.2 tables</td>
+</tr>
+<tr>
+<td><code>docs/RESEARCH_HYPOTHESES.md</code></td>
+<td>Parts IX and X</td>
+</tr>
+<tr>
+<td><code>docs/LIMITATIONS.md</code></td>
+<td>Part XI (item numbering preserved)</td>
+</tr>
+<tr>
+<td><code>docs/PROVENANCE.md</code></td>
+<td>Part VI.7, and the provenance note below</td>
+</tr>
+<tr>
+<td><code>README.md</code></td>
+<td>Abstract, Part VIII</td>
+</tr>
+</tbody>
+</table>
+<p>The interactive instrument on the site's home page is generated from the same underlying data (<code>site/data/instrument.json</code>). Where a number appears in both, it is the same number; if they ever diverge, the CSVs in <code>data/</code> are authoritative.</p>
+<p><strong>Provenance note.</strong> Three of the source documents are adapted from AID Edge Inc.'s internal research repository, with internal file, module and command references replaced by descriptions of the thing they named. No claim, caveat, number or argument was altered in that process; the full before/after list is in <code>docs/PROVENANCE.md</code>.</p>
+<hr />
+<p class="doc-footer">The Pre-Escalation Window · AID Edge Inc. · Velorona research programme.<br>
+Documentation, figures and data are CC BY 4.0. The simulation engine is not published and is not licensed for use.<br>
+Simulated networks. Ground truth known by construction. No operator data. All currency figures illustrative.</p>
+  </article>
+</div>
+</body>
+</html>
