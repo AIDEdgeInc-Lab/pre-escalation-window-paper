@@ -45,7 +45,7 @@
 
 ## Live demo
 
-*Link added after the Cloudflare Pages deployment step.*
+[papers.aidedgeinc.com](https://papers.aidedgeinc.com/) — landing page, [full article](https://papers.aidedgeinc.com/article/), [interactive demo](https://papers.aidedgeinc.com/demo/), and [method](https://papers.aidedgeinc.com/method/).
 
 ## What is published here / what is not
 
