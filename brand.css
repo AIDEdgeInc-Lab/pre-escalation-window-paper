@@ -43,9 +43,11 @@
   --surface-1: rgba(153, 198, 243, 0.03);
   --surface-2: rgba(153, 198, 243, 0.06);
 
-  --text-0: #F5F7FA;
-  --text-1: #AAB8C2;
-  --text-2: #7C8790;
+  /* Text hierarchy (contrast on #05090C): headings 18.6:1, body 10.7:1, secondary 6.4:1, meta 5.4:1 */
+  --text-0: #F5F7FA;  /* headings, page titles, emphasis */
+  --text-1: #B3BFCA;  /* body prose — soft blue-grey, easier over long reading */
+  --text-2: #8794A0;  /* secondary descriptions, captions, metadata */
+  --text-3: #7C8790;  /* faint: dates, footers, labels */
 
   /* Velorona blue family (replaces the teal cyan-300/400/500) */
   --cyan-300: #99C6F3;  /* strong / links on dark, emphasis */
@@ -84,7 +86,7 @@ code, pre, kbd, samp { font-family: var(--font-mono); font-feature-settings: nor
 
 /* Type hierarchy: weights 400 / 500 / 600 only; no heavy bold */
 h1, h2, h3, h4 { letter-spacing: -0.012em; font-weight: 600; }
-strong, b { font-weight: 600; }
+strong, b { font-weight: 600; color: var(--text-0); }
 .eyebrow, .paper-eyebrow, .method-eyebrow, .paper-toc p {
   font-weight: 500; letter-spacing: 0.08em; font-size: 12px;
 }
@@ -103,3 +105,32 @@ footer, .doc-footer, .method-footer {
 
 /* Top navs wrap on narrow screens */
 .paper-nav, .method-nav { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+
+/* ---------- Links ----------
+ * Navigation, cards, footer and list links: no permanent underline (blue + hover/focus).
+ * Inline links in running prose keep an underline, set off from the letters. */
+a { text-decoration: none; text-underline-offset: 0.24em; text-decoration-thickness: 1px; }
+a:hover { text-decoration: underline; }
+a:focus-visible { outline: 2px solid var(--cyan-300); outline-offset: 3px; }
+
+.paper-body a, .method-section a,
+main.wrap p a, main.wrap li a, main.wrap td a, main.wrap dd a, main.wrap figcaption a, main.wrap blockquote a, main.wrap cite a {
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 42%, transparent);
+}
+.paper-body a:hover, .method-section a:hover, main.wrap a:hover { text-decoration-color: currentColor; }
+.paper-toc a, .paper-nav a, .method-toc a, .method-nav a, .cards a, .links a, .updates a { text-decoration-line: none; }
+.paper-toc a:hover, .paper-nav a:hover, .method-toc a:hover, .method-nav a:hover, .cards a:hover, .links a:hover, .updates a:hover { text-decoration-line: underline; text-decoration-color: currentColor; }
+.links a:hover, .cards a:hover { text-decoration-line: none; }
+
+/* ---------- Footer (hub + summary) ---------- */
+.site-footer { font-size: 13px; color: var(--text-3); }
+.site-footer a { color: var(--cyan-400); }
+.site-footer a:hover { color: var(--cyan-300); }
+.footer-links {
+  display: flex; flex-wrap: wrap; row-gap: 6px;
+  list-style: none; margin: 0 0 12px -14px; padding: 0; overflow: hidden;
+}
+.footer-links a { display: block; padding: 0 14px; margin-left: -1px; border-left: 1px solid var(--border-strong); line-height: 1.15; }
+.site-footer p { margin: 0; }
+.site-footer .footer-meta { margin-top: 10px; }

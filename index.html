@@ -10,23 +10,23 @@
 <style>
   :root{
     --bg:var(--plane-0); --panel:var(--plane-1); --border:var(--border-default);
-    --text:var(--text-0); --muted:var(--text-1);
+    --text:var(--text-0); --body:var(--text-1); --muted:var(--text-2);
     --cyan:var(--cyan-300); --cyan-deep:var(--cyan-500); --amber:var(--gold);
   }
   *{box-sizing:border-box}
   body{
-    margin:0; background:var(--bg); color:var(--text);
+    margin:0; background:var(--bg); color:var(--body);
     font:16px/1.6 var(--font-sans);
   }
   .wrap{max-width:760px; margin:0 auto; padding:64px 24px 96px}
   .eyebrow{color:var(--cyan); font-size:13px; letter-spacing:.06em; text-transform:uppercase; margin:0 0 16px}
-  h1{font-size:32px; line-height:1.25; margin:0 0 16px; font-weight:600}
-  .lede{color:var(--muted); font-size:17px; margin:0 0 40px; max-width:60ch}
+  h1{color:var(--text); font-size:32px; line-height:1.25; margin:0 0 16px; font-weight:600}
+  .lede{color:var(--body); font-size:17px; margin:0 0 40px; max-width:60ch}
   .callout{
     border:1px solid var(--border); background:var(--panel); border-radius:12px;
     padding:20px 24px; margin:0 0 40px;
   }
-  .callout p{margin:0; color:var(--muted); font-size:14px}
+  .callout p{margin:0; color:var(--body); font-size:14px}
   .callout strong{color:var(--text)}
   .links{list-style:none; padding:0; margin:0 0 48px; display:grid; gap:12px}
   .links a{
@@ -44,8 +44,8 @@
   .updates li{border:1px solid var(--border); background:var(--panel); border-radius:10px; padding:14px 18px; font-size:14px}
   .updates .t{font-weight:600; font-size:15px; margin:0 0 4px; color:var(--text)}
   .updates .meta{color:var(--muted); font-size:13px; margin:0 0 6px}
-  .updates .meta b{color:var(--text); font-weight:600}
-  .updates p{margin:0 0 6px; color:var(--muted)}
+  .updates .meta b{color:var(--text); font-weight:500}
+  .updates p{margin:0 0 6px; color:var(--body)}
   .updates p:last-child{margin:0}
   .updates a{color:var(--cyan-deep)}
   .updates .tbd{color:var(--gold-light)}
@@ -106,11 +106,16 @@
       </a></li>
     </ul>
 
-    <footer>
-      AID Edge Inc. | <a href="mailto:info@aidedgeinc.com">info@aidedgeinc.com</a> |
-      <a href="https://velorona.ai/">Velorona.ai</a> (product) |
-      <a href="https://aidedgeinc.com/">AID Edge Inc. Website</a> (company)
-    </footer>
+    <footer class="site-footer">
+    <ul class="footer-links">
+      <li><a href="https://velorona.ai/">Velorona.ai</a></li>
+      <li><a href="https://aidedgeinc.com/">AID Edge Inc.</a></li>
+      <li><a href="mailto:info@aidedgeinc.com">Contact</a></li>
+      <li><a href="https://aidedgeinc.com/privacy-policy/">Privacy</a></li>
+      <li><a href="https://aidedgeinc.com/terms-of-use/">Terms</a></li>
+    </ul>
+    <p>&copy; 2026 AID Edge Inc. All rights reserved.</p>
+  </footer>
   </div>
 </body>
 </html>
