@@ -6,16 +6,17 @@
 <title>The Pre-Escalation Window — Research Artifacts</title>
 <meta name="description" content="Published methodology, results, figures and data for The Pre-Escalation Window: a comparative decision-intelligence study of terrestrial microwave backhaul and LEO/NTN.">
 <link rel="canonical" href="https://papers.aidedgeinc.com/">
+<link rel="stylesheet" href="./brand.css">
 <style>
   :root{
-    --bg:#0a0c0e; --panel:#0b0e10; --border:#2a3238;
-    --text:#f2f5f7; --muted:#a9b4bc;
-    --cyan:#35c6de; --cyan-deep:#1ba3bd; --amber:#f2a83c;
+    --bg:var(--plane-0); --panel:var(--plane-1); --border:var(--border-default);
+    --text:var(--text-0); --muted:var(--text-1);
+    --cyan:var(--cyan-300); --cyan-deep:var(--cyan-500); --amber:var(--gold);
   }
   *{box-sizing:border-box}
   body{
     margin:0; background:var(--bg); color:var(--text);
-    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    font:16px/1.6 var(--font-sans);
   }
   .wrap{max-width:760px; margin:0 auto; padding:64px 24px 96px}
   .eyebrow{color:var(--cyan); font-size:13px; letter-spacing:.06em; text-transform:uppercase; margin:0 0 16px}
@@ -41,13 +42,14 @@
   .updates .sub{color:var(--muted); font-size:13px; margin:0 0 14px}
   .updates ol{list-style:none; padding:0; margin:0; display:grid; gap:10px}
   .updates li{border:1px solid var(--border); background:var(--panel); border-radius:10px; padding:14px 18px; font-size:14px}
-  .updates .t{font-weight:600; font-size:15px; margin:0 0 4px}
+  .updates .t{font-weight:600; font-size:15px; margin:0 0 4px; color:var(--text)}
   .updates .meta{color:var(--muted); font-size:13px; margin:0 0 6px}
   .updates .meta b{color:var(--text); font-weight:600}
   .updates p{margin:0 0 6px; color:var(--muted)}
   .updates p:last-child{margin:0}
   .updates a{color:var(--cyan-deep)}
-  .updates .tbd{color:var(--amber)}
+  .updates .tbd{color:var(--gold-light)}
+  .new{display:inline-block; margin-left:8px; padding:0 7px; border:1px solid var(--gold-line); border-radius:999px; background:var(--gold-soft); color:var(--gold-light); font-size:10.5px; font-weight:500; letter-spacing:.08em; line-height:18px; vertical-align:1px}
   footer{border-top:1px solid var(--border); padding-top:24px; color:var(--muted); font-size:13px}
   footer a{color:var(--cyan-deep)}
 </style>
@@ -83,7 +85,7 @@
 
     <ul class="links">
       <li><a href="/summary/">
-        <span class="label">Executive Summary / Research Overview <strong style="color:var(--amber);font-size:11px;letter-spacing:.06em">NEW</strong><small>Findings, how the study works, limitations and citation on one page, with links into the full evidence</small></span>
+        <span class="label">Executive Summary / Research Overview <span class="new">NEW</span><small>Findings, how the study works, limitations and citation on one page, with links into the full evidence</small></span>
         <span class="arrow">&#8594;</span>
       </a></li>
       <li><a href="/article/">

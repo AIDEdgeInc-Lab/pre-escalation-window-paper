@@ -7,7 +7,7 @@ html, body {
   margin: 0; padding: 0;
   background: var(--plane-0);
   color: var(--text-1);
-  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Helvetica, Arial, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.68;
 }
@@ -62,7 +62,7 @@ html, body {
 .paper-body hr { border: none; border-top: 1px solid var(--border-recessed); margin: 64px 0 0; }
 
 .paper-body code {
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.86em; background: var(--surface-2);
   padding: 1px 5px; border-radius: 3px; color: var(--text-0);
   overflow-wrap: anywhere;
