@@ -99,11 +99,22 @@
   figure img,figure svg{max-width:100%; height:auto; border:1px solid var(--border); border-radius:8px; background:var(--panel)}
   figcaption{color:var(--muted); font-size:13px; margin-top:8px}
   dl{margin:0} dt{font-weight:600; margin-top:12px} dd{margin:2px 0 0; color:var(--muted)}
-  pre{background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 14px; overflow-x:auto; font-size:13px; margin:8px 0}
+  pre{white-space:pre-wrap; overflow-wrap:anywhere; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 14px; overflow-x:auto; font-size:13px; margin:8px 0}
   code{overflow-wrap:anywhere}
   ul.bul{padding-left:20px} ul.bul li{margin:6px 0}
   .cta{border:1px solid var(--cyan-deep); border-radius:12px; padding:18px 22px; background:var(--panel)}
   footer{border-top:1px solid var(--border); margin-top:56px; padding-top:24px; color:var(--muted); font-size:14px}
+  @media (max-width:640px){
+    figure.tl svg{display:none}
+    dl.tl-list{border-left:2px solid var(--border); padding-left:20px; margin-left:8px}
+    dl.tl-list dt{position:relative; font-size:16px; margin-top:20px}
+    dl.tl-list dt:first-of-type{margin-top:8px}
+    dl.tl-list dt::before{content:""; position:absolute; left:-30px; top:.4em; width:12px; height:12px; border-radius:50%; background:var(--bg); border:2px solid var(--cyan)}
+    dl.tl-list dt:nth-of-type(1)::before{border-color:#a9b4bc}
+    dl.tl-list dt:nth-of-type(3)::before{border-color:var(--amber)}
+    dl.tl-list dt:nth-of-type(4)::before{background:#0f2a31}
+    dl.tl-list dd{font-size:16px}
+  }
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
@@ -186,7 +197,7 @@
   <h2 id="h-how">How the study works</h2>
   <p class="plain">Every simulated run generates one stream of network telemetry and shows it, unchanged, to two monitors: a <em>conventional</em> threshold monitor (modelled on vendor/NMS behaviour) and a <em>read-only decision layer</em>. Because both see identical data, any difference in outcome comes from the monitor, not the data. The decision layer never writes to a network.</p>
 
-  <figure>
+  <figure class="tl">
     <svg viewBox="0 0 760 210" role="img" aria-labelledby="tl-t tl-d" xmlns="http://www.w3.org/2000/svg">
       <title id="tl-t">Timeline of four moments</title>
       <desc id="tl-d">Left to right: 1 degradation onset, 2 early detection, 3 conventional escalation. The span between early detection and conventional escalation is 4, the decision window, the time available to act before escalation.</desc>
@@ -214,7 +225,7 @@
     <figcaption>Simplified timeline. The study's own definition: pre-escalation window = conventional escalation &minus; decision-layer actionable point. A negative window means the conventional monitor escalated first. The full operational timeline (ticket, service impact, recovery) is Figure 1 in <a href="article/#part-i-the-operational-problem">the article</a>.</figcaption>
   </figure>
 
-  <dl class="plain">
+  <dl class="plain tl-list">
     <dt>1 &middot; Degradation onset</dt><dd>The moment the underlying change begins &mdash; for example a rain cell approaching a link, or a satellite subsystem starting to drift. In the simulation this time is known exactly.</dd>
     <dt>2 &middot; Early detection</dt><dd>The point at which the decision layer has enough evidence to act (&ldquo;decision-layer actionable&rdquo; in the study). The study also records a &ldquo;first detectable&rdquo; point, when the change first becomes observable in the data.</dd>
     <dt>3 &middot; Conventional escalation</dt><dd>When the modelled threshold monitor raises an escalation after smoothing, persistence and process delay.</dd>
@@ -351,7 +362,7 @@
   </details>
 
   <h3>Reproducibility levels</h3>
-  <div class="tablewrap"><table>
+  <div class="tablewrap"><table style="min-width:0">
     <thead><tr><th>Level</th><th>Status</th><th>Basis</th></tr></thead>
     <tbody>
       <tr><td>Figures reproducible</td><td>Yes</td><td>Figures, data (<code>runs.csv</code>, <code>summary.csv</code>, <code>sensitivity_*.csv</code>, <code>coverage_comparison.csv</code>) and <code>replot.py</code> are published; <code>replot.py</code> regenerates every result figure from the published CSVs alone.</td></tr>
@@ -392,7 +403,7 @@
   </ul>
 
   <h3>Table of contents &mdash; article Parts I&ndash;XIII</h3>
-  <div class="tablewrap"><table>
+  <div class="tablewrap"><table style="min-width:0">
     <caption>One-line summaries are the questions each Part answers, from the article's &ldquo;How to read this study&rdquo; table.</caption>
     <thead><tr><th>Stage</th><th>Part</th><th>Question it answers</th></tr></thead>
     <tbody>
