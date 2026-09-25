@@ -36,6 +36,18 @@
   .links a:hover{border-color:var(--cyan-deep)}
   .links span.arrow{color:var(--cyan); flex:none}
   .links .label small{display:block; color:var(--muted); font-weight:400; margin-top:2px; font-size:13px}
+  .updates{margin:0 0 40px}
+  .updates h2{font-size:18px; margin:0 0 4px; font-weight:600}
+  .updates .sub{color:var(--muted); font-size:13px; margin:0 0 14px}
+  .updates ol{list-style:none; padding:0; margin:0; display:grid; gap:10px}
+  .updates li{border:1px solid var(--border); background:var(--panel); border-radius:10px; padding:14px 18px; font-size:14px}
+  .updates .t{font-weight:600; font-size:15px; margin:0 0 4px}
+  .updates .meta{color:var(--muted); font-size:13px; margin:0 0 6px}
+  .updates .meta b{color:var(--text); font-weight:600}
+  .updates p{margin:0 0 6px; color:var(--muted)}
+  .updates p:last-child{margin:0}
+  .updates a{color:var(--cyan-deep)}
+  .updates .tbd{color:var(--amber)}
   footer{border-top:1px solid var(--border); padding-top:24px; color:var(--muted); font-size:13px}
   footer a{color:var(--cyan-deep)}
 </style>
@@ -49,6 +61,25 @@
     <div class="callout">
       <p><strong>Honest labelling.</strong> The networks are simulated — no result here is evidence about a real operator's network. The simulation engine itself is not published; this repository contains the published results, method description, figures, and the data needed to regenerate the figures. Full detail in the README below.</p>
     </div>
+
+    <section class="updates" aria-labelledby="updates-h">
+      <h2 id="updates-h">Research Updates</h2>
+      <p class="sub">Release history, newest first. Research content versions and simulation software versions are tracked separately.</p>
+      <ol>
+        <li>
+          <p class="t">Landing-page restructure and version reconciliation</p>
+          <p class="meta"><b>Research content version:</b> 1.0 &middot; <b>Status:</b> <span class="tbd">pending publication (not yet released)</span> &middot; <b>Date:</b> <span class="tbd">[to be confirmed at publication]</span> &middot; <b>Simulation software version:</b> no tagged release</p>
+          <p>Reconciles the article's Version 1.0 with the README and citation entry (previously 0.1.0), and adds the Executive Summary / Research Overview. Findings are framed as comparator-dependent: H1 held at the default comparator (pooled median window 13 min) and inverted against a degenerate comparator (&minus;146 min). Simulation only; no operator data.</p>
+          <p><a href="/summary/">Executive Summary / Research Overview</a> &middot; <a href="/article/">Full technical paper</a></p>
+        </li>
+        <li>
+          <p class="t">Initial public release of the research artifacts</p>
+          <p class="meta"><b>Research content version:</b> 0.1.0 &middot; <b>Date:</b> 2026-08-18 &middot; <b>Simulation software version:</b> no tagged release (simulation engine not published)</p>
+          <p>Published methodology, results, figures and the data needed to regenerate the figures for The Pre-Escalation Window.</p>
+          <p><a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/commit/c9f4517">Initial public commit on GitHub</a> &middot; <a href="/method/">Method, hypotheses &amp; limitations</a></p>
+        </li>
+      </ol>
+    </section>
 
     <ul class="links">
       <li><a href="/summary/">
@@ -74,8 +105,9 @@
     </ul>
 
     <footer>
-      AID Edge Inc. — <a href="mailto:info@aidedgeinc.com">info@aidedgeinc.com</a> —
-      <a href="https://www.aidedges.com">aidedges.com</a>
+      AID Edge Inc. | <a href="mailto:info@aidedgeinc.com">info@aidedgeinc.com</a> |
+      <a href="https://velorona.ai/">Velorona.ai</a> (product) |
+      <a href="https://aidedgeinc.com/">AID Edge Inc. Website</a> (company)
     </footer>
   </div>
 </body>
