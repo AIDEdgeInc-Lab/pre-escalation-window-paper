@@ -3,40 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Pre-Escalation Window: Microwave Backhaul vs LEO/NTN | AID Edge Research</title>
-<meta name="description" content="Published methodology, results, figures and data for The Pre-Escalation Window: a comparative decision-intelligence study of terrestrial microwave backhaul and LEO/NTN. Simulation study; not validated on operator networks.">
+<title>The Pre-Escalation Window — Research Artifacts</title>
+<meta name="description" content="Published methodology, results, figures and data for The Pre-Escalation Window: a comparative decision-intelligence study of terrestrial microwave backhaul and LEO/NTN.">
 <link rel="canonical" href="https://papers.aidedgeinc.com/">
-<meta property="og:type" content="article">
-<meta property="og:site_name" content="AID Edge Inc. Research">
-<meta property="og:title" content="The Pre-Escalation Window: Microwave Backhaul vs LEO/NTN">
-<meta property="og:description" content="A simulation study of terrestrial microwave backhaul and LEO/NTN: is there a window between early degradation and conventional escalation? Not validated on operator networks.">
-<meta property="og:url" content="https://papers.aidedgeinc.com/">
-<meta property="og:image" content="https://papers.aidedgeinc.com/article/figures/fig12-latency-precision.png">
-<meta property="og:image:alt" content="Scatter of pre-escalation window against escalation false-positive rate for each comparator configuration, for LEO/NTN and microwave.">
-<meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ScholarlyArticle",
-  "name": "The Pre-Escalation Window",
-  "headline": "The Pre-Escalation Window: A comparative decision-intelligence study of terrestrial microwave backhaul and LEO/NTN",
-  "url": "https://papers.aidedgeinc.com/",
-  "author": [{"@type": "Person", "name": "Sara Khosravi", "affiliation": {"@type": "Organization", "name": "AID Edge Inc."}}],
-  "publisher": {"@type": "Organization", "name": "AID Edge Inc.", "url": "https://aidedgeinc.com"},
-  "datePublished": "2026-08-18",
-  "version": "1.0",
-  "inLanguage": "en",
-  "license": "https://creativecommons.org/licenses/by/4.0/",
-  "isBasedOn": "https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper",
-  "image": "https://papers.aidedgeinc.com/article/figures/fig12-latency-precision.png",
-  "hasPart": [
-    {"@type": "WebPage", "name": "Full research article (Parts I–XIII)", "url": "https://papers.aidedgeinc.com/article/"},
-    {"@type": "WebPage", "name": "Method, hypotheses and limitations", "url": "https://papers.aidedgeinc.com/method/"},
-    {"@type": "WebApplication", "name": "Interactive demo", "url": "https://papers.aidedgeinc.com/demo/"}
-  ]
-}
-</script>
-<link rel="stylesheet" href="./tokens.css">
 <style>
   :root{
     --bg:#0a0c0e; --panel:#0b0e10; --border:#2a3238;
@@ -44,447 +13,70 @@
     --cyan:#35c6de; --cyan-deep:#1ba3bd; --amber:#f2a83c;
   }
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth; scroll-padding-top:96px}
-  body{margin:0; background:var(--bg); color:var(--text);
-    font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
-  a{color:var(--cyan)}
-  a:focus-visible,summary:focus-visible{outline:2px solid var(--amber); outline-offset:2px}
-  .wrap{max-width:820px; margin:0 auto; padding:0 20px}
-  main.wrap{padding-bottom:96px}
-  .topbar{border-bottom:1px solid var(--border); background:var(--bg); position:sticky; top:0; z-index:5}
-  .brand{display:flex; flex-wrap:wrap; gap:8px 16px; justify-content:space-between; align-items:baseline; padding-top:12px; font-size:13px; color:var(--muted)}
-  .brand strong{color:var(--text)}
-  nav.main{display:flex; gap:4px 16px; overflow-x:auto; padding:8px 0 10px; font-size:14px; white-space:nowrap}
-  nav.main a{color:var(--muted); text-decoration:none; padding:6px 2px}
-  nav.main a:hover{color:var(--cyan)}
-  .eyebrow{color:var(--cyan); font-size:13px; letter-spacing:.06em; text-transform:uppercase; margin:40px 0 12px}
-  h1{font-size:clamp(26px,5vw,34px); line-height:1.25; margin:0 0 12px; font-weight:600}
-  h2{font-size:24px; line-height:1.3; margin:0 0 16px; font-weight:600}
-  h3{font-size:17px; margin:24px 0 8px}
-  section{margin:0; padding:48px 0 0}
-  .lede{color:var(--muted); font-size:18px; margin:0 0 20px; max-width:62ch}
-  .meta{color:var(--muted); font-size:14px; margin:0 0 16px}
-  .meta span{white-space:normal}
-  .badges{display:flex; flex-wrap:wrap; gap:8px; list-style:none; padding:0; margin:0 0 24px}
-  .badges li{border:1px solid var(--border); border-radius:999px; padding:4px 12px; font-size:13px; background:var(--panel)}
-  .badges li.warn{border-color:var(--amber); color:var(--amber)}
-  .callout{border:1px solid var(--amber); background:var(--panel); border-radius:12px; padding:18px 22px; margin:0 0 8px}
-  .callout p{margin:0; color:var(--muted); font-size:15px}
-  .callout strong{color:var(--text)}
-  .plain{max-width:66ch}
-  .todo{background:rgba(242,168,60,.14); color:var(--amber); padding:0 4px; border-radius:4px; font-size:.92em}
-  .tag{display:inline-block; font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; border-radius:4px; padding:1px 7px; margin-right:6px; vertical-align:1px; border:1px solid}
-  .t-ev{color:var(--cyan); border-color:var(--cyan)}
-  .t-in{color:#c4b5fd; border-color:#c4b5fd}
-  .t-hy{color:var(--amber); border-color:var(--amber)}
-  details{border:1px solid var(--border); background:var(--panel); border-radius:10px; margin:16px 0; padding:0 18px}
-  details>summary{cursor:pointer; padding:12px 0; font-weight:600; font-size:15px; min-height:44px}
-  details[open]>summary{border-bottom:1px solid var(--border); margin-bottom:12px}
-  details>*:last-child{margin-bottom:16px}
-  .cards{list-style:none; padding:0; margin:0 0 24px; display:grid; gap:12px}
-  .cards a{display:block; border:1px solid var(--border); background:var(--panel); border-radius:10px; padding:16px 20px; color:var(--text); text-decoration:none; min-height:44px}
-  .cards a:hover{border-color:var(--cyan-deep)}
-  .cards .head{display:flex; justify-content:space-between; gap:16px; font-weight:600; font-size:16px}
-  .cards .head .arrow{color:var(--cyan)}
-  .cards small{display:block; color:var(--muted); font-size:14px; margin-top:4px}
-  .tablewrap{overflow-x:auto; margin:12px 0 20px}
-  table{border-collapse:collapse; width:100%; font-size:14px; min-width:560px}
-  th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top}
-  th{background:var(--panel); color:var(--text)}
-  td{color:var(--muted)}
-  caption{text-align:left; color:var(--muted); font-size:13px; padding-bottom:6px}
-  blockquote{margin:12px 0; padding:8px 16px; border-left:3px solid var(--cyan-deep); color:var(--muted); font-size:15px}
-  blockquote cite{display:block; font-size:12px; margin-top:6px; font-style:normal}
-  figure{margin:20px 0}
-  figure img,figure svg{max-width:100%; height:auto; border:1px solid var(--border); border-radius:8px; background:var(--panel)}
-  figcaption{color:var(--muted); font-size:13px; margin-top:8px}
-  dl{margin:0} dt{font-weight:600; margin-top:12px} dd{margin:2px 0 0; color:var(--muted)}
-  pre{white-space:pre-wrap; overflow-wrap:anywhere; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 14px; overflow-x:auto; font-size:13px; margin:8px 0}
-  code{overflow-wrap:anywhere}
-  ul.bul{padding-left:20px} ul.bul li{margin:6px 0}
-  .cta{border:1px solid var(--cyan-deep); border-radius:12px; padding:18px 22px; background:var(--panel)}
-  footer{border-top:1px solid var(--border); margin-top:56px; padding-top:24px; color:var(--muted); font-size:14px}
-  @media (max-width:640px){
-    figure.tl svg{display:none}
-    dl.tl-list{border-left:2px solid var(--border); padding-left:20px; margin-left:8px}
-    dl.tl-list dt{position:relative; font-size:16px; margin-top:20px}
-    dl.tl-list dt:first-of-type{margin-top:8px}
-    dl.tl-list dt::before{content:""; position:absolute; left:-30px; top:.4em; width:12px; height:12px; border-radius:50%; background:var(--bg); border:2px solid var(--cyan)}
-    dl.tl-list dt:nth-of-type(1)::before{border-color:#a9b4bc}
-    dl.tl-list dt:nth-of-type(3)::before{border-color:var(--amber)}
-    dl.tl-list dt:nth-of-type(4)::before{background:#0f2a31}
-    dl.tl-list dd{font-size:16px}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
   }
-  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  .wrap{max-width:760px; margin:0 auto; padding:64px 24px 96px}
+  .eyebrow{color:var(--cyan); font-size:13px; letter-spacing:.06em; text-transform:uppercase; margin:0 0 16px}
+  h1{font-size:32px; line-height:1.25; margin:0 0 16px; font-weight:600}
+  .lede{color:var(--muted); font-size:17px; margin:0 0 40px; max-width:60ch}
+  .callout{
+    border:1px solid var(--border); background:var(--panel); border-radius:12px;
+    padding:20px 24px; margin:0 0 40px;
+  }
+  .callout p{margin:0; color:var(--muted); font-size:14px}
+  .callout strong{color:var(--text)}
+  .links{list-style:none; padding:0; margin:0 0 48px; display:grid; gap:12px}
+  .links a{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    border:1px solid var(--border); background:var(--panel); border-radius:10px;
+    padding:16px 20px; color:var(--text); text-decoration:none; font-size:15px;
+  }
+  .links a:hover{border-color:var(--cyan-deep)}
+  .links span.arrow{color:var(--cyan); flex:none}
+  .links .label small{display:block; color:var(--muted); font-weight:400; margin-top:2px; font-size:13px}
+  footer{border-top:1px solid var(--border); padding-top:24px; color:var(--muted); font-size:13px}
+  footer a{color:var(--cyan-deep)}
 </style>
 </head>
 <body>
-<header class="topbar">
   <div class="wrap">
-    <div class="brand">
-      <span><strong>AID Edge Inc.</strong> | Research &amp; Technical Publications</span>
-      <span><a href="https://aidedgeinc.com">aidedgeinc.com</a> (company) &middot; <a href="https://velorona.ai">velorona.ai</a> (product)</span>
+    <p class="eyebrow">AID Edge Inc. — Published Research</p>
+    <h1>The Pre-Escalation Window</h1>
+    <p class="lede">A comparative decision-intelligence study of terrestrial microwave backhaul and LEO/NTN — is there a measurable window during which operational degradation can be detected and acted on before conventional monitoring escalates?</p>
+
+    <div class="callout">
+      <p><strong>Honest labelling.</strong> The networks are simulated — no result here is evidence about a real operator's network. The simulation engine itself is not published; this repository contains the published results, method description, figures, and the data needed to regenerate the figures. Full detail in the README below.</p>
     </div>
-    <nav class="main" aria-label="Page sections">
-      <a href="#overview">Overview</a>
-      <a href="#how-it-works">How it works</a>
-      <a href="#findings">Findings</a>
-      <a href="#limitations">Limitations</a>
-      <a href="#artifacts">Artifacts</a>
-      <a href="#cite">Cite</a>
-      <a href="#about">About</a>
-    </nav>
-  </div>
-</header>
 
-<main class="wrap">
-
-<!-- 1. TITLE BLOCK -->
-<p class="eyebrow">AID Edge Inc. &mdash; Published Research</p>
-<h1>The Pre-Escalation Window</h1>
-<p class="lede">A comparative decision-intelligence study of terrestrial microwave backhaul and LEO/NTN &mdash; is there a measurable window during which operational degradation can be detected and acted on before conventional monitoring escalates?</p>
-<p class="meta">
-  Author: Sara Khosravi, AID Edge Inc.<br>
-  Published: 2026-08-18 &middot;
-  Page last updated: 2026-09-25 &middot;
-  Version 1.0
-</p>
-<ul class="badges" aria-label="Study status">
-  <li class="warn">Simulation study</li>
-  <li class="warn">Not operator-validated</li>
-  <li>Reproducibility artifacts available</li>
-</ul>
-
-<div class="callout" role="note">
-  <p><strong>Honest labelling.</strong> The networks are simulated &mdash; no result here is evidence about a real operator's network. The simulation engine itself is not published; this repository contains the published results, method description, figures, and the data needed to regenerate the figures. Full detail in the README below and in <a href="#limitations">Limitations</a>.</p>
-</div>
-
-<!-- 2. 30-SECOND SUMMARY -->
-<section id="overview" aria-labelledby="h-overview">
-  <h2 id="h-overview">The 30-second summary</h2>
-  <div class="plain">
-  <p>Network problems usually start gradually, well before an alarm fires, and conventional monitoring can look calm while service is getting worse. This study asks whether that gap &mdash; the &ldquo;pre-escalation window&rdquo; &mdash; can be measured, in two very different kinds of network: fixed terrestrial microwave links and moving LEO/NTN satellite links.</p>
-  <p>We built simulated networks and showed the same data to two monitors: a modelled conventional threshold monitor, and a read-only decision layer.</p>
-  <p>The pre-escalation hypothesis (H1) held under the default comparator (pooled median lead time: 13 minutes) but inverted under a degenerate comparator (&minus;146 minutes), indicating the result is comparator-dependent rather than unconditional. What survived is a different, robustness result: the conventional monitor can be made faster only by escalating unnecessarily more often, while the decision layer's unnecessary-escalation rate did not move in the simulation (4.4%, 2 of 45 self-clearing runs per comparator configuration).</p>
-  <p><strong>What this does not prove:</strong> a stable, guaranteed or unconditional early-warning window &mdash; and nothing about real networks. Everything is simulated; whether any of it holds on real telemetry is unmeasured and is the next experiment.</p>
-  </div>
-</section>
-
-<!-- 3. THE PROBLEM -->
-<section id="problem" aria-labelledby="h-problem">
-  <h2 id="h-problem">The problem &mdash; why this matters</h2>
-  <div class="plain">
-  <p>A service-impacting incident is rarely instantaneous. It usually begins as a small change in signal strength, geometry, capacity or system state, and only later becomes an alarm, a ticket and a truck roll. In between, dashboards can look &ldquo;calm&rdquo; while the network is quietly getting worse. Conventional monitoring responds only when a measurement crosses a configured threshold, stays there for a configured time, and survives a process delay.</p>
-  <p><strong>Terrestrial microwave backhaul</strong> is a fixed radio link between two sites that carries network traffic; its main enemy is changing weather along a fixed path.</p>
-  <p><strong>LEO/NTN</strong> (low-Earth-orbit / non-terrestrial network) is a satellite network in which the satellites move, so both the infrastructure and the propagation conditions keep changing.</p>
-  <p><span class="todo">[SOURCE NEEDED]</span> No industry statistic on how often this gradual-degradation pattern occurs in operators' networks is cited in the article; none is claimed here.</p>
-  </div>
-  <details>
-    <summary>For engineers</summary>
-    <p>The interval between the first observable change and conventional escalation is what the study calls the pre-escalation window. Conventional escalation is modelled as KPI smoothing over N reporting intervals, an M-of-N persistence rule, fixed thresholds against a nominal reference, and escalation/ticket process delays, with no geometry model. Microwave: fixed infrastructure, changing propagation (rain attenuation, path loss, fade margin, ACM, capacity degradation). LEO/NTN: orbital geometry, elevation, slant range, serving-satellite state, handover and capacity. See <a href="article/#part-i-the-operational-problem">Part I</a>, <a href="article/#part-ii-terrestrial-microwave-backhaul-how-degradation-propagates-through-the-link">Part II</a>, <a href="article/#part-iii-leo-ntn-how-degradation-propagates-through-a-moving-network">Part III</a>.</p>
-  </details>
-</section>
-
-<!-- 4. RESEARCH QUESTION -->
-<section id="question" aria-labelledby="h-question">
-  <h2 id="h-question">The research question</h2>
-  <blockquote>Is there a measurable <strong>pre-escalation window</strong> during which operational degradation can be detected, characterised and acted on before conventional monitoring reaches its escalation threshold &mdash; and does the same decision-intelligence principle hold when the underlying network changes from terrestrial microwave to LEO/NTN?<cite>README.md, opening quote (verbatim)</cite></blockquote>
-  <p class="plain"><strong>In plain language:</strong> is there a window of time between when a link starts to degrade and when conventional alarms fire &mdash; and is it long enough to act? <em>Answer in this study, in simulation: it depends on how fast the conventional monitor is tuned; see <a href="#findings">Findings</a>.</em></p>
-</section>
-
-<!-- 5. HOW IT WORKS -->
-<section id="how-it-works" aria-labelledby="h-how">
-  <h2 id="h-how">How the study works</h2>
-  <p class="plain">Every simulated run generates one stream of network telemetry and shows it, unchanged, to two monitors: a <em>conventional</em> threshold monitor (modelled on vendor/NMS behaviour) and a <em>read-only decision layer</em>. Because both see identical data, any difference in outcome comes from the monitor, not the data. The decision layer never writes to a network.</p>
-
-  <figure class="tl">
-    <svg viewBox="0 0 760 210" role="img" aria-labelledby="tl-t tl-d" xmlns="http://www.w3.org/2000/svg">
-      <title id="tl-t">Timeline of four moments</title>
-      <desc id="tl-d">Left to right: 1 degradation onset, 2 early detection, 3 conventional escalation. The span between early detection and conventional escalation is 4, the decision window, the time available to act before escalation.</desc>
-      <line x1="30" y1="90" x2="730" y2="90" stroke="#6e7a82" stroke-width="2"/>
-      <rect x="290" y="72" width="330" height="36" rx="6" fill="#0f2a31" stroke="#35c6de"/>
-      <text x="455" y="95" text-anchor="middle" fill="#f2f5f7" font-size="14">4 &#183; Decision window</text>
-      <g fill="#0a0c0e" stroke-width="2">
-        <circle cx="90" cy="90" r="9" stroke="#a9b4bc"/>
-        <circle cx="290" cy="90" r="9" stroke="#35c6de"/>
-        <circle cx="620" cy="90" r="9" stroke="#f2a83c"/>
-      </g>
-      <g fill="#f2f5f7" font-size="14" text-anchor="middle" font-weight="600">
-        <text x="90" y="55">1 &#183; Degradation onset</text>
-        <text x="290" y="55">2 &#183; Early detection</text>
-        <text x="620" y="55">3 &#183; Conventional escalation</text>
-      </g>
-      <g fill="#a9b4bc" font-size="12" text-anchor="middle">
-        <text x="90" y="130">the physical change begins</text>
-        <text x="290" y="130">decision layer can act</text>
-        <text x="620" y="130">threshold alarm / ticket path</text>
-        <text x="455" y="165">time available to act before escalation</text>
-        <text x="455" y="185">(can be zero or negative &#8212; see Findings)</text>
-      </g>
-    </svg>
-    <figcaption>Simplified timeline. The study's own definition: pre-escalation window = conventional escalation &minus; decision-layer actionable point. A negative window means the conventional monitor escalated first. The full operational timeline (ticket, service impact, recovery) is Figure 1 in <a href="article/#part-i-the-operational-problem">the article</a>.</figcaption>
-  </figure>
-
-  <dl class="plain tl-list">
-    <dt>1 &middot; Degradation onset</dt><dd>The moment the underlying change begins &mdash; for example a rain cell approaching a link, or a satellite subsystem starting to drift. In the simulation this time is known exactly.</dd>
-    <dt>2 &middot; Early detection</dt><dd>The point at which the decision layer has enough evidence to act (&ldquo;decision-layer actionable&rdquo; in the study). The study also records a &ldquo;first detectable&rdquo; point, when the change first becomes observable in the data.</dd>
-    <dt>3 &middot; Conventional escalation</dt><dd>When the modelled threshold monitor raises an escalation after smoothing, persistence and process delay.</dd>
-    <dt>4 &middot; Decision window</dt><dd>The time between 2 and 3: how long there is to act before conventional escalation. Called the pre-escalation window in the study.</dd>
-  </dl>
-
-  <details>
-    <summary>For engineers: method, definitions and metrics</summary>
-    <ul class="bul">
-      <li><strong>Pipeline:</strong> OBSERVE &rarr; DETECT &rarr; CORRELATE &rarr; DIAGNOSE &rarr; ESTIMATE DECISION RISK &rarr; WAIT / ESCALATE / RECOMMEND ACTION &rarr; VERIFY (<a href="method/#method">method</a>).</li>
-      <li><strong>Baseline:</strong> per-element Shewhart 3-sigma control limits from a robust baseline &mdash; median and MAD of the element's own history over a warm-up window, then frozen. Warm-up: 120 min before the decision layer has a baseline.</li>
-      <li><strong>Sampling / clock:</strong> 1-minute simulation resolution; duration 600 min default; 30 seeds per (domain, scenario) in the default sweep (11 scenarios = 330 runs); 15 seeds per configuration in each sensitivity sweep.</li>
-      <li><strong>Signals used:</strong> microwave &mdash; RSL, C/N or MSE, TX power under ATPC, errored seconds (article &sect;2.3); LEO/NTN &mdash; geometry-corrected received level, serving-satellite and gateway context, housekeeping telemetry. <em>As documented in the article; this reflects what the article discloses, not the full internal engine schema.</em></li>
-      <li><strong>Degradation scenarios:</strong> onset, ramp, hold, severity and self-clearing flag declared per scenario; severity swept over a 7-point multiplier grid (0.4&ndash;2.2&times;). Onset, ramp and hold are chosen, not sampled (a stated limitation).</li>
-      <li><strong>Escalation thresholds:</strong> conventional arm &mdash; smoothing over N intervals, M-of-N persistence, fixed thresholds against a nominal reference, process delays; swept over 11 comparator configurations including a degenerate one. Decision-layer threshold constants and predicates are unpublished. Default comparator (identical for both domains in <code>data/sensitivity_comparator.csv</code>): <code>smoothing_window</code> = 5, <code>persistence_m</code>/<code>persistence_n</code> = 3/5, <code>escalation_delay_min</code> = 8 (the row labelled DEFAULT in <a href="article/#8-4-comparator-sensitivity-the-central-result">&sect;8.4</a>). Degenerate: 1, 1/1, 0.</li>
-      <li><strong>Metrics:</strong> false-calm window, pre-escalation window, exposure window, decision margin, conventional margin, time to correct diagnosis; per-sample detection/escalation confusion matrices (F1, FPR); unnecessary-dispatch rates; ambiguous/wait counts; ILLUSTRATIVE economics. Definitions: <a href="article/#6-9-metric-definitions">article &sect;6.9</a>, <a href="method/#experiment_matrix">experiment matrix</a>.</li>
-      <li><strong>Baselines compared:</strong> Arm A, modelled conventional monitor; Arm B, read-only decision layer; plus the comparator sweep including a degenerate (perfect, instantaneous, unsmoothed) monitor.</li>
+    <ul class="links">
+      <li><a href="/summary/">
+        <span class="label">Executive Summary / Research Overview <strong style="color:var(--amber);font-size:11px;letter-spacing:.06em">NEW</strong><small>Findings, how the study works, limitations and citation on one page, with links into the full evidence</small></span>
+        <span class="arrow">&#8594;</span>
+      </a></li>
+      <li><a href="/article/">
+        <span class="label">Full research article<small>The complete written analysis, Parts I–XIII</small></span>
+        <span class="arrow">&#8594;</span>
+      </a></li>
+      <li><a href="/method/">
+        <span class="label">Method, hypotheses &amp; limitations<small>Full method description, hypothesis cards, and limitations</small></span>
+        <span class="arrow">&#8594;</span>
+      </a></li>
+      <li><a href="/demo/">
+        <span class="label">Interactive demo<small>Live instrument — explore the microwave and LEO/NTN scenarios directly</small></span>
+        <span class="arrow">&#8594;</span>
+      </a></li>
+      <li><a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper">
+        <span class="label">Research repository (GitHub)<small>Methodology, limitations, hypotheses, source data, figures — start here</small></span>
+        <span class="arrow">&#8594;</span>
+      </a></li>
     </ul>
-  </details>
 
-  <h3>Scenario overview</h3>
-  <p class="plain">Eleven scenarios &mdash; five microwave, six LEO/NTN &mdash; covering gradual and step faults, faults hidden inside a weather event, interference, configuration change, and conditions that clear by themselves (rain, or pure orbital geometry with no fault at all).</p>
-  <div class="tablewrap"><table>
-    <caption>Scenarios (from docs/EXPERIMENT_MATRIX.md)</caption>
-    <thead><tr><th>Domain</th><th>Scenario</th><th>Ground-truth class</th><th>Self-clearing</th></tr></thead>
-    <tbody>
-      <tr><td>Microwave</td><td>mw_rain_cell</td><td>RAIN_FADE</td><td>yes</td></tr>
-      <tr><td>Microwave</td><td>mw_directional_hardware</td><td>HARDWARE_DIRECTIONAL</td><td>no</td></tr>
-      <tr><td>Microwave</td><td>mw_hidden_in_storm</td><td>HARDWARE_DIRECTIONAL (inside an active fade)</td><td>no</td></tr>
-      <tr><td>Microwave</td><td>mw_interference</td><td>INTERFERENCE</td><td>no</td></tr>
-      <tr><td>Microwave</td><td>mw_config_change</td><td>CONFIG_CHANGE</td><td>no</td></tr>
-      <tr><td>LEO/NTN</td><td>leo_low_elevation</td><td>LOW_ELEVATION_GEOMETRY (no fault injected)</td><td>yes</td></tr>
-      <tr><td>LEO/NTN</td><td>leo_ground_rain</td><td>PROPAGATION_FADE</td><td>yes</td></tr>
-      <tr><td>LEO/NTN</td><td>leo_rf_subsystem</td><td>RF_SUBSYSTEM</td><td>no</td></tr>
-      <tr><td>LEO/NTN</td><td>leo_pointing</td><td>POINTING_ATTITUDE</td><td>no</td></tr>
-      <tr><td>LEO/NTN</td><td>leo_gateway_side</td><td>GATEWAY_SIDE</td><td>no</td></tr>
-      <tr><td>LEO/NTN</td><td>leo_hidden_in_rain</td><td>RF_SUBSYSTEM</td><td>no</td></tr>
-    </tbody></table></div>
-  <p class="plain"><strong>Limit:</strong> each run contains a single fault except the two &ldquo;hidden_in_*&rdquo; composites; real incidents overlap far more (<a href="method/#limitations">Limitations</a>). Only the eleven scenarios above were run; conditions outside them (for example overlapping faults) are not covered by the study.</p>
-</section>
-
-<!-- 6. FINDINGS -->
-<section id="findings" aria-labelledby="h-findings">
-  <h2 id="h-findings">Findings</h2>
-  <p><span class="tag t-ev">Evidence</span> simulation result &nbsp; <span class="tag t-in">Interpretation</span> &nbsp; <span class="tag t-hy">Hypothesis</span> &mdash; all findings below are from simulation.</p>
-
-  <h3>Headline result: comparator-dependent, not unconditional</h3>
-  <p class="callout" style="padding:14px 18px"><span class="tag t-ev">Evidence</span> <strong>The pre-escalation hypothesis (H1) held under the default comparator (pooled median lead time: 13 minutes) but inverted under a degenerate comparator (&minus;146 minutes), indicating the result is comparator-dependent rather than unconditional.</strong> This is the paper's most important limitation, restated in <a href="#limitations">Limitations</a>.</p>
-  <blockquote>The original hypothesis did not survive. H1 &mdash; that the decision layer provides a measurable earlier-detection advantage &mdash; held at the default comparator (pooled median window 13 min) and failed under comparator sensitivity analysis. Against a degenerate comparator (a perfect, instantaneous, unsmoothed threshold monitor, better than any real NMS), the pooled median window inverts to &minus;146 min.<cite>Article, <a href="article/#abstract">Abstract</a></cite></blockquote>
-  <p><span class="tag t-ev">Evidence</span> What survived is a trade-off, not an early-warning window: conventional monitoring can be made arbitrarily fast, but the price is unnecessary escalation, and the decision layer's rates did not move under any comparator tuning. Two figures are reported, on <strong>different populations</strong>, and are not interchangeable:</p>
-  <div class="tablewrap"><table>
-    <caption>Decision-layer vs conventional unnecessary escalation on self-clearing scenarios (mw_rain_cell, leo_ground_rain, leo_low_elevation). Article &sect;8.5 states the two rates &ldquo;are different populations and are not interchangeable&rdquo;.</caption>
-    <thead><tr><th>Population</th><th>Runs</th><th>Conventional</th><th>Decision layer</th><th>Source</th></tr></thead>
-    <tbody>
-      <tr><td>Default comparator (P1-SC)</td><td>90 (3 scenarios &times; 30 seeds)</td><td>60 of 90 (66.7%)</td><td>3 of 90 (3.3%; shown as 3% in the README)</td><td><a href="article/#8-5-self-clearing-scenarios">Article &sect;8.5</a>; README Findings</td></tr>
-      <tr><td>Comparator sweep (P2-SC)</td><td>45 per configuration (15 seeds), 11 configurations</td><td>66.7% at default, 100% at degenerate</td><td>2 of 45 (4.4%) in every configuration</td><td><a href="article/#abstract">Abstract</a>; <a href="article/#8-4-comparator-sensitivity-the-central-result">&sect;8.4</a></td></tr>
-    </tbody></table></div>
-  <blockquote>Across the 90 self-clearing runs (three scenarios x 30 seeds), the conventional arm escalated unnecessarily in 60 (67%); the decision layer did so in 3 (3%) &mdash; a residual, not zero, and the single most operationally relevant result in this study.<cite>README.md, Findings (verbatim; default comparator, 90 runs)</cite></blockquote>
-  <blockquote>The pre-escalation window is not a fixed detection-speed advantage: a comparator sweep (<code>data/sensitivity_comparator.csv</code>) shows it trading against precision. &hellip; See <code>figures/fig10_latency_precision_tradeoff.png</code>.<cite>README.md, Findings (excerpt; full text in the <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper#findings">repository README</a>)</cite></blockquote>
-  <p><span class="tag t-ev">Evidence</span> A positive window at the default comparator is observed in 10 of 11 scenarios, with medians from 7 to 250 minutes. <span class="tag t-in">Interpretation</span> This range &ldquo;describes the default comparator's behaviour as much as the decision layer's&rdquo; (README) and should not be read as a stable window. <code>leo_low_elevation</code> is the only scenario in which the conventional arm never escalates; its window is undefined.</p>
-  <p><span class="tag t-in">Interpretation</span> &ldquo;Conventional monitoring can be made arbitrarily fast; the price is paid in unnecessary escalation, and the decision layer is not on that trade-off curve.&rdquo; (<a href="article/#abstract">Abstract</a>). <span class="tag t-hy">Hypothesis</span> Whether the decision layer separates real events from transients on real telemetry is <strong>not measured</strong> (<a href="article/#part-xii-field-validation-the-next-experiment">Part XII</a>).</p>
-
-  <figure>
-    <img src="./article/figures/fig12-latency-precision.png" width="3000" height="1100" loading="lazy" alt="Two scatter plots, LEO/NTN on the left and microwave on the right, of median pre-escalation window in minutes against escalation false-positive rate. The conventional arm's curve falls as tuning makes it faster; for LEO/NTN it reaches about minus 190 minutes at a false-positive rate of 1.0 at the degenerate setting. The decision layer's points stay at a false-positive rate of 0.">
-    <figcaption><strong>Figure 12 of the article &mdash; latency vs. precision.</strong> Each conventional point is one comparator configuration; the decision layer does not move along the trade-off. Simulation result. <a href="article/#part-viii-results">Read the full results</a> (<a href="article/#8-4-comparator-sensitivity-the-central-result">&sect;8.4, comparator sensitivity</a>).</figcaption>
-  </figure>
-
-  <details>
-    <summary>Per-scenario results table (default comparator, 30 seeds)</summary>
-    <div class="tablewrap"><table>
-      <caption>From README.md. &ldquo;n/a&rdquo; = no persistent fault was present, so escalation F1 is undefined by construction; a window shown with n= is conditioned on the seeds where the conventional arm escalated. Default comparator only &mdash; not the headline result.</caption>
-      <thead><tr><th>Domain</th><th>Scenario</th><th>Window (min, median)</th><th>Layer F1</th><th>Conv. F1</th><th>Layer unnecessary dispatch</th><th>Conv. unnecessary dispatch</th></tr></thead>
-      <tbody>
-        <tr><td>leo_ntn</td><td>leo_pointing</td><td>250 (n=6/30)</td><td>0.95</td><td>0.30</td><td>0%</td><td>0%</td></tr>
-        <tr><td>leo_ntn</td><td>leo_rf_subsystem</td><td>189 (n=28/30)</td><td>0.94</td><td>0.34</td><td>0%</td><td>0%</td></tr>
-        <tr><td>leo_ntn</td><td>leo_gateway_side</td><td>9</td><td>0.98</td><td>0.97</td><td>0%</td><td>0%</td></tr>
-        <tr><td>leo_ntn</td><td>leo_ground_rain</td><td>7</td><td>n/a</td><td>n/a</td><td>0%</td><td>100%</td></tr>
-        <tr><td>leo_ntn</td><td>leo_hidden_in_rain</td><td>7</td><td>0.89</td><td>0.39</td><td>0%</td><td>0%</td></tr>
-        <tr><td>leo_ntn</td><td>leo_low_elevation</td><td>&mdash;</td><td>n/a</td><td>n/a</td><td>3%</td><td>0%</td></tr>
-        <tr><td>microwave</td><td>mw_interference</td><td>20</td><td>0.99</td><td>0.97</td><td>0%</td><td>0%</td></tr>
-        <tr><td>microwave</td><td>mw_rain_cell</td><td>16</td><td>n/a</td><td>n/a</td><td>7%</td><td>100%</td></tr>
-        <tr><td>microwave</td><td>mw_directional_hardware</td><td>13</td><td>0.92</td><td>0.90</td><td>0%</td><td>0%</td></tr>
-        <tr><td>microwave</td><td>mw_hidden_in_storm</td><td>13</td><td>0.95</td><td>0.98</td><td>0%</td><td>0%</td></tr>
-        <tr><td>microwave</td><td>mw_config_change</td><td>11</td><td>1.00</td><td>0.98</td><td>0%</td><td>0%</td></tr>
-      </tbody></table></div>
-  </details>
-
-  <h3>Microwave vs LEO/NTN, side by side</h3>
-  <div class="tablewrap"><table>
-    <caption>Same rows for both domains. Sources: article &sect;2.3, &sect;2.9, &sect;4.1, &sect;6.4, &sect;6.9 and the experiment matrix.</caption>
-    <thead><tr><th scope="col">Row</th><th scope="col">Terrestrial microwave</th><th scope="col">LEO / NTN</th></tr></thead>
-    <tbody>
-      <tr><th scope="row">Input signals</th>
-        <td>RSL, C/N or MSE, TX power (under ATPC), errored seconds, capacity/ACM state</td>
-        <td>Received level with the geometry-predicted component removed; baselines conditioned on the serving satellite; gateway and housekeeping context <em>(as documented in the article, not the full internal engine schema)</em></td></tr>
-      <tr><th scope="row">Degradation pattern</th>
-        <td>Fixed infrastructure, changing propagation: rain fade, directional hardware degradation, interference, configuration change; capacity falls before availability does</td>
-        <td>Changing infrastructure <em>and</em> propagation: pass geometry, ground-side fade, spacecraft RF subsystem, pointing/attitude drift, gateway/feeder impairment; serving satellite changes every ~4.5 min at 550 km / 25&deg; mask</td></tr>
-      <tr><th scope="row">Escalation definition</th>
-        <td colspan="2">Same modelled conventional arm in both domains: KPI smoothing over N intervals, M-of-N persistence, fixed thresholds against a nominal reference, escalation/ticket process delay, no geometry model. Default values, identical in both domains in <code>data/sensitivity_comparator.csv</code>: <code>smoothing_window</code> = 5, <code>persistence_m</code>/<code>persistence_n</code> = 3/5, <code>escalation_delay_min</code> = 8. Degenerate: 1, 1/1, 0 (both domains).</td></tr>
-      <tr><th scope="row">Metrics</th>
-        <td colspan="2">Same in both: pre-escalation window, false-calm window, escalation F1/FPR, unnecessary-dispatch rate, ambiguous decisions, illustrative exposure.</td></tr>
-      <tr><th scope="row">Result at the degenerate comparator</th>
-        <td><span class="tag t-ev">Evidence</span> Window approximately zero (+2 min in every variant); stable under tuning</td>
-        <td><span class="tag t-ev">Evidence</span> &minus;191 min as run; &minus;71 min after crediting the 120-min warm-up; every sensitivity effect concentrates here</td></tr>
-    </tbody></table></div>
-</section>
-
-<!-- 7. LIMITATIONS -->
-<section id="limitations" aria-labelledby="h-lim">
-  <h2 id="h-lim">What this study does NOT show</h2>
-  <ul class="bul">
-    <li><strong>The headline result is comparator-dependent, not unconditional &mdash; the paper's most important limitation.</strong> H1 held under the default comparator (pooled median lead time: 13 minutes) but inverted under a degenerate comparator (&minus;146 minutes). No stable, guaranteed or unconditional early-warning window is shown. The comparator is a model, not any vendor's product, and its sensitivity was measured rather than assumed.</li>
-    <li><strong>The networks are simulated.</strong> No result here is evidence about a real operator's network.</li>
-    <li><strong>The simulation engine is not published</strong> &mdash; nor any decision-layer threshold constant, condition predicate or hypothesis-card content.</li>
-    <li><strong>No live operator validation.</strong> No operator data is used anywhere; only an operator pilot on real telemetry can show whether the architecture works in production.</li>
-    <li><strong>No claim of outage reduction or cost savings.</strong> All currency figures are ILLUSTRATIVE; the economics model is parametric and no monetary claim should be read as measured.</li>
-    <li><strong>Modelled behaviour may not match real equipment.</strong> Physics is drawn from ITU-R P.838-3, ITU-R P.530-18 and standard orbital mechanics with every simplification stated; the conventional arm is not any specific vendor's product.</li>
-    <li>Ground truth is known by construction, so every precision/recall figure is an upper bound on what real, ambiguous data would allow.</li>
-    <li>Single-fault scenarios (except the two &ldquo;hidden_in_*&rdquo; composites); real incidents overlap far more.</li>
-    <li>The positive window at the default comparator is largely a property of the comparator's configuration, not evidence of intelligence in the other arm.</li>
-  </ul>
-  <details open>
-    <summary>Full statement (original honest-labelling paragraph &amp; README list)</summary>
-    <p><strong>Honest labelling.</strong> The networks are simulated &mdash; no result here is evidence about a real operator's network. The simulation engine itself is not published; this repository contains the published results, method description, figures, and the data needed to regenerate the figures. Full detail in the README below.</p>
-    <ul class="bul">
-      <li>The networks are <strong>simulated</strong>. No result here is evidence about a real operator's network.</li>
-      <li>Physics is drawn from published recommendations &mdash; ITU-R P.838-3 (rain attenuation), ITU-R P.530-18 (terrestrial line-of-sight design), and standard orbital mechanics &mdash; with every simplification stated in <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/docs/LIMITATIONS.md">docs/LIMITATIONS.md</a>.</li>
-      <li><strong>No operator data is used anywhere in this repository.</strong></li>
-      <li><strong>All currency figures are ILLUSTRATIVE.</strong> The economics model is parametric and labelled as such; no monetary claim should be read as measured.</li>
-      <li><strong>The simulation engine is not published.</strong> This repository contains the published results, the method description, the figures, and the data needed to regenerate the figures &mdash; not the code that produced the data.</li>
-    </ul>
-    <p>Full limitations: <a href="method/#limitations">Method page</a> &middot; <a href="article/#part-xi-limitations">Article Part XI</a> (including the NOT-MEASURED register).</p>
-  </details>
-
-  <h3>Reproducibility levels</h3>
-  <div class="tablewrap"><table style="min-width:0">
-    <thead><tr><th>Level</th><th>Status</th><th>Basis</th></tr></thead>
-    <tbody>
-      <tr><td>Figures reproducible</td><td>Yes</td><td>Figures, data (<code>runs.csv</code>, <code>summary.csv</code>, <code>sensitivity_*.csv</code>, <code>coverage_comparison.csv</code>) and <code>replot.py</code> are published; <code>replot.py</code> regenerates every result figure from the published CSVs alone.</td></tr>
-      <tr><td>Experiment reproducible</td><td>Partly</td><td>Scenarios, arms, metrics and seed counts are documented, and runs are bit-reproducible; but rerunning requires the private engine. <span class="todo">[TODO: author to say whether per-run seed values and full scenario parameter tables are published]</span></td></tr>
-      <tr><td>Engine inspectable</td><td>No</td><td>The simulation engine is not published and not licensed for use.</td></tr>
-    </tbody></table></div>
-</section>
-
-<!-- 8. OPERATIONAL RELEVANCE -->
-<section id="relevance" aria-labelledby="h-rel">
-  <h2 id="h-rel">Operational Relevance and Future Validation</h2>
-  <p class="plain">This study investigates the potential for detecting network degradation before conventional monitoring escalation under defined simulation conditions. The research informs the development of <a href="https://velorona.ai">Velorona</a>, AID Edge Inc.'s read-only, out-of-band pre-escalation decision layer for operational networks. The results are simulation-based and do not establish performance on live operator networks; the early-detection result is comparator-dependent (see Findings) and is not an unconditional or guaranteed early-warning window. Validation on historical operator telemetry, followed by controlled pilot evaluation, is required to assess operational applicability, detection reliability, and decision-support value. AID Edge Inc. is seeking operator and infrastructure-partner collaboration to evaluate these questions on real-world network data.</p>
-  <div class="cta plain">
-    <p style="margin:0"><strong>Interested in an offline evaluation on your historical telemetry?</strong> <a href="mailto:info@aidedgeinc.com">Contact us</a> </p>
+    <footer>
+      AID Edge Inc. — <a href="mailto:info@aidedgeinc.com">info@aidedgeinc.com</a> —
+      <a href="https://www.aidedges.com">aidedges.com</a>
+    </footer>
   </div>
-</section>
-
-<!-- 9. ARTIFACTS -->
-<section id="artifacts" aria-labelledby="h-art">
-  <h2 id="h-art">Research artifacts</h2>
-  <ul class="cards">
-    <li><a href="/article/">
-      <span class="head"><span>Full research article</span><span class="arrow" aria-hidden="true">&rarr;</span></span>
-      <small>The complete written analysis, Parts I&ndash;XIII &mdash; the whole story from problem to conclusion.</small>
-      <small>Technical: physics of both domains, pipeline, simulation design, comparator sweep, results, failures, limitations, references.</small></a></li>
-    <li><a href="/method/">
-      <span class="head"><span>Method, hypotheses &amp; limitations</span><span class="arrow" aria-hidden="true">&rarr;</span></span>
-      <small>Full method description, hypothesis cards, and limitations &mdash; what was tested and what can't be claimed (including that the headline result is comparator-dependent).</small>
-      <small>Technical: seven-stage pipeline, H1&ndash;H6 with falsification conditions, experiment matrix, metrics, provenance.</small></a></li>
-    <li><a href="/demo/">
-      <span class="head"><span>Interactive demo</span><span class="arrow" aria-hidden="true">&rarr;</span></span>
-      <small>Live instrument &mdash; explore the microwave and LEO/NTN scenarios directly: switch comparator configuration and view timelines and unnecessary-escalation rates per scenario.</small>
-      <small>Technical: renders the published sweep data; accessible data tables provided.</small></a></li>
-    <li><a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper">
-      <span class="head"><span>Research repository (GitHub)</span><span class="arrow" aria-hidden="true">&rarr;</span></span>
-      <small>Methodology, limitations, hypotheses, source data, figures &mdash; start here.</small>
-      <small>Technical: CSV data, <code>replot.py</code>, <code>build_readme_table.py</code>, docs/, figures/; CC BY 4.0 docs/data, MIT scripts.</small></a></li>
-  </ul>
-
-  <h3>Table of contents &mdash; article Parts I&ndash;XIII</h3>
-  <div class="tablewrap"><table style="min-width:0">
-    <caption>One-line summaries are the questions each Part answers, from the article's &ldquo;How to read this study&rdquo; table.</caption>
-    <thead><tr><th>Stage</th><th>Part</th><th>Question it answers</th></tr></thead>
-    <tbody>
-      <tr><td rowspan="5">Setup</td><td><a href="article/#part-i-the-operational-problem">I</a></td><td>Why does the interval before escalation matter at all?</td></tr>
-      <tr><td><a href="article/#part-ii-terrestrial-microwave-backhaul-how-degradation-propagates-through-the-link">II</a></td><td>What happens physically in a microwave link when it degrades?</td></tr>
-      <tr><td><a href="article/#part-iii-leo-ntn-how-degradation-propagates-through-a-moving-network">III</a></td><td>What happens physically in a LEO/NTN link when it degrades?</td></tr>
-      <tr><td><a href="article/#part-iv-what-is-different-between-them">IV</a></td><td>Why are these two mechanisms not the same problem?</td></tr>
-      <tr><td><a href="article/#part-v-the-pre-escalation-decision-model">V</a></td><td>What is a pre-escalation decision layer, precisely?</td></tr>
-      <tr><td rowspan="2">Method</td><td><a href="article/#part-vi-simulation-design">VI</a></td><td>How was the simulation built, and what is assumed?</td></tr>
-      <tr><td><a href="article/#part-vii-the-comparative-experiment">VII</a></td><td>What exactly was compared, in what populations?</td></tr>
-      <tr><td rowspan="3">Results</td><td><a href="article/#part-viii-results">VIII</a></td><td>What was observed, per domain and across domains?</td></tr>
-      <tr><td><a href="article/#part-ix-what-failed">IX</a></td><td>Which hypothesis failed, and how badly?</td></tr>
-      <tr><td><a href="article/#part-x-what-survived">X</a></td><td>Which result survived the sensitivity analysis?</td></tr>
-      <tr><td rowspan="3">Conclusions</td><td><a href="article/#part-xi-limitations">XI</a></td><td>What this study cannot claim.</td></tr>
-      <tr><td><a href="article/#part-xii-field-validation-the-next-experiment">XII</a></td><td>What has to be measured on real telemetry next.</td></tr>
-      <tr><td><a href="article/#part-xiii-conclusion">XIII</a></td><td>Conclusion.</td></tr>
-    </tbody></table></div>
-</section>
-
-<!-- 10. GLOSSARY -->
-<section id="glossary" aria-labelledby="h-gl">
-  <h2 id="h-gl">Glossary</h2>
-  <p class="meta">Plain-language definitions written for this page; study-specific terms follow the article's usage.</p>
-  <dl>
-    <dt>Microwave backhaul</dt><dd>Fixed point-to-point radio links between sites that carry a network's traffic.</dd>
-    <dt>LEO</dt><dd>Low Earth orbit: satellites orbiting a few hundred kilometres up (550 km in the modelled case), moving quickly across the sky.</dd>
-    <dt>NTN</dt><dd>Non-terrestrial network: a network that uses satellites or other airborne platforms as part of the infrastructure.</dd>
-    <dt>RSL</dt><dd>Received signal level: how strong the signal is at the receiver.</dd>
-    <dt>Modulation</dt><dd>How data is encoded onto the radio signal. Adaptive coding and modulation (ACM) steps to a more robust, slower scheme as the signal weakens, so capacity can fall before the link fails.</dd>
-    <dt>Telemetry</dt><dd>The measurements a network device reports about itself.</dd>
-    <dt>Threshold</dt><dd>A configured limit; conventional monitoring raises an alarm when a measurement crosses it (and stays there).</dd>
-    <dt>Alarm / escalation</dt><dd>The step where a condition is raised to operations staff as an alarm, ticket or dispatch.</dd>
-    <dt>Degradation</dt><dd>A gradual worsening of service quality that has not yet become an outage.</dd>
-    <dt>False calm</dt><dd>The period when monitoring looks normal although the first observable change has already occurred (in the study: conventional escalation minus first detectable).</dd>
-    <dt>Lead time</dt><dd>How much earlier one method acts than another. In this study, the pre-escalation window; it can be negative.</dd>
-    <dt>False alarm</dt><dd>An escalation when nothing needed action &mdash; in the study, escalating on a self-clearing cause counts as a false positive.</dd>
-    <dt>Baseline</dt><dd>What &ldquo;normal&rdquo; is taken to be for an element &mdash; here, the median and MAD of its own history over a frozen warm-up window.</dd>
-    <dt>Simulation</dt><dd>A computer model that generates artificial network behaviour with a known cause, so results can be scored. It is not a measurement of a real network.</dd>
-  </dl>
-</section>
-
-<!-- 11. CITE -->
-<section id="cite" aria-labelledby="h-cite">
-  <h2 id="h-cite">How to cite</h2>
-  <p>Plain text:</p>
-  <pre>Khosravi, S., AID Edge Inc. (2026, August 18). The Pre-Escalation Window (version 1.0). https://papers.aidedgeinc.com/</pre>
-  <p>BibTeX (the repository's existing entry, version updated and page URL added):</p>
-  <pre>@software{aid_edge_pre_escalation_window,
-  title        = {The Pre-Escalation Window},
-  author       = {{AID Edge Inc.}},
-  year         = {2026},
-  date         = {2026-08-18},
-  version      = {1.0},
-  url          = {https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper},
-  note         = {Article and demo: https://papers.aidedgeinc.com/}
-}</pre>
-  <p><span class="todo">[TODO: optional Zenodo DOI &mdash; none exists]</span></p>
-</section>
-
-<!-- 12. ABOUT -->
-<section id="about" aria-labelledby="h-about">
-  <h2 id="h-about">About</h2>
-  <p><strong>AID Edge Inc.</strong> develops Velorona, a read-only, out-of-band pre-escalation decision layer for operational networks &mdash; designed to surface early degradation signals from existing telemetry before conventional monitoring escalates, under simulation conditions. AID Edge Inc. is seeking operator and infrastructure-partner collaboration to evaluate this research direction on real-world network data. <a href="https://aidedgeinc.com">aidedgeinc.com</a></p>
-  <p><strong>Velorona</strong> is AID Edge Inc.'s read-only, out-of-band pre-escalation decision layer for operational networks; this research informs its development. <a href="https://velorona.ai">velorona.ai</a></p>
-  <p><strong>Contact:</strong> <a href="mailto:info@aidedgeinc.com">info@aidedgeinc.com</a></p>
-  <h3>Licences</h3>
-  <ul class="bul">
-    <li>Text, figures, documentation and data (<code>docs/</code>, <code>figures/</code>, <code>data/</code>, README): CC BY 4.0 &mdash; <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/LICENSE">LICENSE</a>.</li>
-    <li>Code (<code>replot.py</code>, <code>build_readme_table.py</code>): MIT &mdash; <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/LICENSE-CODE">LICENSE-CODE</a>.</li>
-    <li>Simulation engine: not published and not licensed for use.</li>
-    <li>Interactive demo frontend: <span class="todo">[TODO: licence not stated in the repository]</span></li>
-  </ul>
-  <footer>
-    AID Edge Inc. &mdash; <a href="mailto:info@aidedgeinc.com">info@aidedgeinc.com</a> &mdash;
-    <a href="https://aidedgeinc.com">aidedgeinc.com</a> &mdash;
-    <a href="https://velorona.ai">velorona.ai</a> &mdash;
-    <a href="https://github.com/AIDEdgeInc-Lab">github.com/AIDEdgeInc-Lab</a><br>
-    Version 1.0 &middot; Last updated 2026-09-25 &middot; <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/commits/main">Changelog (commit history)</a>
-  </footer>
-</section>
-
-</main>
 </body>
 </html>
