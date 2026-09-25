@@ -37,8 +37,8 @@
 ## Findings
 
 <!-- FINDINGS:START -->
-- Across the 90 self-clearing runs (three scenarios x 30 seeds), the conventional arm escalated unnecessarily in 60 (67%); the decision layer did so in 3 (3%) — a residual, not zero, and the single most operationally relevant result in this study.
-- The pre-escalation window is not a fixed detection-speed advantage: a comparator sweep (`data/sensitivity_comparator.csv`) shows it trading against precision. At the default comparator, pooled median window 13 min, conventional escalation FPR 0%, conventional unnecessary dispatch 67%. At a DEGENERATE comparator (a perfect, instantaneous, unsmoothed threshold monitor), window -146 min, conventional escalation FPR 100%, conventional unnecessary dispatch 100% — it buys the apparent lead with false alarms. The decision layer's own escalation FPR (0%) and unnecessary-dispatch rate (4%) do not move under any comparator tuning. See `figures/fig10_latency_precision_tradeoff.png`.
+- Across the 90 self-clearing runs (three scenarios x 30 seeds), the conventional arm escalated unnecessarily in 60 (67%); the decision layer did so in 3 (3%; 3.3% of 90 runs) — a residual, not zero, and the single most operationally relevant result in this study.
+- The pre-escalation window is not a fixed detection-speed advantage: a comparator sweep (`data/sensitivity_comparator.csv`) shows it trading against precision. At the default comparator, pooled median window 13 min, conventional escalation FPR 0%, conventional unnecessary dispatch 67%. At a DEGENERATE comparator (a perfect, instantaneous, unsmoothed threshold monitor), window -146 min, conventional escalation FPR 100%, conventional unnecessary dispatch 100% — it buys the apparent lead with false alarms. The decision layer's own escalation FPR (0%) and unnecessary-dispatch rate (4%; 4.4%, 2 of 45 self-clearing runs per comparator configuration — a different population from the 3.3% on 90 runs above) do not move under any comparator tuning. See `figures/fig10_latency_precision_tradeoff.png`.
 - A positive pre-escalation window at the default comparator is observed in 10 of 11 scenarios, with medians ranging from 7 to 250 minutes — but this range describes the default comparator's behaviour as much as the decision layer's; see the trade-off finding above.
 - `leo_low_elevation` is the only scenario in which the conventional arm never escalates, in any of the 30 seeds — its pre-escalation window is undefined for every seed as a result. The decision layer nonetheless escalated unnecessarily in 1 of 30 seeds, part of the residual above.
 <!-- FINDINGS:END -->
@@ -79,7 +79,7 @@ published and is not licensed for use.
   title        = {The Pre-Escalation Window},
   author       = {{AID Edge Inc.}},
   year         = {2026},
-  version      = {0.1.0},
+  version      = {1.0},
   url          = {https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper}
 }
 ```
@@ -87,4 +87,4 @@ published and is not licensed for use.
 ## Contact
 
 AID Edge Inc. — [info@aidedgeinc.com](mailto:info@aidedgeinc.com) —
-[aidedges.com](https://www.aidedges.com) — [github.com/AIDEdgeInc-Lab](https://github.com/AIDEdgeInc-Lab)
+[aidedgeinc.com](https://aidedgeinc.com) — [velorona.ai](https://velorona.ai) — [github.com/AIDEdgeInc-Lab](https://github.com/AIDEdgeInc-Lab)
