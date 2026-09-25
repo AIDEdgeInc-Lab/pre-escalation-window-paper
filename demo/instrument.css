@@ -9,7 +9,7 @@ html, body {
   padding: 0;
   background: var(--plane-0);
   color: var(--text-0);
-  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Helvetica, Arial, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.55;
 }
@@ -151,7 +151,7 @@ p.tl-window-label-main.tl-inverted { color: #e0a3a3; }
 .header-left { display: flex; align-items: center; gap: 10px; }
 .header-wordmark { font-size: 0.95rem; font-weight: 650; color: var(--text-0); margin: 0; }
 .header-modelled-badge {
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -170,7 +170,7 @@ p.tl-window-label-main.tl-inverted { color: #e0a3a3; }
 .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .header-domain-toggle { display: inline-flex; border: 1px solid var(--border-default); border-radius: 7px; overflow: hidden; }
 .header-domain-btn {
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -235,7 +235,7 @@ p.tl-window-label-main.tl-inverted { color: #e0a3a3; }
 .rail-group legend { font-size: 11px; color: var(--text-1); font-weight: 600; padding: 0 0 6px; }
 .rail-btn-row { display: flex; flex-wrap: wrap; gap: 6px; }
 .rail-btn {
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 11.5px;
   color: var(--text-1);
   background: transparent;
@@ -260,7 +260,7 @@ p.tl-window-label-main.tl-inverted { color: #e0a3a3; }
 }
 .rail-preset-btn.is-selected { border-color: var(--color-noc-decision); color: var(--text-0); }
 .rail-preset-degenerate.is-selected { border-color: #c76b6b; color: var(--text-0); }
-.rail-current { font-size: 11px; color: var(--text-2); margin: 12px 0 0; font-family: ui-monospace, monospace; }
+.rail-current { font-size: 11px; color: var(--text-2); margin: 12px 0 0; font-family: var(--font-mono); }
 
 /* ==================================================================================
    Acts, shared
@@ -351,7 +351,7 @@ p.tl-window-label-main.tl-inverted { color: #e0a3a3; }
 .cdd-table tbody th { max-width: 220px; }
 .cdd-pooled-cell { color: var(--text-0); }
 .cdd-pooled-tag {
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -366,7 +366,7 @@ p.tl-window-label-main.tl-inverted { color: #e0a3a3; }
 .cdd-provenance-list { margin: 10px 0 0; font-size: 11px; }
 .cdd-provenance-list dt { color: var(--text-0); font-weight: 600; margin-top: 8px; }
 .cdd-provenance-list dt:first-child { margin-top: 0; }
-.cdd-provenance-list dd { color: var(--text-2); margin: 2px 0 0; font-family: ui-monospace, monospace; font-size: 10.5px; }
+.cdd-provenance-list dd { color: var(--text-2); margin: 2px 0 0; font-family: var(--font-mono); font-size: 10.5px; }
 
 .topo-details { margin-top: 16px; }
 .topo-details summary { cursor: pointer; font-size: 11px; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.08em; }
@@ -396,7 +396,7 @@ p.tl-window-label-main.tl-inverted { color: #e0a3a3; }
 
 .opview-chain { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
 .opview-step {
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.03em;

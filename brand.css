@@ -1,0 +1,136 @@
+/* Velorona Papers — brand layer.
+ *
+ * Aligns Papers with velorona.ai and aidedgeinc.com. Values are the ones those sites ship
+ * (source: aidedge-velorona-web/packages/design-system/src/styles/{tokens,theme-velorona,
+ * theme-aidedge}.css, confirmed against the live CSS):
+ *   Velorona   bg #05090C, elevated #081116, accent #5F98D1, secondary #7AAEE3,
+ *              strong #99C6F3, deep #224B75, text #F5F7FA, muted #AAB8C2, faint #7C8790,
+ *              neutral slate border rgba(96,108,118,.22), glow-wash rgba(90,165,220,.14)
+ *   AID Edge   gold #C6A15B, light gold #D8BC84, deep gold #8F6A2D
+ *   Type       Geist Sans (400/500/600) + Geist Mono, self-hosted (SIL OFL, see /fonts)
+ *
+ * Load AFTER tokens.css (a generated, vendored file that must not be hand-edited). This file
+ * re-points the tokens.css variable names at the brand values, so every page and the demo pick
+ * them up without touching their own CSS. The dark theme is unchanged.
+ *
+ * Gold is deliberately scarce: NEW / pending labels, illustrative tags and callout rules.
+ * Links and interactive elements use the Velorona blue.
+ */
+
+@font-face { font-family: "Geist Sans"; src: url("fonts/Geist-Regular.woff2") format("woff2");  font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Geist Sans"; src: url("fonts/Geist-Medium.woff2") format("woff2");   font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Geist Sans"; src: url("fonts/Geist-SemiBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Geist Mono"; src: url("fonts/GeistMono-Regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Geist Mono"; src: url("fonts/GeistMono-Medium.woff2") format("woff2");  font-weight: 500; font-style: normal; font-display: swap; }
+
+:root {
+  --font-sans: "Geist Sans", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Velorona navy-black planes (bg / elevated are the brand values; 2-4 step up in the same hue) */
+  --plane-0: #05090C;
+  --plane-1: #081116;
+  --plane-2: #0B151B;
+  --plane-3: #0F1A22;
+  --plane-4: #14212B;
+
+  --border-recessed: rgba(96, 108, 118, 0.14);
+  --border-default: rgba(96, 108, 118, 0.26);
+  --border-strong: rgba(96, 108, 118, 0.42);
+  --border: var(--border-default);
+  --border-active: rgba(153, 198, 243, 0.24);
+  --border-focus: rgba(153, 198, 243, 0.45);
+  --surface-1: rgba(153, 198, 243, 0.03);
+  --surface-2: rgba(153, 198, 243, 0.06);
+
+  /* Text hierarchy (contrast on #05090C): headings 18.6:1, body 10.7:1, secondary 6.4:1, meta 5.4:1 */
+  --text-0: #F5F7FA;  /* headings, page titles, emphasis */
+  --text-1: #B3BFCA;  /* body prose — soft blue-grey, easier over long reading */
+  --text-2: #8794A0;  /* secondary descriptions, captions, metadata */
+  --text-3: #7C8790;  /* faint: dates, footers, labels */
+
+  /* Velorona blue family (replaces the teal cyan-300/400/500) */
+  --cyan-300: #99C6F3;  /* strong / links on dark, emphasis */
+  --cyan-400: #7AAEE3;  /* secondary — decision-layer series, interactive */
+  --cyan-500: #5F98D1;  /* accent — rules, hover borders */
+  --blue-deep: #224B75;
+
+  /* AID Edge gold (replaces the orange amber-300/400) */
+  --gold: #C6A15B;
+  --gold-light: #D8BC84;
+  --gold-deep: #8F6A2D;
+  --gold-soft: rgba(198, 161, 91, 0.10);
+  --gold-line: rgba(198, 161, 91, 0.32);
+  --amber-300: var(--gold-light);
+  --amber-400: var(--gold);
+
+  --glow-wash: rgba(90, 165, 220, 0.14);
+  --color-noc-decision: var(--cyan-400);
+}
+
+/* Restrained Velorona atmosphere: a faint blue wash from the top edge, nothing more. */
+html { background: var(--plane-0); }
+body:not(:has(#instrument-root)) {
+  background:
+    radial-gradient(900px 380px at 50% -140px, var(--glow-wash), transparent 72%) no-repeat,
+    var(--plane-0);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body:has(#instrument-root) { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+
+/* Monospace: code and technical values */
+code, pre, kbd, samp { font-family: var(--font-mono); font-feature-settings: normal; }
+
+/* Type hierarchy: weights 400 / 500 / 600 only; no heavy bold */
+h1, h2, h3, h4 { letter-spacing: -0.012em; font-weight: 600; }
+strong, b { font-weight: 600; color: var(--text-0); }
+.eyebrow, .paper-eyebrow, .method-eyebrow, .paper-toc p {
+  font-weight: 500; letter-spacing: 0.08em; font-size: 12px;
+}
+th { font-weight: 500; }
+
+/* Footers: a hairline that fades from Velorona blue instead of a flat rule */
+footer, .doc-footer, .method-footer {
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(90deg, rgba(153, 198, 243, 0.32), rgba(96, 108, 118, 0.16) 55%, transparent) 1;
+}
+
+::selection { background: rgba(95, 152, 209, 0.35); color: var(--text-0); }
+
+/* Long URLs in running text wrap instead of forcing horizontal scroll on phones */
+.paper-body a, .method-section a, .doc-footer a, .method-footer a { overflow-wrap: anywhere; }
+
+/* Top navs wrap on narrow screens */
+.paper-nav, .method-nav { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+
+/* ---------- Links ----------
+ * Navigation, cards, footer and list links: no permanent underline (blue + hover/focus).
+ * Inline links in running prose keep an underline, set off from the letters. */
+a { text-decoration: none; text-underline-offset: 0.24em; text-decoration-thickness: 1px; }
+a:hover { text-decoration: underline; }
+a:focus-visible { outline: 2px solid var(--cyan-300); outline-offset: 3px; }
+
+.paper-body a, .method-section a,
+main.wrap p a, main.wrap li a, main.wrap td a, main.wrap dd a, main.wrap figcaption a, main.wrap blockquote a, main.wrap cite a {
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 42%, transparent);
+}
+.paper-body a:hover, .method-section a:hover, main.wrap a:hover { text-decoration-color: currentColor; }
+.paper-toc a, .paper-nav a, .method-toc a, .method-nav a, .cards a, .links a, .updates a { text-decoration-line: none; }
+.paper-toc a:hover, .paper-nav a:hover, .method-toc a:hover, .method-nav a:hover, .cards a:hover, .links a:hover, .updates a:hover { text-decoration-line: underline; text-decoration-color: currentColor; }
+.links a:hover, .cards a:hover { text-decoration-line: none; }
+
+/* ---------- Footer (hub + summary) ---------- */
+.site-footer { font-size: 13px; color: var(--text-3); }
+.site-footer a { color: var(--cyan-400); }
+.site-footer a:hover { color: var(--cyan-300); }
+.footer-links {
+  display: flex; flex-wrap: wrap; row-gap: 6px;
+  list-style: none; margin: 0 0 12px -14px; padding: 0; overflow: hidden;
+}
+.footer-links a { display: block; padding: 0 14px; margin-left: -1px; border-left: 1px solid var(--border-strong); line-height: 1.15; }
+.site-footer p { margin: 0; }
+.site-footer .footer-meta { margin-top: 10px; }

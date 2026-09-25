@@ -1,28 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
   <defs>
     <marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#35c6de"/>
+      <path d="M0,0 L10,5 L0,10 z" fill="#7AAEE3"/>
     </marker>
     <marker id="a5g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#6e7a82"/>
+      <path d="M0,0 L10,5 L0,10 z" fill="#8794A0"/>
     </marker>
     <marker id="a5a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#f2a83c"/>
+      <path d="M0,0 L10,5 L0,10 z" fill="#C6A15B"/>
     </marker>
   </defs>
-  <rect width="1000" height="560" fill="#0b0e10"/>
+  <rect width="1000" height="560" fill="#081116"/>
 
-  <text x="24" y="32" font-size="14" fill="#f2f5f7" font-weight="600">Read-only decision layer — signal → context → state → evidence → decision boundary</text>
+  <text x="24" y="32" font-size="14" fill="#F5F7FA" font-weight="600">Read-only decision layer — signal → context → state → evidence → decision boundary</text>
 
   <!-- sources -->
-  <text x="24" y="62" font-size="11" fill="#6e7a82" letter-spacing="0.07em">SOURCES</text>
+  <text x="24" y="62" font-size="11" fill="#8794A0" letter-spacing="0.07em">SOURCES</text>
   <g fill="rgba(255,255,255,0.035)" stroke="rgba(255,255,255,0.12)">
     <rect x="24" y="74" width="170" height="38" rx="6"/>
     <rect x="24" y="122" width="170" height="38" rx="6"/>
     <rect x="24" y="170" width="170" height="38" rx="6"/>
     <rect x="24" y="218" width="170" height="38" rx="6"/>
   </g>
-  <g font-size="11.5" fill="#f2f5f7">
+  <g font-size="11.5" fill="#F5F7FA">
     <text x="38" y="98">element telemetry</text>
     <text x="38" y="146">peer-group / topology</text>
     <text x="38" y="194">environmental feed</text>
@@ -30,9 +30,9 @@
   </g>
 
   <!-- read-only boundary -->
-  <line x1="222" y1="66" x2="222" y2="416" stroke="#f2a83c" stroke-width="1.4" stroke-dasharray="6 5" opacity="0.8"/>
-  <text x="232" y="434" font-size="11" fill="#f2a83c">READ-ONLY BOUNDARY — no code path writes to a network</text>
-  <g stroke="#6e7a82" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#a5g)">
+  <line x1="222" y1="66" x2="222" y2="416" stroke="#C6A15B" stroke-width="1.4" stroke-dasharray="6 5" opacity="0.8"/>
+  <text x="232" y="434" font-size="11" fill="#C6A15B">READ-ONLY BOUNDARY — no code path writes to a network</text>
+  <g stroke="#8794A0" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#a5g)">
     <line x1="196" y1="93" x2="248" y2="120"/>
     <line x1="196" y1="141" x2="248" y2="128"/>
     <line x1="196" y1="189" x2="248" y2="136"/>
@@ -40,19 +40,19 @@
   </g>
 
   <!-- row 1 -->
-  <g fill="rgba(53,198,222,0.10)" stroke="#1ba3bd">
+  <g fill="rgba(122,174,227,0.10)" stroke="#5F98D1">
     <rect x="252" y="98" width="168" height="78" rx="6"/>
     <rect x="440" y="98" width="168" height="78" rx="6"/>
     <rect x="628" y="98" width="168" height="78" rx="6"/>
     <rect x="816" y="98" width="160" height="78" rx="6"/>
   </g>
-  <g font-size="12.5" fill="#f2f5f7">
+  <g font-size="12.5" fill="#F5F7FA">
     <text x="266" y="122">OBSERVE</text>
     <text x="454" y="122">DETECT</text>
     <text x="642" y="122">CORRELATE</text>
     <text x="830" y="122">DIAGNOSE</text>
   </g>
-  <g font-size="10" fill="#a9b4bc">
+  <g font-size="10" fill="#AAB8C2">
     <text x="266" y="139">feature extraction ·</text>
     <text x="266" y="152">geometry correction ·</text>
     <text x="454" y="139">outside the element's OWN</text>
@@ -62,31 +62,31 @@
     <text x="830" y="139">hypothesis cards: required,</text>
     <text x="830" y="152">supporting, refuting</text>
   </g>
-  <text x="266" y="165" font-size="10" fill="#7fe3f0">context conditioning</text>
+  <text x="266" y="165" font-size="10" fill="#99C6F3">context conditioning</text>
 
-  <g stroke="#35c6de" stroke-width="1.6" marker-end="url(#a5)">
+  <g stroke="#7AAEE3" stroke-width="1.6" marker-end="url(#a5)">
     <line x1="422" y1="130" x2="436" y2="130"/>
     <line x1="610" y1="130" x2="624" y2="130"/>
     <line x1="798" y1="130" x2="812" y2="130"/>
   </g>
 
   <!-- wrap -->
-  <path d="M896 176 L896 202 L336 202 L336 226" fill="none" stroke="#35c6de" stroke-width="1.6" marker-end="url(#a5)"/>
+  <path d="M896 176 L896 202 L336 202 L336 226" fill="none" stroke="#7AAEE3" stroke-width="1.6" marker-end="url(#a5)"/>
 
   <!-- row 2 -->
-  <g fill="rgba(53,198,222,0.10)" stroke="#1ba3bd">
+  <g fill="rgba(122,174,227,0.10)" stroke="#5F98D1">
     <rect x="252" y="230" width="168" height="64" rx="6"/>
   </g>
-  <rect x="440" y="230" width="168" height="64" rx="6" fill="rgba(242,168,60,0.12)" stroke="#f2a83c"/>
-  <g fill="rgba(53,198,222,0.10)" stroke="#1ba3bd">
+  <rect x="440" y="230" width="168" height="64" rx="6" fill="rgba(198,161,91,0.12)" stroke="#C6A15B"/>
+  <g fill="rgba(122,174,227,0.10)" stroke="#5F98D1">
     <rect x="816" y="230" width="160" height="64" rx="6"/>
   </g>
-  <g font-size="12.5" fill="#f2f5f7">
-    <text x="266" y="254">ESTIMATE DECISION RISK</text>
-    <text x="454" y="254" fill="#ffc978">DECISION GATE</text>
+  <g font-size="12.5" fill="#F5F7FA">
+    <text x="266" y="254" font-size="11.6">ESTIMATE DECISION RISK</text>
+    <text x="454" y="254" fill="#D8BC84">DECISION GATE</text>
     <text x="830" y="254">VERIFY</text>
   </g>
-  <g font-size="10" fill="#a9b4bc">
+  <g font-size="10" fill="#AAB8C2">
     <text x="266" y="271">what does acting cost if the</text>
     <text x="266" y="284">diagnosis is wrong? blast radius</text>
     <text x="454" y="271">named checks, each with a</text>
@@ -94,7 +94,7 @@
     <text x="830" y="271">did the recommendation hold</text>
     <text x="830" y="284">against what happened?</text>
   </g>
-  <g stroke="#35c6de" stroke-width="1.6" marker-end="url(#a5)">
+  <g stroke="#7AAEE3" stroke-width="1.6" marker-end="url(#a5)">
     <line x1="422" y1="262" x2="436" y2="262"/>
   </g>
 
@@ -104,35 +104,35 @@
     <rect x="628" y="254" width="168" height="30" rx="5"/>
     <rect x="628" y="290" width="168" height="30" rx="5"/>
   </g>
-  <g font-size="11.5" fill="#f2f5f7">
+  <g font-size="11.5" fill="#F5F7FA">
     <text x="642" y="238">OBSERVE / WAIT</text>
     <text x="642" y="274">ESCALATE</text>
     <text x="642" y="310">RECOMMEND ACTION</text>
   </g>
-  <g stroke="#f2a83c" stroke-width="1.4" marker-end="url(#a5a)">
+  <g stroke="#C6A15B" stroke-width="1.4" marker-end="url(#a5a)">
     <line x1="610" y1="248" x2="624" y2="233"/>
     <line x1="610" y1="262" x2="624" y2="269"/>
     <line x1="610" y1="276" x2="624" y2="305"/>
   </g>
-  <line x1="798" y1="262" x2="812" y2="262" stroke="#35c6de" stroke-width="1.6" marker-end="url(#a5)"/>
+  <line x1="798" y1="262" x2="812" y2="262" stroke="#7AAEE3" stroke-width="1.6" marker-end="url(#a5)"/>
 
   <!-- human -->
-  <rect x="628" y="342" width="348" height="48" rx="6" fill="rgba(242,168,60,0.08)" stroke="rgba(242,168,60,0.45)"/>
-  <text x="642" y="362" font-size="12" fill="#ffc978">HUMAN OPERATOR — every output carries its audit trail</text>
-  <text x="642" y="380" font-size="10.5" fill="#a9b4bc">A recommendation a VP cannot audit is one a VP cannot sign.</text>
-  <line x1="712" y1="322" x2="712" y2="338" stroke="#f2a83c" stroke-width="1.4" marker-end="url(#a5a)"/>
+  <rect x="628" y="342" width="348" height="48" rx="6" fill="rgba(198,161,91,0.08)" stroke="rgba(198,161,91,0.45)"/>
+  <text x="642" y="362" font-size="12" fill="#D8BC84">HUMAN OPERATOR — every output carries its audit trail</text>
+  <text x="642" y="380" font-size="10.5" fill="#AAB8C2">A recommendation a VP cannot audit is one a VP cannot sign.</text>
+  <line x1="712" y1="322" x2="712" y2="338" stroke="#C6A15B" stroke-width="1.4" marker-end="url(#a5a)"/>
 
   <!-- feedback -->
-  <path d="M976 262 L992 262 L992 420 L336 420 L336 300" fill="none" stroke="#6e7a82" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#a5g)"/>
-  <text x="660" y="414" font-size="10.5" fill="#6e7a82">verification feeds back into the next decision — it does not act</text>
+  <path d="M976 262 L992 262 L992 420 L336 420 L336 300" fill="none" stroke="#8794A0" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#a5g)"/>
+  <text x="660" y="414" font-size="10.5" fill="#8794A0">verification feeds back into the next decision — it does not act</text>
 
   <!-- notes -->
   <rect x="24" y="440" width="580" height="96" rx="6" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.08)"/>
-  <text x="38" y="462" font-size="11.5" fill="#f2f5f7">Properties that hold at every stage</text>
-  <g font-size="10.5" fill="#a9b4bc">
+  <text x="38" y="462" font-size="11.5" fill="#F5F7FA">Properties that hold at every stage</text>
+  <g font-size="10.5" fill="#AAB8C2">
     <text x="38" y="482">· Confidence is ordinal (LOW / MEDIUM / HIGH) — never a probability.</text>
     <text x="38" y="499">· Two hypotheses at the same top tier ⇒ AMBIGUOUS, reported as a measured outcome.</text>
     <text x="38" y="516">· Baselines are median/MAD over a 120-min warm-up, then frozen — not rolling.</text>
-    <text x="38" y="530" fill="#6e7a82">· No learned model is included anywhere in this study.</text>
+    <text x="38" y="530" fill="#8794A0">· No learned model is included anywhere in this study.</text>
   </g>
 </svg>
