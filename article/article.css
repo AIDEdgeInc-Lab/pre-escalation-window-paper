@@ -77,7 +77,7 @@ html, body {
 .paper-body blockquote {
   border-left: 2px solid var(--cyan-500);
   margin: 24px 0; padding: 8px 0 8px 24px;
-  color: var(--text-0); font-size: 1.02rem; max-width: 680px;
+  color: #CBD5DE; font-size: 1.02rem; max-width: 680px;  /* a step above body, below headings */
 }
 .paper-body blockquote p { margin: 8px 0; }
 .paper-body blockquote strong { color: var(--cyan-300); }
@@ -86,6 +86,12 @@ html, body {
 .paper-body table {
   border-collapse: collapse; font-size: 0.85rem; margin: 24px 0;
   display: block; overflow-x: auto; max-width: 1000px;
+  /* edge fades that appear only while there is more to scroll to (hidden scrollbars give no cue) */
+  background:
+    linear-gradient(to right, var(--plane-0) 30%, transparent) 0 0 / 40px 100% no-repeat local,
+    linear-gradient(to left, var(--plane-0) 30%, transparent) 100% 0 / 40px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgba(153, 198, 243, 0.22), transparent) 0 0 / 14px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(153, 198, 243, 0.22), transparent) 100% 0 / 14px 100% no-repeat scroll;
 }
 .paper-body th, .paper-body td {
   text-align: left; padding: 8px 16px 8px 0;
