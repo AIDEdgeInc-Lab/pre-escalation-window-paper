@@ -263,7 +263,7 @@ That lag is the *entire* mechanism behind a positive pre-escalation window at th
 
 <figure class="fig">
 <img src="./figures/fig02-microwave-causal-chain.svg" alt="Causal chain from rain rate through specific attenuation, path attenuation, received signal level, C/N, fade margin, ACM downshift, capacity, service margin and telemetry to conventional escalation, with branch points for ATPC masking, protection switching and self-clearing recovery.">
-<figcaption><span class="fig-num">Figure 2</span> <strong>Terrestrial microwave: how a propagation change becomes an operational event.</strong> Blue path = physical mechanism; grey = what monitoring observes; amber = decision points. Two properties matter operationally: ATPC moves the evidence out of RSL and into TX-power telemetry, and a passing rain cell returns the link to nominal with no intervention at all. <span class="fig-tag fig-tag-concept">CONCEPTUAL</span></figcaption>
+<figcaption><span class="fig-num">Figure 2</span> <strong>Terrestrial microwave: how a propagation change becomes an operational event.</strong> Blue path = physical mechanism; grey = what monitoring observes; gold = decision points. Two properties matter operationally: ATPC moves the evidence out of RSL and into TX-power telemetry, and a passing rain cell returns the link to nominal with no intervention at all. <span class="fig-tag fig-tag-concept">CONCEPTUAL</span></figcaption>
 </figure>
 
 The chain in one line: **fixed infrastructure, changing propagation, and a link that trades capacity for availability before it fails.**
@@ -398,7 +398,7 @@ The 307-satellite figure is a street-of-coverage packing lower bound (Part XI, i
 
 <figure class="fig">
 <img src="./figures/fig03-leo-causal-chain.svg" alt="Causal chain from orbital geometry through elevation and slant range, propagation, link margin, serving satellite and beam state, handover and gateway state, to RTT, loss, throughput and capacity, then telemetry and conventional escalation, with branches for geometry-explained variation and serving-context conditioning.">
-<figcaption><span class="fig-num">Figure 3</span> <strong>LEO/NTN: how geometry, propagation and serving state combine into an operational event.</strong> Cyan path = physical mechanism; grey = what monitoring observes; amber = decision points. The two branches that have no microwave equivalent are marked: <em>geometry-explained</em> variation, which must be removed before anything is called anomalous, and <em>serving-context</em> changes, which make an unconditioned baseline statistically blind to spacecraft-side faults. <span class="fig-tag fig-tag-concept">CONCEPTUAL</span></figcaption>
+<figcaption><span class="fig-num">Figure 3</span> <strong>LEO/NTN: how geometry, propagation and serving state combine into an operational event.</strong> Blue path = physical mechanism; grey = what monitoring observes; gold = decision points. The two branches that have no microwave equivalent are marked: <em>geometry-explained</em> variation, which must be removed before anything is called anomalous, and <em>serving-context</em> changes, which make an unconditioned baseline statistically blind to spacecraft-side faults. <span class="fig-tag fig-tag-concept">CONCEPTUAL</span></figcaption>
 </figure>
 
 The chain in one line: **changing infrastructure, changing propagation, and a link whose nominal behaviour is itself a moving target.**
