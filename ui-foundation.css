@@ -205,3 +205,36 @@ html[data-brand='aidedge'] details > *:not(summary) { padding-bottom: var(--ui-s
   html[data-brand='aidedge'] .cta,
   html[data-brand='aidedge'] .paper-toc { padding: var(--ui-card-pad); }
 }
+
+/* ---- 6. Header and footer visuals ------------------------------------------------------------- */
+/* Header (summary page top bar is the sticky one): 85% background + blur, hairline after 8px of scroll. */
+html[data-brand='aidedge'] .topbar {
+  background: var(--ui-header-bg);
+  -webkit-backdrop-filter: blur(var(--ui-header-blur));
+  backdrop-filter: blur(var(--ui-header-blur));
+  border-bottom: 1px solid transparent;
+}
+html[data-brand='aidedge'] .topbar.is-scrolled { border-bottom-color: var(--ui-hairline); }
+
+/* Footer: flat surface, 1px accent hairline (40%) across the top, radial accent glow <= 6% in one corner. */
+html[data-brand='aidedge'] footer,
+html[data-brand='aidedge'] .site-footer,
+html[data-brand='aidedge'] .doc-footer,
+html[data-brand='aidedge'] .method-footer {
+  position: relative;
+  background-color: var(--ui-surface);
+  background-image: radial-gradient(circle at 100% 0%, var(--ui-accent-glow), transparent 55%);
+  border: 0;
+  border-image: none;
+  border-top: 1px solid var(--ui-accent-line);
+  margin-top: var(--ui-space-7);
+  padding: var(--ui-space-6);
+  border-radius: 0;
+  color: var(--ui-text-2);
+  font-size: var(--ui-fs-small);
+}
+html[data-brand='aidedge'] footer a, html[data-brand='aidedge'] .site-footer a,
+html[data-brand='aidedge'] .method-footer a { color: var(--ui-text-2); }
+html[data-brand='aidedge'] footer a:hover, html[data-brand='aidedge'] .site-footer a:hover,
+html[data-brand='aidedge'] .method-footer a:hover { color: var(--ui-text-1); text-decoration: underline; text-underline-offset: 3px; }
+html[data-brand='aidedge'] .footer-links a { border-left-color: var(--ui-hairline-strong); }
