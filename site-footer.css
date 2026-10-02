@@ -46,13 +46,13 @@ footer.site-footer .footer-legal a, footer.site-footer .footer-copyright a { col
 @property --edge-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
 .site-header .nav-cta, .page-cta .btn-primary { position: relative; isolation: isolate; }
 .site-header .nav-cta::after, .page-cta .btn-primary::after {
-  content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; opacity: 0.5;
-  background: conic-gradient(from var(--edge-angle), transparent 0deg, transparent 260deg, var(--ui-accent-line) 285deg,
-    var(--ui-accent) 305deg, var(--ui-accent-line) 325deg, transparent 345deg, transparent 360deg);
+  content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; opacity: 0.9;
+  background: conic-gradient(from var(--edge-angle), transparent 0deg, transparent 255deg, var(--ui-accent-line) 280deg,
+    color-mix(in srgb, var(--ui-accent) 62%, white) 305deg, var(--ui-accent-line) 330deg, transparent 345deg, transparent 360deg);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude;
-  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--ui-accent) 20%, transparent)); pointer-events: none; z-index: 2;
-  transition: opacity 450ms var(--ui-ease); animation: edge-travel 8s linear infinite;
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--ui-accent) 45%, transparent)); pointer-events: none; z-index: 2;
+  transition: opacity 450ms var(--ui-ease); animation: edge-travel 6.8s linear infinite;
 }
 .site-header .nav-cta:hover::after, .site-header .nav-cta:focus-visible::after, .page-cta .btn-primary:hover::after, .page-cta .btn-primary:focus-visible::after { opacity: 1; }
 @keyframes edge-travel { to { --edge-angle: 360deg; } }
