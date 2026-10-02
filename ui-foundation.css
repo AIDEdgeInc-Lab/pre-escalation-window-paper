@@ -387,3 +387,16 @@ html[data-brand='aidedge'] footer.site-footer .footer-legal a, html[data-brand='
 
 /* Inline code never drops below the 12px floor. */
 html[data-brand='aidedge'] code { font-size: max(12px, 0.9em); }
+
+/* ---- Contextual page ending: one line and one button, before the footer ---- */
+.page-cta { padding: var(--ui-section-pad) 0 0; }
+.page-cta-inner { display: flex; flex-direction: column; align-items: center; gap: var(--ui-space-4); max-width: var(--ui-cta-block-max); margin: 0 auto; padding-top: var(--ui-space-7); border-top: 1px solid var(--ui-hairline); text-align: center; }
+.page-cta-line { margin: 0; max-width: none; color: var(--ui-text-2); font-size: var(--ui-fs-body); text-wrap: balance; }
+.page-cta .btn-primary {
+  display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; height: var(--ui-btn-h);
+  padding: 0 var(--ui-space-5); border: 1px solid var(--ui-accent); border-radius: var(--ui-btn-radius);
+  background: var(--ui-accent-fill); color: var(--ui-text-1); font-size: var(--ui-fs-button); font-weight: var(--ui-weight-medium);
+  white-space: nowrap; text-decoration: none; transition: background 220ms var(--ui-ease);
+}
+.page-cta .btn-primary:hover, .page-cta .btn-primary:focus-visible { background: color-mix(in srgb, var(--ui-accent) 22%, transparent); }
+.page-cta .btn-primary:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
