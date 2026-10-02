@@ -1,0 +1,124 @@
+/* AID Edge ecosystem - shared UI tokens (docs/ui/BRIEF.md section 4). COPIED FILE, do not edit here.
+   SOURCE: aidedge-velorona-web/packages/design-system/src/styles/ui-tokens.css
+   (commit f3ce233 on branch ui/foundation-audit). Everything below this header is byte-identical to the source.
+   Change the source first, then re-copy.
+   NOT LINKED from any page yet (Prompt 1 = definitions only, zero visual change).
+   Every name carries the --ui- prefix so nothing collides with existing tokens.
+   Brand switch: <html data-brand="aidedge | velorona | map">. Only --ui-accent differs per brand.
+   Breakpoints (literals, media queries cannot read custom properties): tablet <= 1023px, mobile <= 639px. */
+
+:root {
+  /* Type families: Geist Sans (text) + Geist Mono (eyebrows, numerals, metadata). Weights 400/500/600 only. */
+  --ui-font-sans: 'Geist Sans', system-ui, sans-serif;
+  --ui-font-mono: 'Geist Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --ui-weight-regular: 400;
+  --ui-weight-medium: 500;
+  --ui-weight-semibold: 600;
+
+  /* Type scale (desktop values; mobile overrides below) */
+  --ui-fs-h1: 44px;
+  --ui-fs-h2: 28px;
+  --ui-fs-h3: 20px;
+  --ui-fs-body: 16px;
+  --ui-fs-small: 14px;
+  --ui-fs-label: 12px;
+  --ui-label-tracking: 0.08em;
+  --ui-lh-body: 1.6;
+  --ui-fs-button: 15px;
+
+  /* Text hierarchy by color (never pure white). Each is >= 4.5:1 on --ui-bg and --ui-surface. */
+  --ui-text-1: #F2F4F7; /* headings */
+  --ui-text-2: #C3C9D1; /* lead / body */
+  --ui-text-3: #8D96A1; /* supporting */
+  --ui-text-4: #7A828C; /* metadata */
+
+  /* Backgrounds and lines */
+  --ui-bg: #05070A;
+  --ui-surface: #0B0E13;
+  --ui-hairline: rgba(255, 255, 255, 0.08);
+  --ui-hairline-strong: rgba(255, 255, 255, 0.14);
+
+  /* Spacing scale (px) */
+  --ui-space-1: 4px;
+  --ui-space-2: 8px;
+  --ui-space-3: 12px;
+  --ui-space-4: 16px;
+  --ui-space-5: 24px;
+  --ui-space-6: 32px;
+  --ui-space-7: 48px;
+  --ui-space-8: 64px;
+  --ui-space-9: 96px;
+  --ui-space-10: 128px;
+
+  /* Section rhythm (each of top and bottom). "Major" = hero, final CTA, first section after hero. */
+  --ui-section-pad: 96px;
+  --ui-section-pad-major: 120px; /* brief range 112-128 on desktop; 72 on mobile */
+  --ui-gap-eyebrow-h2: 12px;
+  --ui-gap-h2-lead: 16px;
+  --ui-gap-lead-content: 48px;
+  --ui-gap-cards: 24px;
+
+  /* Grid */
+  --ui-container: 1200px;
+  --ui-gutter: 48px;
+
+  /* Text geometry */
+  --ui-measure-h1: 22ch;
+  --ui-measure-h2: 28ch;
+  --ui-measure-p: 62ch;
+  --ui-cta-block-max: 560px;
+
+  /* Components */
+  --ui-btn-h: 48px;
+  --ui-btn-radius: 999px;
+  --ui-card-radius: 16px;
+  --ui-card-pad: 32px;
+  --ui-eyebrow-dot: 6px;
+
+  /* Motion: edge sweep, section reveal, ambient hero */
+  --ui-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ui-ease-out: ease-out;
+  --ui-sweep-duration: 700ms;
+  --ui-reveal-duration: 400ms;
+  --ui-reveal-rise: 8px;
+  --ui-ambient-min-cycle: 20s;
+
+  /* Header */
+  --ui-header-bg: color-mix(in srgb, var(--ui-bg) 85%, transparent);
+  --ui-header-blur: 12px;
+
+  /* Brand-neutral fallback accent (always overridden by data-brand) */
+  --ui-accent: #8D96A1;
+}
+
+/* One accent per property: the only brand difference. Accent is for eyebrows, primary CTA, active nav,
+   key links, icons and the edge sweep. Never body text or large fills. */
+:root[data-brand='aidedge']  { --ui-accent: #C7A96B; }
+:root[data-brand='velorona'] { --ui-accent: #4B8DFF; }
+:root[data-brand='map']      { --ui-accent: #2EC4D6; }
+
+/* Accent derivatives (resolve per brand because they read --ui-accent) */
+:root {
+  --ui-accent-fill: color-mix(in srgb, var(--ui-accent) 14%, transparent);   /* primary button fill */
+  --ui-accent-line: color-mix(in srgb, var(--ui-accent) 40%, transparent);   /* footer top hairline */
+  --ui-accent-glow: color-mix(in srgb, var(--ui-accent) 6%, transparent);    /* footer corner glow, max 6% */
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --ui-section-pad: 72px;
+    --ui-gutter: 32px;
+  }
+}
+
+@media (max-width: 639px) {
+  :root {
+    --ui-fs-h1: 32px;
+    --ui-fs-h2: 22px;
+    --ui-fs-h3: 18px;
+    --ui-section-pad: 56px;
+    --ui-section-pad-major: 72px;
+    --ui-gutter: 20px;
+    --ui-card-pad: 24px;
+  }
+}
