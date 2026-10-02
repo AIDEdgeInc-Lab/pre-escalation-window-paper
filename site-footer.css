@@ -34,3 +34,9 @@ footer.site-footer .footer-legal a, footer.site-footer .footer-copyright a { col
 @media (max-width: 1023px) { .footer-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 639px) { .footer-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ui-space-6) var(--ui-space-5); } .footer-bottom { flex-direction: column; margin-top: var(--ui-space-7); } }
 
+
+/* ---- Touch targets (tablet and phone): at least 44px ---- */
+@media (max-width: 1023px) {
+  .footer-col ul { gap: 0; }
+  footer.site-footer .footer-col a, footer.site-footer .footer-legal a { display: inline-block; min-width: 44px; padding-block: 0.8rem; }
+}
