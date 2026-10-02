@@ -238,3 +238,62 @@ html[data-brand='aidedge'] .method-footer a { color: var(--ui-text-2); }
 html[data-brand='aidedge'] footer a:hover, html[data-brand='aidedge'] .site-footer a:hover,
 html[data-brand='aidedge'] .method-footer a:hover { color: var(--ui-text-1); text-decoration: underline; text-underline-offset: 3px; }
 html[data-brand='aidedge'] .footer-links a { border-left-color: var(--ui-hairline-strong); }
+
+/* ---- 7. Motion -------------------------------------------------------------------------------- */
+/* Edge sweep: the ONE signature effect. A thin light travels once (700ms, ease-out, no loop) along the
+   border of interactive cards on hover/focus. Invisible at rest. */
+@property --edge-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+html[data-brand='aidedge'] .links a,
+html[data-brand='aidedge'] .cards a { position: relative; isolation: isolate; }
+html[data-brand='aidedge'] .links a::after,
+html[data-brand='aidedge'] .cards a::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 2px;
+  opacity: 0;
+  background: conic-gradient(
+    from var(--edge-angle),
+    transparent 0deg,
+    transparent 255deg,
+    color-mix(in srgb, var(--ui-accent) 70%, transparent) 285deg,
+    color-mix(in srgb, var(--ui-accent) 35%, white) 315deg,
+    color-mix(in srgb, var(--ui-accent) 70%, transparent) 345deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  filter: drop-shadow(0 0 4px var(--ui-accent));
+  pointer-events: none;
+  z-index: 2;
+}
+html[data-brand='aidedge'] .links a:hover::after, html[data-brand='aidedge'] .links a:focus-visible::after,
+html[data-brand='aidedge'] .cards a:hover::after, html[data-brand='aidedge'] .cards a:focus-visible::after {
+  animation: ui-edge-sweep var(--ui-sweep-duration) var(--ui-ease-out) 1;
+}
+@keyframes ui-edge-sweep {
+  0%   { --edge-angle: 0deg;   opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { --edge-angle: 360deg; opacity: 0; }
+}
+
+/* Section reveal: opacity 0 -> 1 + 8px rise, 400ms, once. Hidden only when ui-foundation.js is running
+   (it sets html.js), so content stays visible if JS fails. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(var(--ui-reveal-rise));
+  transition: opacity var(--ui-reveal-duration) var(--ui-ease-out), transform var(--ui-reveal-duration) var(--ui-ease-out);
+}
+.js [data-reveal].is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-brand='aidedge'], html[data-brand='aidedge'] * , html[data-brand='aidedge'] *::before, html[data-brand='aidedge'] *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .js [data-reveal] { opacity: 1; transform: none; }
+}
