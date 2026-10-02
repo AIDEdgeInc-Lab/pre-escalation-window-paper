@@ -1,0 +1,7 @@
+# Local tooling state and secrets: never commit
+.wrangler/
+.env
+.env.*
+.dev.vars
+node_modules/
+.DS_Store
