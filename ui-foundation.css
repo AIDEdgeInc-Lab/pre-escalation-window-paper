@@ -121,3 +121,87 @@ html[data-brand='aidedge'] .paper-body p,
 html[data-brand='aidedge'] .paper-body li { max-width: var(--ui-measure-p); line-height: var(--ui-lh-body); }
 html[data-brand='aidedge'] .links a { align-items: flex-start; }
 html[data-brand='aidedge'] .links, html[data-brand='aidedge'] .cards { align-items: stretch; }
+
+/* ---- 5. Components ---------------------------------------------------------------------------- */
+/* Card: --ui-surface, 1px hairline, radius 16, padding 32 (24 mobile). */
+html[data-brand='aidedge'] .callout,
+html[data-brand='aidedge'] .updates li,
+html[data-brand='aidedge'] .links a,
+html[data-brand='aidedge'] .cards a,
+html[data-brand='aidedge'] .cta,
+html[data-brand='aidedge'] .paper-toc {
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-hairline);
+  border-radius: var(--ui-card-radius);
+  padding: var(--ui-card-pad);
+}
+html[data-brand='aidedge'] .links a, html[data-brand='aidedge'] .cards a { padding-top: var(--ui-space-5); padding-bottom: var(--ui-space-5); }
+html[data-brand='aidedge'] .cta { border-color: var(--ui-accent-line); }
+
+/* Eyebrow: 6px accent dot + mono label; dot aligns with the FIRST line. */
+html[data-brand='aidedge'] .eyebrow,
+html[data-brand='aidedge'] .paper-eyebrow,
+html[data-brand='aidedge'] .method-eyebrow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  color: var(--ui-accent);
+}
+html[data-brand='aidedge'] .eyebrow::before,
+html[data-brand='aidedge'] .paper-eyebrow::before,
+html[data-brand='aidedge'] .method-eyebrow::before {
+  content: '';
+  flex: none;
+  width: var(--ui-eyebrow-dot);
+  height: var(--ui-eyebrow-dot);
+  border-radius: 50%;
+  background: var(--ui-accent);
+  transform: translateY(-0.1em);
+}
+
+/* Text link: accent, 15px / 500; underline on hover. */
+html[data-brand='aidedge'] .updates a, html[data-brand='aidedge'] .footer-links a {
+  font-size: var(--ui-fs-button);
+  font-weight: var(--ui-weight-medium);
+}
+
+/* Accordion: one style. Hairline separators, "+" rotating to "x", no native marker. */
+html[data-brand='aidedge'] details {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--ui-hairline);
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+}
+html[data-brand='aidedge'] details:last-of-type { border-bottom: 1px solid var(--ui-hairline); }
+html[data-brand='aidedge'] details > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-space-4);
+  list-style: none;
+  padding: var(--ui-space-4) 0;
+  min-height: 44px;
+  font-weight: var(--ui-weight-medium);
+}
+html[data-brand='aidedge'] details > summary::-webkit-details-marker { display: none; }
+html[data-brand='aidedge'] details > summary::marker { content: ''; }
+html[data-brand='aidedge'] details > summary::after {
+  content: '+';
+  flex: none;
+  color: var(--ui-accent);
+  font-size: 1.25rem;
+  line-height: 1;
+  transition: transform 220ms var(--ui-ease);
+}
+html[data-brand='aidedge'] details[open] > summary::after { transform: rotate(45deg); }
+html[data-brand='aidedge'] details[open] > summary { border-bottom: 0; margin-bottom: 0; }
+html[data-brand='aidedge'] details > *:not(summary) { padding-bottom: var(--ui-space-4); }
+
+@media (max-width: 639px) {
+  html[data-brand='aidedge'] .callout,
+  html[data-brand='aidedge'] .updates li,
+  html[data-brand='aidedge'] .cta,
+  html[data-brand='aidedge'] .paper-toc { padding: var(--ui-card-pad); }
+}
