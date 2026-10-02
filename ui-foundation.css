@@ -30,3 +30,48 @@ html[data-brand='aidedge'] .paper-toc p {
 }
 html[data-brand='aidedge'] h1, html[data-brand='aidedge'] h2, html[data-brand='aidedge'] h3, html[data-brand='aidedge'] h4,
 html[data-brand='aidedge'] strong, html[data-brand='aidedge'] b { font-weight: var(--ui-weight-semibold); }
+
+/* ---- 2. Colors and contrast ------------------------------------------------------------------- */
+html[data-brand='aidedge'] {
+  /* surfaces and lines */
+  --plane-0: var(--ui-bg);
+  --plane-1: var(--ui-surface);
+  --border-default: var(--ui-hairline);
+  --border: var(--ui-hairline);
+  --border-strong: var(--ui-hairline-strong);
+  /* text hierarchy by color: headings / body / supporting / metadata (all >= 4.5:1) */
+  --text-0: var(--ui-text-1);
+  --text-1: var(--ui-text-2);
+  --text-2: var(--ui-text-3);
+  --text-3: var(--ui-text-4);
+  /* page-local aliases used by the inline page styles */
+  --bg: var(--ui-bg);
+  --panel: var(--ui-surface);
+  --text: var(--ui-text-1);
+  --body: var(--ui-text-2);
+  --muted: var(--ui-text-3);
+  /* DATA COLOR PINNED: tokens.css derives this from --text-1; keep its current value (#B3BFCA). */
+  --color-noc-conventional: #B3BFCA;
+}
+/* the faint blue atmosphere belongs to Velorona; AID Edge pages sit on the flat background */
+html[data-brand='aidedge'] body:not(:has(#instrument-root)) { background: var(--ui-bg); }
+html[data-brand='aidedge'] ::selection { background: color-mix(in srgb, var(--ui-accent) 35%, transparent); color: var(--ui-text-1); }
+
+/* Accent (champagne gold) only on: eyebrows, key links, active nav, icons, focus. */
+html[data-brand='aidedge'] .eyebrow,
+html[data-brand='aidedge'] .links span.arrow,
+html[data-brand='aidedge'] .cards .head .arrow { color: var(--ui-accent); }
+html[data-brand='aidedge'] a,
+html[data-brand='aidedge'] .paper-nav a, html[data-brand='aidedge'] .paper-toc a, html[data-brand='aidedge'] .paper-body a,
+html[data-brand='aidedge'] .method-nav a, html[data-brand='aidedge'] .method-toc a, html[data-brand='aidedge'] .method-section a,
+html[data-brand='aidedge'] .updates a, html[data-brand='aidedge'] footer a,
+html[data-brand='aidedge'] .site-footer a, html[data-brand='aidedge'] .doc-footer a, html[data-brand='aidedge'] .method-footer a { color: var(--ui-accent); }
+html[data-brand='aidedge'] nav.main a { color: var(--ui-text-3); }
+html[data-brand='aidedge'] nav.main a:hover { color: var(--ui-accent); }
+html[data-brand='aidedge'] .links a { color: var(--ui-text-1); }
+html[data-brand='aidedge'] .links a:hover, html[data-brand='aidedge'] .cards a:hover { border-color: var(--ui-accent); }
+html[data-brand='aidedge'] blockquote { border-left-color: var(--ui-accent); }
+html[data-brand='aidedge'] blockquote strong, html[data-brand='aidedge'] .paper-body blockquote strong { color: var(--ui-text-1); }
+html[data-brand='aidedge'] :focus-visible,
+html[data-brand='aidedge'] a:focus-visible,
+html[data-brand='aidedge'] summary:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 3px; }

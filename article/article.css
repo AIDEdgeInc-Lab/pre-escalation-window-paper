@@ -77,7 +77,7 @@ html, body {
 .paper-body blockquote {
   border-left: 2px solid var(--cyan-500);
   margin: 24px 0; padding: 8px 0 8px 24px;
-  color: #CBD5DE; font-size: var(--ui-fs-body); max-width: 680px;  /* a step above body, below headings */
+  color: var(--ui-text-2); font-size: var(--ui-fs-body); max-width: 680px;  /* a step above body, below headings */
 }
 .paper-body blockquote p { margin: 8px 0; }
 .paper-body blockquote strong { color: var(--cyan-300); }
