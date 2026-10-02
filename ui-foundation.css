@@ -107,3 +107,17 @@ html[data-brand='aidedge'] .updates { margin-bottom: 0; }
 html[data-brand='aidedge'] .links, html[data-brand='aidedge'] .cards, html[data-brand='aidedge'] .updates ol { gap: var(--ui-gap-cards); }
 html[data-brand='aidedge'] .links { margin-bottom: 0; }
 html[data-brand='aidedge'] .method-footer { margin-top: 0; }
+
+/* ---- 4. Text geometry ------------------------------------------------------------------------ */
+html[data-brand='aidedge'] h1, html[data-brand='aidedge'] h2, html[data-brand='aidedge'] h3 { text-wrap: balance; }
+html[data-brand='aidedge'] h1 { max-width: var(--ui-measure-h1); }
+html[data-brand='aidedge'] h2 { max-width: var(--ui-measure-h2); }
+html[data-brand='aidedge'] p, html[data-brand='aidedge'] li { text-wrap: pretty; }
+html[data-brand='aidedge'] p,
+html[data-brand='aidedge'] .method-section p,
+html[data-brand='aidedge'] .method-section ul,
+html[data-brand='aidedge'] .method-section ol,
+html[data-brand='aidedge'] .paper-body p,
+html[data-brand='aidedge'] .paper-body li { max-width: var(--ui-measure-p); line-height: var(--ui-lh-body); }
+html[data-brand='aidedge'] .links a { align-items: flex-start; }
+html[data-brand='aidedge'] .links, html[data-brand='aidedge'] .cards { align-items: stretch; }
