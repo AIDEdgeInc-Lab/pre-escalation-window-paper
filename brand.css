@@ -134,3 +134,6 @@ main.wrap p a, main.wrap li a, main.wrap td a, main.wrap dd a, main.wrap figcapt
 .footer-links a { display: block; padding: 0 14px; margin-left: -1px; border-left: 1px solid var(--border-strong); line-height: 1.15; }
 .site-footer p { margin: 0; }
 .site-footer .footer-meta { margin-top: 10px; }
+
+/* Form controls inherit the page font (the demo instrument otherwise falls back to the browser default). */
+button, input, select, textarea { font-family: inherit; }

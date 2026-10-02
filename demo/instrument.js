@@ -2257,7 +2257,7 @@ function renderDrawer(container, data) {
   details.appendChild(summary);
   const methodP = document.createElement("p");
   methodP.className = "drawer-method-note";
-  methodP.innerHTML = `Full method description, hypothesis cards, and the complete write-up live at <a href="/method">/method</a>. The full research paper \u2014 problem, both domains, results, what failed, what survived \u2014 is at <a href="/article/">/article</a>. This drawer surfaces the limitations that bound every figure on this page.`;
+  methodP.innerHTML = `Full method description, hypothesis cards, and the complete write-up live at <a href="/method/">/method</a>. The full research paper \u2014 problem, both domains, results, what failed, what survived \u2014 is at <a href="/article/">/article</a>. This drawer surfaces the limitations that bound every figure on this page.`;
   details.appendChild(methodP);
   for (const cat of CATEGORY_ORDER) {
     const items = data.limitations.filter((l) => l.category === cat);
