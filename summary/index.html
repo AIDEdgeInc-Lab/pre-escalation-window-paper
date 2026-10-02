@@ -7,7 +7,7 @@
 <meta name="description" content="Published methodology, results, figures and data for The Pre-Escalation Window: a comparative decision-intelligence study of terrestrial microwave backhaul and LEO/NTN. Simulation study; not validated on operator networks.">
 <link rel="canonical" href="https://papers.aidedgeinc.com/summary/">
 <meta property="og:type" content="article">
-<meta property="og:site_name" content="AID Edge Inc. Research">
+<meta property="og:site_name" content="AID Edge Research">
 <meta property="og:title" content="The Pre-Escalation Window: Microwave Backhaul vs LEO/NTN">
 <meta property="og:description" content="A simulation study of terrestrial microwave backhaul and LEO/NTN: is there a window between early degradation and conventional escalation? Not validated on operator networks.">
 <meta property="og:url" content="https://papers.aidedgeinc.com/summary/">
@@ -124,13 +124,26 @@
 <link rel="stylesheet" href="../ui-foundation.css">
 </head>
 <body>
+<header class="site-header">
+  <div class="ui-wrap nav-shell">
+    <a class="brand-text" href="/">AID Edge Research</a>
+    <div class="nav-right">
+      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Toggle menu"><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span></button>
+      <nav aria-label="Primary" id="primaryNav" class="nav-list">
+        <ul>
+          <li class="has-dropdown"><button type="button" class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">Products<span class="nav-caret" aria-hidden="true"></span></button><ul class="dropdown-menu"><li><a href="https://velorona.ai/"><span class="dd-label">Velorona <span class="ext" aria-hidden="true">↗</span></span><span class="dd-note">Degradation Intelligence for Network Operations</span><span class="visually-hidden"> (external site)</span></a></li><li><a href="https://map.velorona.ai/"><span class="dd-label">Velorona Map <span class="ext" aria-hidden="true">↗</span></span><span class="dd-note">Geospatial &amp; Environmental Intelligence for telecom links</span><span class="visually-hidden"> (external site)</span></a></li></ul></li>
+          <li class="has-dropdown"><button type="button" class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">Tools<span class="nav-caret" aria-hidden="true"></span></button><ul class="dropdown-menu"><li><a href="https://plugins.qgis.org/plugins/velorona/"><span class="dd-label">Velorona for QGIS <span class="ext" aria-hidden="true">↗</span></span><span class="dd-note">Link analysis inside QGIS. A separate desktop tool.</span><span class="visually-hidden"> (external site)</span></a></li><li><a href="https://aidedgeinc.com/tools/#public-libraries"><span class="dd-label">AEI SDK &amp; Libraries</span><span class="dd-note">Python libraries from our engineering work. Some are public; some are proprietary.</span></a></li></ul></li>
+          <li class="has-dropdown"><button type="button" class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">Research<span class="nav-caret" aria-hidden="true"></span></button><ul class="dropdown-menu"><li><a href="/" class="active" aria-current="page"><span class="dd-label">AID Edge Research</span><span class="dd-note">The papers, methods and data behind our products.</span></a></li><li><a href="https://aidedgeinc.com/publications/"><span class="dd-label">Publications</span></a></li><li><a href="https://aidedgeinc.com/research-lab/#standards-publications"><span class="dd-label">Standards &amp; IEEE</span></a></li></ul></li>
+          <li class="has-dropdown"><button type="button" class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">Company<span class="nav-caret" aria-hidden="true"></span></button><ul class="dropdown-menu"><li><a href="https://aidedgeinc.com/about/"><span class="dd-label">About</span></a></li><li><a href="https://aidedgeinc.com/news-events/"><span class="dd-label">News &amp; Events</span></a></li></ul></li>
+        </ul>
+        <a class="nav-cta" href="https://aidedgeinc.com/contact/">Contact</a>
+      </nav>
+    </div>
+  </div>
+</header>
 <header class="topbar">
   <div class="wrap">
-    <p style="margin:0 0 8px;font-size:13px"><a href="../">&larr; Velorona Papers (all research resources)</a> &middot; <a href="../article/">Full technical paper &rarr;</a></p>
-    <div class="brand">
-      <span><strong>AID Edge Inc.</strong> | Research &amp; Technical Publications</span>
-      <span><a href="https://aidedgeinc.com">aidedgeinc.com</a> (company) &middot; <a href="https://velorona.ai">velorona.ai</a> (product)</span>
-    </div>
+    <p style="margin:0 0 8px;font-size:13px"><a href="../">&larr; AID Edge Research (all research resources)</a> &middot; <a href="../article/">Full technical paper &rarr;</a></p>
     <nav class="main" aria-label="Page sections">
       <a href="#overview">Overview</a>
       <a href="#how-it-works">How it works</a>
@@ -482,20 +495,18 @@
     <li>Simulation engine: not published and not licensed for use.</li>
     <li>Interactive demo frontend: <span class="todo">[TODO: licence not stated in the repository]</span></li>
   </ul>
-  <footer class="site-footer">
-    <ul class="footer-links">
-      <li><a href="https://velorona.ai/">Velorona.ai</a></li>
-      <li><a href="https://aidedgeinc.com/">AID Edge Inc.</a></li>
-      <li><a href="mailto:info@aidedgeinc.com">Contact</a></li>
-      <li><a href="https://aidedgeinc.com/privacy-policy/">Privacy</a></li>
-      <li><a href="https://aidedgeinc.com/terms-of-use/">Terms</a></li>
-    </ul>
-    <p>&copy; 2026 AID Edge Inc. All rights reserved.</p>
-    <p class="footer-meta">Version 1.0 &middot; Last updated 2026-09-25 &middot; <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/commits/main">Changelog (commit history)</a> &middot; <a href="https://github.com/AIDEdgeInc-Lab">GitHub</a></p>
-  </footer>
 </section>
 
 </main>
+<footer class="site-footer">
+  <div class="ui-wrap">
+    <div class="footer-cols"><nav class="footer-col" aria-label="Products"><h2 class="footer-heading">Products</h2><ul><li><a href="https://velorona.ai/">Velorona</a></li><li><a href="https://map.velorona.ai/">Velorona Map</a></li></ul></nav><nav class="footer-col" aria-label="Tools"><h2 class="footer-heading">Tools</h2><ul><li><a href="https://plugins.qgis.org/plugins/velorona/">Velorona for QGIS</a></li><li><a href="https://aidedgeinc.com/tools/#public-libraries">AEI SDK &amp; Libraries</a></li></ul></nav><nav class="footer-col" aria-label="Research"><h2 class="footer-heading">Research</h2><ul><li><a href="/">AID Edge Research</a></li><li><a href="https://aidedgeinc.com/publications/">Publications</a></li><li><a href="https://aidedgeinc.com/research-lab/#standards-publications">Standards &amp; IEEE</a></li></ul></nav><nav class="footer-col" aria-label="Company"><h2 class="footer-heading">Company</h2><ul><li><a href="https://aidedgeinc.com/about/">About</a></li><li><a href="https://aidedgeinc.com/news-events/">News &amp; Events</a></li></ul></nav><nav class="footer-col" aria-label="Contact"><h2 class="footer-heading">Contact</h2><ul><li><a href="https://aidedgeinc.com/contact/">Contact</a></li></ul></nav></div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2026 AID Edge Inc. &middot; Version 1.0 &middot; Last updated 2026-09-25 &middot; <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/commits/main">Changelog (commit history)</a></p>
+      <p class="footer-legal"><a href="https://github.com/AIDEdgeInc-Lab">GitHub</a> &middot; <a href="https://aidedgeinc.com/privacy-policy/">Privacy</a> &middot; <a href="https://aidedgeinc.com/terms-of-use/">Terms</a></p>
+    </div>
+  </div>
+</footer>
 <script src="../ui-foundation.js" defer></script>
 </body>
 </html>

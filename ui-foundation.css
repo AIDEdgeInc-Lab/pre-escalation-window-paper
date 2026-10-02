@@ -297,3 +297,93 @@ html[data-brand='aidedge'] .cards a:hover::after, html[data-brand='aidedge'] .ca
   }
   .js [data-reveal] { opacity: 1; transform: none; }
 }
+
+
+/* ---- 8. Site chrome: shared header (AID Edge IA) and five-column footer ------------------------ */
+html[data-brand='aidedge'] { --site-header-h: 72px; }
+.ui-wrap { max-width: var(--ui-container); margin: 0 auto; padding-inline: var(--ui-gutter); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--ui-header-bg);
+  -webkit-backdrop-filter: blur(var(--ui-header-blur)); backdrop-filter: blur(var(--ui-header-blur));
+  border-bottom: 1px solid transparent; transition: border-color 220ms var(--ui-ease);
+}
+.site-header.is-scrolled { border-bottom-color: var(--ui-hairline); }
+.site-header .nav-shell { display: flex; align-items: center; justify-content: space-between; gap: var(--ui-space-4); min-height: var(--site-header-h); }
+.site-header .brand-text { font-size: var(--ui-fs-h3); font-weight: var(--ui-weight-semibold); letter-spacing: -0.01em; color: var(--ui-text-1); text-decoration: none; white-space: nowrap; }
+.site-header .nav-right { display: flex; align-items: center; gap: var(--ui-space-4); }
+.site-header .nav-list { display: flex; align-items: center; gap: var(--ui-space-5); }
+.site-header .nav-list ul { list-style: none; display: flex; gap: var(--ui-space-5); margin: 0; padding: 0; }
+.site-header .nav-dropdown-trigger {
+  display: inline-flex; align-items: center; gap: 0.3rem; background: none; border: none; padding: 0; cursor: pointer;
+  font: inherit; font-size: var(--ui-fs-small); font-weight: var(--ui-weight-medium); color: var(--ui-text-2);
+  transition: color 220ms var(--ui-ease);
+}
+.site-header .nav-dropdown-trigger:hover, .site-header .has-dropdown.dropdown-open .nav-dropdown-trigger { color: var(--ui-text-1); }
+.site-header .nav-caret { width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid currentColor; }
+.site-header .has-dropdown { position: relative; }
+.site-header .nav-list .has-dropdown .dropdown-menu {
+  display: none; list-style: none; flex-direction: column; gap: 0; margin: 0; padding: 0.5rem;
+  position: absolute; top: calc(100% + 0.75rem); left: 0; min-width: 300px; max-width: 340px;
+  background: var(--ui-surface); border: 1px solid var(--ui-hairline-strong); border-radius: var(--ui-card-radius); z-index: 60;
+}
+.site-header .has-dropdown.dropdown-open .dropdown-menu { display: block; }
+.site-header .dropdown-menu a { display: block; padding: 0.6rem 0.75rem; border-radius: 8px; color: var(--ui-text-2); text-decoration: none; font-size: var(--ui-fs-small); font-weight: var(--ui-weight-medium); }
+.site-header .dropdown-menu a:hover { color: var(--ui-text-1); background: var(--ui-bg); }
+.site-header .dropdown-menu a.active { color: var(--ui-accent); }
+.site-header .dd-note { display: block; margin-top: 0.1rem; font-size: var(--ui-fs-label); font-weight: 400; color: var(--ui-text-3); }
+.site-header .dd-label .ext { color: var(--ui-text-3); }
+.site-header .nav-cta {
+  display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; height: var(--ui-btn-h);
+  padding: 0 var(--ui-space-5); border: 1px solid var(--ui-accent); border-radius: var(--ui-btn-radius);
+  background: var(--ui-accent-fill); color: var(--ui-text-1); font-size: var(--ui-fs-button); font-weight: var(--ui-weight-medium);
+  white-space: nowrap; text-decoration: none; transition: background 220ms var(--ui-ease);
+}
+.site-header .nav-cta:hover, .site-header .nav-cta:focus-visible { background: color-mix(in srgb, var(--ui-accent) 22%, transparent); }
+.site-header a:focus-visible, .site-header button:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
+/* the summary page's own section bar sits under the site header */
+html[data-brand='aidedge'] .topbar { top: var(--site-header-h); z-index: 40; }
+
+.site-header .nav-toggle { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--ui-hairline-strong); background: transparent; cursor: pointer; }
+.site-header .nav-toggle-bar { display: block; width: 18px; height: 2px; margin: 0 auto; background: var(--ui-text-1); border-radius: 2px; transition: transform 220ms var(--ui-ease); }
+.site-header .nav-toggle[aria-expanded='true'] .nav-toggle-bar:nth-child(1) { transform: translateY(3.5px) rotate(45deg); }
+.site-header .nav-toggle[aria-expanded='true'] .nav-toggle-bar:nth-child(2) { transform: translateY(-3.5px) rotate(-45deg); }
+
+@media (max-width: 1023px) {
+  html[data-brand='aidedge'] { --site-header-h: 64px; }
+  .site-header .nav-toggle { display: flex; }
+  /* Opaque panel hanging from the sticky header. */
+  .site-header .nav-list {
+    position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0;
+    background: var(--ui-surface); border-bottom: 1px solid var(--ui-hairline-strong);
+    padding: var(--ui-space-2) var(--ui-gutter) var(--ui-space-4); display: none; max-height: calc(100dvh - 4rem); overflow-y: auto;
+  }
+  .site-header .nav-list.nav-open { display: flex; }
+  .site-header .nav-list ul { flex-direction: column; gap: 0; }
+  .site-header .nav-list .nav-dropdown-trigger { display: flex; width: 100%; justify-content: space-between; padding: 0.85rem 0; border-bottom: 1px solid var(--ui-hairline); font-size: var(--ui-fs-body); color: var(--ui-text-1); }
+  .site-header .nav-list .has-dropdown .dropdown-menu { position: static; min-width: 0; max-width: none; background: none; border: none; border-radius: 0; padding: 0; }
+  .site-header .nav-list .dropdown-menu a { padding: 0.75rem 0 0.75rem 1rem; border-bottom: 1px solid var(--ui-hairline); border-radius: 0; }
+  .site-header .nav-list .nav-cta { margin-top: var(--ui-space-4); align-self: stretch; }
+}
+
+html[data-brand='aidedge'] footer.site-footer {
+  position: relative; overflow: hidden; margin-top: var(--ui-space-9); padding: var(--ui-space-8) 0 var(--ui-space-6);
+  background-color: var(--ui-surface); background-image: none; border: 0; border-top: 1px solid var(--ui-accent-line); border-radius: 0;
+}
+footer.site-footer::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 100% 0%, var(--ui-accent-glow), transparent 55%); pointer-events: none; }
+footer.site-footer .ui-wrap { position: relative; }
+.footer-cols { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--ui-space-7) var(--ui-space-6); }
+.footer-heading { margin: 0 0 var(--ui-space-4); font-family: var(--ui-font-mono); font-size: var(--ui-fs-label); font-weight: var(--ui-weight-medium); letter-spacing: var(--ui-label-tracking); text-transform: uppercase; line-height: 1.4; color: var(--ui-text-3); }
+.footer-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--ui-space-3); }
+html[data-brand='aidedge'] footer.site-footer a { color: var(--ui-text-2); font-size: var(--ui-fs-small); text-decoration: none; }
+html[data-brand='aidedge'] footer.site-footer a:hover, html[data-brand='aidedge'] footer.site-footer a:focus-visible { color: var(--ui-text-1); text-decoration: underline; text-underline-offset: 3px; }
+.footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--ui-space-2) var(--ui-space-5); margin-top: var(--ui-space-8); padding-top: var(--ui-space-5); border-top: 1px solid var(--ui-hairline); }
+.footer-copyright, .footer-legal { margin: 0; max-width: none; font-size: var(--ui-fs-small); color: var(--ui-text-3); }
+html[data-brand='aidedge'] footer.site-footer .footer-legal a, html[data-brand='aidedge'] footer.site-footer .footer-copyright a { color: var(--ui-text-3); }
+@media (max-width: 1023px) { .footer-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 639px) { .footer-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ui-space-6) var(--ui-space-5); } .footer-bottom { flex-direction: column; margin-top: var(--ui-space-7); } }
+
+/* Inline code never drops below the 12px floor. */
+html[data-brand='aidedge'] code { font-size: max(12px, 0.9em); }
