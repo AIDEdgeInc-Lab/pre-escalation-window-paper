@@ -336,13 +336,13 @@ html[data-brand='aidedge'] { --site-header-h: 72px; }
 .site-header .dd-note { display: block; margin-top: 0.1rem; font-size: var(--ui-fs-label); font-weight: 400; color: var(--ui-text-3); }
 .site-header .dd-label .ext { color: var(--ui-text-3); }
 .site-header .nav-cta {
-  display: inline-flex; align-items: center; justify-content: center; padding: 0.45rem 1.05rem;
-  border: 1px solid var(--ui-accent-line); border-radius: 999px; background: var(--ui-accent-fill); color: var(--ui-text-1);
-  font-size: 0.85rem; font-weight: 600; white-space: nowrap; text-decoration: none; transition: border-color 220ms var(--ui-ease), background 220ms var(--ui-ease);
+  display: inline-flex; align-items: center; justify-content: center; padding: 0.45rem 1.4rem;
+  border: 1px solid var(--ui-accent-line); border-radius: 999px; background: transparent; color: var(--ui-text-1);
+  font-size: 0.875rem; font-weight: 500; line-height: 1.5; white-space: nowrap; text-decoration: none; transition: border-color 220ms var(--ui-ease);
 }
 /* The visible capsule stays low-profile; an invisible band extends the hit area to 44px. */
 .site-header .nav-cta::before { content: ''; position: absolute; inset: -0.4rem 0; }
-.site-header .nav-cta:hover, .site-header .nav-cta:focus-visible { border-color: var(--ui-accent); background: var(--ui-accent-line); }
+.site-header .nav-cta:hover, .site-header .nav-cta:focus-visible { border-color: var(--ui-accent); }
 .site-header a:focus-visible, .site-header button:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
 /* the summary page's own section bar sits under the site header */
 html[data-brand='aidedge'] .topbar { top: var(--site-header-h); z-index: 40; }
@@ -366,7 +366,7 @@ html[data-brand='aidedge'] .topbar { top: var(--site-header-h); z-index: 40; }
   .site-header .nav-list .nav-dropdown-trigger { display: flex; width: 100%; justify-content: space-between; padding: 0.85rem 0; border-bottom: 1px solid var(--ui-hairline); font-size: var(--ui-fs-body); color: var(--ui-text-1); }
   .site-header .nav-list .has-dropdown .dropdown-menu { position: static; min-width: 0; max-width: none; background: none; border: none; border-radius: 0; padding: 0; }
   .site-header .nav-list .dropdown-menu a { padding: 0.75rem 0 0.75rem 1rem; border-bottom: 1px solid var(--ui-hairline); border-radius: 0; }
-  .site-header .nav-list .nav-cta { margin-top: var(--ui-space-4); align-self: stretch; padding: 0.8rem 1rem; font-size: 0.95rem; }
+  .site-header .nav-list .nav-cta { margin-top: var(--ui-space-4); align-self: stretch; }
 }
 
 html[data-brand='aidedge'] footer.site-footer {
@@ -394,12 +394,12 @@ html[data-brand='aidedge'] code { font-size: max(12px, 0.9em); }
 .page-cta-inner { display: flex; flex-direction: column; align-items: center; gap: var(--ui-space-4); max-width: var(--ui-cta-block-max); margin: 0 auto; padding-top: var(--ui-space-7); border-top: 1px solid var(--ui-hairline); text-align: center; }
 .page-cta-line { margin: 0; max-width: none; color: var(--ui-text-2); font-size: var(--ui-fs-body); text-wrap: balance; }
 .page-cta .btn-primary {
-  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-width: 7rem; padding: 0.85rem 1.6rem;
-  border: 1px solid var(--ui-accent-line); border-radius: 999px; background: var(--ui-accent-fill); color: var(--ui-text-1);
-  font-size: 0.95rem; font-weight: 600; line-height: 1.6; white-space: nowrap; text-decoration: none;
-  transition: transform 220ms var(--ui-ease), border-color 220ms var(--ui-ease), box-shadow 220ms var(--ui-ease), filter 220ms var(--ui-ease);
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-width: 7rem; padding: 0.45rem 1.6rem;
+  border: 1px solid var(--ui-accent-line); border-radius: 999px; background: transparent; color: var(--ui-text-1);
+  font-size: 0.875rem; font-weight: 500; line-height: 1.5; white-space: nowrap; text-decoration: none; transition: border-color 220ms var(--ui-ease);
 }
-.page-cta .btn-primary:hover { transform: translateY(-1px); border-color: var(--ui-accent); box-shadow: 0 0 22px -4px color-mix(in srgb, var(--ui-accent) 20%, transparent); filter: brightness(1.08); }
+.page-cta .btn-primary::before { content: ''; position: absolute; inset: -0.4rem 0; }
+.page-cta .btn-primary:hover { border-color: var(--ui-accent); }
 .page-cta .btn-primary:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
 
 /* ---- Touch targets (tablet and phone): at least 44px ---- */
