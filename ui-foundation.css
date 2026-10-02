@@ -1,0 +1,32 @@
+/* AID Edge Research - UI foundation layer (docs/ui/BRIEF.md section 4).
+   Loaded LAST on index, summary, method and article pages, after tokens.css / brand.css / page styles, and
+   keyed on <html data-brand="aidedge"> (AID Edge Research uses the AID Edge theme: gold #C7A96B).
+   tokens.css and brand.css are NOT edited (vendored/generated); this file overrides them through selectors.
+   DATA COLORS ARE NOT TOUCHED: chart/figure/plot colors, --cyan-*, --amber-*, --color-noc-* and the
+   evidence/status tags keep their current values. Requires ui-tokens.css. */
+
+/* ---- 1. Typography ---------------------------------------------------------------------------- */
+html[data-brand='aidedge'] body {
+  font-family: var(--ui-font-sans);
+  font-size: var(--ui-fs-body);
+  line-height: var(--ui-lh-body);
+}
+html[data-brand='aidedge'] code,
+html[data-brand='aidedge'] pre,
+html[data-brand='aidedge'] kbd,
+html[data-brand='aidedge'] samp { font-family: var(--ui-font-mono); }
+
+/* Eyebrows / labels: Geist Mono 12px uppercase, 0.08em tracking */
+html[data-brand='aidedge'] .eyebrow,
+html[data-brand='aidedge'] .paper-eyebrow,
+html[data-brand='aidedge'] .method-eyebrow,
+html[data-brand='aidedge'] .paper-toc p {
+  font-family: var(--ui-font-mono);
+  font-size: var(--ui-fs-label);
+  font-weight: var(--ui-weight-medium);
+  letter-spacing: var(--ui-label-tracking);
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+html[data-brand='aidedge'] h1, html[data-brand='aidedge'] h2, html[data-brand='aidedge'] h3, html[data-brand='aidedge'] h4,
+html[data-brand='aidedge'] strong, html[data-brand='aidedge'] b { font-weight: var(--ui-weight-semibold); }

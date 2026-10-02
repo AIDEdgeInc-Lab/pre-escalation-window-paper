@@ -1,11 +1,14 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-brand="aidedge">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Pre-Escalation Window — Research Artifacts</title>
 <meta name="description" content="Published methodology, results, figures and data for The Pre-Escalation Window: a comparative decision-intelligence study of terrestrial microwave backhaul and LEO/NTN.">
 <link rel="canonical" href="https://papers.aidedgeinc.com/">
+<link rel="stylesheet" href="./ui-tokens.css">
+<link rel="preload" href="/fonts/Geist-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Geist-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="./brand.css">
 <style>
   :root{
@@ -19,40 +22,41 @@
     font:16px/1.6 var(--font-sans);
   }
   .wrap{max-width:760px; margin:0 auto; padding:64px 24px 96px}
-  .eyebrow{color:var(--cyan); font-size:13px; letter-spacing:.06em; text-transform:uppercase; margin:0 0 16px}
-  h1{color:var(--text); font-size:32px; line-height:1.25; margin:0 0 16px; font-weight:600}
-  .lede{color:var(--body); font-size:17px; margin:0 0 40px; max-width:60ch}
+  .eyebrow{color:var(--cyan); font-size:var(--ui-fs-small); letter-spacing:.06em; text-transform:uppercase; margin:0 0 16px}
+  h1{color:var(--text); font-size:var(--ui-fs-h1); line-height:1.25; margin:0 0 16px; font-weight:600}
+  .lede{color:var(--body); font-size:var(--ui-fs-body); margin:0 0 40px; max-width:60ch}
   .callout{
     border:1px solid var(--border); background:var(--panel); border-radius:12px;
     padding:20px 24px; margin:0 0 40px;
   }
-  .callout p{margin:0; color:var(--body); font-size:14px}
+  .callout p{margin:0; color:var(--body); font-size:var(--ui-fs-small)}
   .callout strong{color:var(--text)}
   .links{list-style:none; padding:0; margin:0 0 48px; display:grid; gap:12px}
   .links a{
     display:flex; align-items:center; justify-content:space-between; gap:16px;
     border:1px solid var(--border); background:var(--panel); border-radius:10px;
-    padding:16px 20px; color:var(--text); text-decoration:none; font-size:15px;
+    padding:16px 20px; color:var(--text); text-decoration:none; font-size:var(--ui-fs-body);
   }
   .links a:hover{border-color:var(--cyan-deep)}
   .links span.arrow{color:var(--cyan); flex:none}
-  .links .label small{display:block; color:var(--muted); font-weight:400; margin-top:2px; font-size:13px}
+  .links .label small{display:block; color:var(--muted); font-weight:400; margin-top:2px; font-size:var(--ui-fs-small)}
   .updates{margin:0 0 40px}
-  .updates h2{font-size:18px; margin:0 0 4px; font-weight:600}
-  .updates .sub{color:var(--muted); font-size:13px; margin:0 0 14px}
+  .updates h2{font-size:var(--ui-fs-h2); margin:0 0 4px; font-weight:600}
+  .updates .sub{color:var(--muted); font-size:var(--ui-fs-small); margin:0 0 14px}
   .updates ol{list-style:none; padding:0; margin:0; display:grid; gap:10px}
-  .updates li{border:1px solid var(--border); background:var(--panel); border-radius:10px; padding:14px 18px; font-size:14px}
-  .updates .t{font-weight:600; font-size:15px; margin:0 0 4px; color:var(--text)}
-  .updates .meta{color:var(--muted); font-size:13px; margin:0 0 6px}
+  .updates li{border:1px solid var(--border); background:var(--panel); border-radius:10px; padding:14px 18px; font-size:var(--ui-fs-small)}
+  .updates .t{font-weight:600; font-size:var(--ui-fs-body); margin:0 0 4px; color:var(--text)}
+  .updates .meta{color:var(--muted); font-size:var(--ui-fs-small); margin:0 0 6px}
   .updates .meta b{color:var(--text); font-weight:500}
   .updates p{margin:0 0 6px; color:var(--body)}
   .updates p:last-child{margin:0}
   .updates a{color:var(--cyan-deep)}
   .updates .tbd{color:var(--gold-light)}
-  .new{display:inline-block; margin-left:8px; padding:0 7px; border:1px solid var(--gold-line); border-radius:999px; background:var(--gold-soft); color:var(--gold-light); font-size:10.5px; font-weight:500; letter-spacing:.08em; line-height:18px; vertical-align:1px}
-  footer{border-top:1px solid var(--border); padding-top:24px; color:var(--muted); font-size:13px}
+  .new{display:inline-block; margin-left:8px; padding:0 7px; border:1px solid var(--gold-line); border-radius:999px; background:var(--gold-soft); color:var(--gold-light); font-size:var(--ui-fs-label); font-weight:500; letter-spacing:.08em; line-height:18px; vertical-align:1px}
+  footer{border-top:1px solid var(--border); padding-top:24px; color:var(--muted); font-size:var(--ui-fs-small)}
   footer a{color:var(--cyan-deep)}
 </style>
+<link rel="stylesheet" href="./ui-foundation.css">
 </head>
 <body>
   <div class="wrap">
