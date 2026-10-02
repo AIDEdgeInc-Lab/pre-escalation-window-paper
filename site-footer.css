@@ -9,12 +9,12 @@ footer.site-footer a:hover, footer.site-footer a:focus-visible { color: var(--ui
 .page-cta-inner { display: flex; flex-direction: column; align-items: center; gap: var(--ui-space-4); max-width: var(--ui-cta-block-max); margin: 0 auto; padding-top: var(--ui-space-7); border-top: 1px solid var(--ui-hairline); text-align: center; }
 .page-cta-line { margin: 0; max-width: none; color: var(--ui-text-2); font-size: var(--ui-fs-body); text-wrap: balance; }
 .page-cta .btn-primary {
-  display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; height: var(--ui-btn-h);
-  padding: 0 var(--ui-space-5); border: 1px solid var(--ui-accent); border-radius: var(--ui-btn-radius);
-  background: var(--ui-accent-fill); color: var(--ui-text-1); font-size: var(--ui-fs-button); font-weight: var(--ui-weight-medium);
-  white-space: nowrap; text-decoration: none; transition: background 220ms var(--ui-ease);
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-width: 7rem; padding: 0.85rem 1.6rem;
+  border: 1px solid var(--ui-accent-line); border-radius: 999px; background: var(--ui-accent-fill); color: var(--ui-text-1);
+  font-size: 0.95rem; font-weight: 600; line-height: 1.6; white-space: nowrap; text-decoration: none;
+  transition: transform 220ms var(--ui-ease), border-color 220ms var(--ui-ease), box-shadow 220ms var(--ui-ease), filter 220ms var(--ui-ease);
 }
-.page-cta .btn-primary:hover, .page-cta .btn-primary:focus-visible { background: color-mix(in srgb, var(--ui-accent) 22%, transparent); }
+.page-cta .btn-primary:hover { transform: translateY(-1px); border-color: var(--ui-accent); box-shadow: 0 0 22px -4px color-mix(in srgb, var(--ui-accent) 20%, transparent); filter: brightness(1.08); }
 .page-cta .btn-primary:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
 
 footer.site-footer {
@@ -40,3 +40,20 @@ footer.site-footer .footer-legal a, footer.site-footer .footer-copyright a { col
   .footer-col ul { gap: 0; }
   footer.site-footer .footer-col a, footer.site-footer .footer-legal a { display: inline-block; min-width: 44px; padding-block: 0.8rem; }
 }
+
+/* PRIMARY CTA capsule: the previous low-profile geometry plus the restored continuous edge light (shared ring + edge-travel):
+   one light segment travels slowly along the border (8s linear), half opacity at rest, brighter on hover/focus. */
+@property --edge-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+.site-header .nav-cta, .page-cta .btn-primary { position: relative; isolation: isolate; }
+.site-header .nav-cta::after, .page-cta .btn-primary::after {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; opacity: 0.5;
+  background: conic-gradient(from var(--edge-angle), transparent 0deg, transparent 260deg, var(--ui-accent-line) 285deg,
+    var(--ui-accent) 305deg, var(--ui-accent-line) 325deg, transparent 345deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--ui-accent) 20%, transparent)); pointer-events: none; z-index: 2;
+  transition: opacity 450ms var(--ui-ease); animation: edge-travel 8s linear infinite;
+}
+.site-header .nav-cta:hover::after, .site-header .nav-cta:focus-visible::after, .page-cta .btn-primary:hover::after, .page-cta .btn-primary:focus-visible::after { opacity: 1; }
+@keyframes edge-travel { to { --edge-angle: 360deg; } }
+@media (prefers-reduced-motion: reduce) { .site-header .nav-cta::after, .page-cta .btn-primary::after { animation: none !important; opacity: 0; } }
