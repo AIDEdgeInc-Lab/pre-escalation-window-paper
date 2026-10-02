@@ -75,3 +75,35 @@ html[data-brand='aidedge'] blockquote strong, html[data-brand='aidedge'] .paper-
 html[data-brand='aidedge'] :focus-visible,
 html[data-brand='aidedge'] a:focus-visible,
 html[data-brand='aidedge'] summary:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 3px; }
+
+/* ---- 3. Grid, alignment, spacing ------------------------------------------------------------- */
+/* One container (1200) with 48/32/20 gutters. Narrow reading columns keep their measure but are
+   anchored to the SAME left edge as the container, so every block on a page shares one left edge. */
+html[data-brand='aidedge'] .wrap,
+html[data-brand='aidedge'] .method-shell,
+html[data-brand='aidedge'] .paper-shell {
+  box-sizing: border-box;
+  margin-left: max(0px, calc((100% - var(--ui-container)) / 2));
+  margin-right: auto;
+  padding-left: var(--ui-gutter);
+  padding-right: var(--ui-gutter);
+}
+html[data-brand='aidedge'] .wrap { max-width: calc(820px + 2 * var(--ui-gutter)); }
+html[data-brand='aidedge'] .method-shell { max-width: calc(760px + 2 * var(--ui-gutter)); }
+html[data-brand='aidedge'] .paper-shell { max-width: var(--ui-container); }
+
+/* Section rhythm: 96 / 72 / 56 top and bottom, 12px eyebrow -> heading, 16px heading -> lead, 24px between cards. */
+html[data-brand='aidedge'] main section,
+html[data-brand='aidedge'] .method-section {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: var(--ui-section-pad);
+  padding-bottom: var(--ui-section-pad);
+}
+html[data-brand='aidedge'] main section .eyebrow { margin: 0 0 var(--ui-gap-eyebrow-h2); }
+html[data-brand='aidedge'] .method-section > h1:first-child,
+html[data-brand='aidedge'] main section > h2:first-child { margin-top: 0; }
+html[data-brand='aidedge'] .updates { margin-bottom: 0; }
+html[data-brand='aidedge'] .links, html[data-brand='aidedge'] .cards, html[data-brand='aidedge'] .updates ol { gap: var(--ui-gap-cards); }
+html[data-brand='aidedge'] .links { margin-bottom: 0; }
+html[data-brand='aidedge'] .method-footer { margin-top: 0; }
