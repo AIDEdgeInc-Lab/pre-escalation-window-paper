@@ -1,0 +1,36 @@
+/* Shared page ending for the demo: contextual CTA + site footer. Loaded only by /demo/ (ui-foundation.css is not, so the
+   instrument's own styles are untouched). Mirrors the footer section of ui-foundation.css. */
+.ui-wrap { max-width: var(--ui-container); margin: 0 auto; padding-inline: var(--ui-gutter); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+footer.site-footer a:hover, footer.site-footer a:focus-visible { color: var(--ui-text-1); }
+
+/* ---- Contextual page ending: one line and one button, before the footer ---- */
+.page-cta { padding: var(--ui-section-pad) 0 0; }
+.page-cta-inner { display: flex; flex-direction: column; align-items: center; gap: var(--ui-space-4); max-width: var(--ui-cta-block-max); margin: 0 auto; padding-top: var(--ui-space-7); border-top: 1px solid var(--ui-hairline); text-align: center; }
+.page-cta-line { margin: 0; max-width: none; color: var(--ui-text-2); font-size: var(--ui-fs-body); text-wrap: balance; }
+.page-cta .btn-primary {
+  display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; height: var(--ui-btn-h);
+  padding: 0 var(--ui-space-5); border: 1px solid var(--ui-accent); border-radius: var(--ui-btn-radius);
+  background: var(--ui-accent-fill); color: var(--ui-text-1); font-size: var(--ui-fs-button); font-weight: var(--ui-weight-medium);
+  white-space: nowrap; text-decoration: none; transition: background 220ms var(--ui-ease);
+}
+.page-cta .btn-primary:hover, .page-cta .btn-primary:focus-visible { background: color-mix(in srgb, var(--ui-accent) 22%, transparent); }
+.page-cta .btn-primary:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
+
+footer.site-footer {
+  position: relative; overflow: hidden; margin-top: var(--ui-space-9); padding: var(--ui-space-8) 0 var(--ui-space-6);
+  background-color: var(--ui-surface); background-image: none; border: 0; border-top: 1px solid var(--ui-accent-line); border-radius: 0;
+}
+footer.site-footer::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 100% 0%, var(--ui-accent-glow), transparent 55%); pointer-events: none; }
+footer.site-footer .ui-wrap { position: relative; }
+.footer-cols { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--ui-space-7) var(--ui-space-6); }
+.footer-heading { margin: 0 0 var(--ui-space-4); font-family: var(--ui-font-mono); font-size: var(--ui-fs-label); font-weight: var(--ui-weight-medium); letter-spacing: var(--ui-label-tracking); text-transform: uppercase; line-height: 1.4; color: var(--ui-text-3); }
+.footer-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--ui-space-3); }
+footer.site-footer a { color: var(--ui-text-2); font-size: var(--ui-fs-small); text-decoration: none; }
+footer.site-footer a:hover, footer.site-footer a:focus-visible { color: var(--ui-text-1); text-decoration: underline; text-underline-offset: 3px; }
+.footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--ui-space-2) var(--ui-space-5); margin-top: var(--ui-space-8); padding-top: var(--ui-space-5); border-top: 1px solid var(--ui-hairline); }
+.footer-copyright, .footer-legal { margin: 0; max-width: none; font-size: var(--ui-fs-small); color: var(--ui-text-3); }
+footer.site-footer .footer-legal a, footer.site-footer .footer-copyright a { color: var(--ui-text-3); }
+@media (max-width: 1023px) { .footer-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 639px) { .footer-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ui-space-6) var(--ui-space-5); } .footer-bottom { flex-direction: column; margin-top: var(--ui-space-7); } }
+
