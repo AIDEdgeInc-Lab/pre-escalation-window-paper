@@ -45,7 +45,7 @@
 
 ## Live demo
 
-[papers.aidedgeinc.com](https://papers.aidedgeinc.com/) — landing page, [full article](https://papers.aidedgeinc.com/article/), [interactive demo](https://papers.aidedgeinc.com/demo/), and [method](https://papers.aidedgeinc.com/method/).
+[researchlab.aidedgeinc.com](https://researchlab.aidedgeinc.com/) — landing page, [full article](https://researchlab.aidedgeinc.com/article/), [interactive demo](https://researchlab.aidedgeinc.com/demo/), and [method](https://researchlab.aidedgeinc.com/method/).
 
 ## What is published here / what is not
 
