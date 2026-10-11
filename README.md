@@ -56,12 +56,12 @@
 - The experiment design — scenarios, arms, metrics: [`docs/EXPERIMENT_MATRIX.md`](docs/EXPERIMENT_MATRIX.md).
 - The stated limitations, first: [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md).
 - A description of the method at the level needed to interpret the results: [`docs/METHOD.md`](docs/METHOD.md).
-- The live interactive demo is hosted separately (see Live demo, above) — its frontend source is not part of this repository.
+- The built (JavaScript bundle and CSS) files of the interactive demo, under [`demo/`](demo/), with the derived data it displays. These are the files the live site serves; they are published for transparency and are **not licensed for reuse** (the licenses below cover only the listed documents, data, figures and two scripts).
 
 **Not published:**
-- The interactive demo site's frontend source (TypeScript instrument, page templates, build tooling) — deployed separately, not part of this repository.
+- The interactive demo's TypeScript source, page templates and build tooling (including the generator for `method/`).
 - The simulation engine: the network models, the physics implementation, the conventional-monitoring model, and the decision layer's feature extraction, rule engine and hypothesis cards.
-- Any threshold constant, condition predicate, or hypothesis-card content used by the decision layer.
+- The decision layer's threshold constants, condition predicates and hypothesis-card content, with the exception of a few values stated in the documentation because the results cannot be interpreted without them (3-sigma control limits, the 120-minute warm-up, and the 3.0 dB / 5-sample figures in the residual analysis in `docs/LIMITATIONS.md`).
 - Any internal architecture or planning document.
 
 ## License
