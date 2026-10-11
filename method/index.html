@@ -783,163 +783,36 @@ seeds is exactly the overfitting this rewrite exists to avoid.</p>
 <h1>Provenance of the copied documents</h1>
 <p><code>docs/RESEARCH_HYPOTHESES.md</code>, <code>docs/EXPERIMENT_MATRIX.md</code> and
 <code>docs/LIMITATIONS.md</code> are adapted from AID Edge Inc.'s internal research
-repository (<code>velorona-research-v2</code>, private).</p>
+documentation. The internal repository is private and its simulation engine is not
+published. See the "What is published here / what is not" section of
+<a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/README.md">README.md</a> and <a href="#method">METHOD.md</a> for what that boundary
+covers.</p>
 <p><strong>The only changes made are:</strong>
-1. <strong>removal of references to internal source files, modules, classes and
-   commands that are not published in this repository</strong> — each replaced with
-   a description of the thing it named rather than the path to it, or with a
-   published-repository-relative reference where an equivalent published
-   file exists (e.g. a private <code>results/...csv</code> path becomes the
-   corresponding <code>data/...csv</code> path actually published here);
-2. <strong>one cross-reference to <code>docs/RESEARCH_SIMULATION_V2_PLAN.md</code> removed
-   outright</strong>, since that document is internal (architecture/audit) and is
-   not published here at all — there is no published equivalent to point to;
-3. <strong>framing additions in <code>docs/EXPERIMENT_MATRIX.md</code>'s reference-results
+1. <strong>Removal of references to internal source files, modules, classes,
+   constants and commands that are not published in this repository.</strong> Each was
+   replaced with a description of the thing it named, or with a
+   published-repository-relative reference where an equivalent published file
+   exists (for example, a private results path becomes the corresponding
+   <code>data/...csv</code> path published here);
+2. <strong>One cross-reference to an internal planning document removed outright</strong>,
+   since that document is not published and there is no published equivalent
+   to point to;
+3. <strong>Framing additions in <code>docs/EXPERIMENT_MATRIX.md</code>'s reference-results
    table</strong> (a caveat paragraph and a fourth footnote) demoting it from a
    headline presentation to a comparator-scoped one, cross-referencing H1
    (REVISED) and <code>figures/fig10_latency_precision_tradeoff.png</code> — added, not
    substituted for existing text, because the original table's numbers are
-   accurate only under one comparator configuration and the original
-   document did not say so.</p>
-<p>No claim, caveat, number or argument already present in the internal
-documents was altered, added to, or removed on its own terms — case 3 above
-adds a signpost to evidence that exists elsewhere in this same repository
-(H1 (REVISED), <code>figures/fig10_latency_precision_tradeoff.png</code>,
-<code>data/sensitivity_comparator.csv</code>), it does not change or dispute the
-table's own numbers.</p>
-<p>This file was regenerated in full for the Phase 10/11 update: the previous
-version's before/after list is superseded by the complete list below, since
-the three documents were refreshed from Repo A in their entirety rather than
-patched incrementally.</p>
-<p>The internal repository is private and its simulation engine is not
-published. See the "What is published here / what is not" section of
-<a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/README.md">README.md</a> and <a href="#method">METHOD.md</a> for what that boundary
-covers.</p>
-<h2>Every rewritten phrase</h2>
-<h3><code>docs/RESEARCH_HYPOTHESES.md</code></h3>
-<table>
-<thead>
-<tr>
-<th>Before</th>
-<th>After</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>modelled explicitly in `monitoring/conventional.py`.</code></td>
-<td>modelled explicitly in the conventional-monitoring baseline.</td>
-</tr>
-<tr>
-<td><code>A one-factor-at-a-time sweep of `ConventionalConfig` moves the pooled median window</code></td>
-<td>A one-factor-at-a-time sweep of the comparator's configuration moves the pooled median window</td>
-</tr>
-<tr>
-<td><code>The comparator sweep (`experiments/sensitivity.py`, `results/sensitivity/sensitivity_comparator.csv`):</code></td>
-<td>The comparator sweep (<code>data/sensitivity_comparator.csv</code>):</td>
-</tr>
-<tr>
-<td><code>since `ConventionalConfig` has no effect on it</code></td>
-<td>since the comparator's configuration has no effect on it</td>
-</tr>
-<tr>
-<td><code>One `FeatureExtractor`, one `DecisionLayer`, one metric set, both domains.</code></td>
-<td>A single shared feature extractor, a single shared decision layer and a single metric set are applied to both domains; only the physics models and the hypothesis catalogue differ.</td>
-</tr>
-<tr>
-<td><code>This is implemented as `Observation.context_id` and was discovered by the simulation failing without it.</code></td>
-<td>This is implemented by conditioning each element's statistical baseline on its serving satellite, and was discovered by the simulation failing without it.</td>
-</tr>
-<tr>
-<td><code>Parametric model in `economics/model.py`, reported as ranges over the sensitivity bounds and over seeds.</code></td>
-<td>Parametric economics model, reported as ranges over the sensitivity bounds and over seeds.</td>
-</tr>
-</tbody>
-</table>
-<h3><code>docs/EXPERIMENT_MATRIX.md</code></h3>
-<table>
-<thead>
-<tr>
-<th>Before</th>
-<th>After</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>\| A — conventional \| `monitoring/conventional.py` \| ...</code></td>
-<td>| A — conventional | conventional-monitoring baseline | ...</td>
-</tr>
-<tr>
-<td><code>\| B — decision layer \| `decision/` \| ...</code></td>
-<td>| B — decision layer | decision layer | ...</td>
-</tr>
-<tr>
-<td><code>### Microwave (`Domain.MICROWAVE`)</code></td>
-<td>### Microwave</td>
-</tr>
-<tr>
-<td><code>### LEO / NTN (`Domain.LEO_NTN`)</code></td>
-<td>### LEO / NTN</td>
-</tr>
-<tr>
-<td><code>(`core/rng.py`), so changing the number of draws in one component does not perturb another. Runs are bit-reproducible; `tests/test_reproducibility.py` enforces it.</code></td>
-<td>(named, seed-derived random streams), so changing the number of draws in one component does not perturb another. Runs are bit-reproducible; a dedicated reproducibility test enforces it.</td>
-</tr>
-<tr>
-<td><code>**Reproduce:** `velorona-research sweep --seeds 30 --out results`</code></td>
-<td><strong>Reproduce the figures from the published data:</strong> <code>python replot.py</code> in this repository. Reproducing the underlying runs themselves requires the private simulation engine, which is not published here.</td>
-</tr>
-<tr>
-<td><em>(nothing — new text)</em></td>
-<td>A caveat paragraph before the reference-results table, and a fourth footnote, stating the table assumes the default comparator and pointing to H1 (REVISED) / <code>figures/fig10_latency_precision_tradeoff.png</code> / <code>data/sensitivity_comparator.csv</code>.</td>
-</tr>
-</tbody>
-</table>
-<h3><code>docs/LIMITATIONS.md</code></h3>
-<table>
-<thead>
-<tr>
-<th>Before</th>
-<th>After</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>(`physics/itu_rain.py`)</code></td>
-<td>(rain-attenuation model)</td>
-</tr>
-<tr>
-<td><code>Phase 10 (`experiments/sensitivity.py`) sweeps severity ... (see `docs/RESEARCH_SIMULATION_V2_PLAN.md` and H1's Status in `docs/RESEARCH_HYPOTHESES.md`)</code></td>
-<td>Phase 10 sweeps severity ... (see H1's Status in <a href="#research_hypotheses">RESEARCH_HYPOTHESES.md</a>) — the <code>RESEARCH_SIMULATION_V2_PLAN.md</code> cross-reference is dropped outright, not rewritten, since that document is not published here</td>
-</tr>
-<tr>
-<td><code>Phase 10/11 sweep `smoothing_window`, persistence and `escalation_delay_min` one-factor-at-a-time</code></td>
-<td>Phase 10/11 sweep the smoothing window, the persistence rule and the escalation delay one-factor-at-a-time</td>
-</tr>
-<tr>
-<td><code>The window is meaningless without its paired error rates (`metrics/reporting.require_window_with_error_rates`, enforced in code)</code></td>
-<td>The window is meaningless without its paired error rates (a rule enforced in the private engine's code)</td>
-</tr>
-<tr>
-<td><code>See H1 (REVISED) in `docs/RESEARCH_HYPOTHESES.md` for the full finding</code></td>
-<td>See H1 (REVISED) in <a href="#research_hypotheses">RESEARCH_HYPOTHESES.md</a> for the full finding</td>
-</tr>
-<tr>
-<td><code>the seed with full feature and hypothesis capture (`experiments/sensitivity.py::diagnose_residual`):</code></td>
-<td>the seed with full feature and hypothesis capture:</td>
-</tr>
-<tr>
-<td><code>the 3.0 dB nominal directional-imbalance floor (`ASYMMETRY_FLOOR_DB`) for 5 consecutive samples</code></td>
-<td>the 3.0 dB nominal directional-imbalance floor for 5 consecutive samples</td>
-</tr>
-</tbody>
-</table>
-<p>The <code>### Microwave (Domain.MICROWAVE)</code> / <code>### LEO / NTN (Domain.LEO_NTN)</code>
-headings and the <code>**Reproduce:**</code> line (both in <code>EXPERIMENT_MATRIX.md</code>) were
-found during the original sweep of that document, in addition to the items
-identified beforehand; the same rule was applied to them — name the thing,
-not the file, module, class or command that only exists in the private
-repository. <code>ASYMMETRY_FLOOR_DB</code> (in <code>LIMITATIONS.md</code>) is a named constant
-from the private decision-rule engine and was removed on the same basis.</p>
+   accurate only under one comparator configuration and the original document
+   did not say so.</p>
+<p>No claim, caveat, number or argument already present in the internal documents
+was altered, added to, or removed on its own terms. Case 3 adds a signpost to
+evidence that exists elsewhere in this same repository (H1 (REVISED),
+<code>figures/fig10_latency_precision_tradeoff.png</code>,
+<code>data/sensitivity_comparator.csv</code>); it does not change or dispute the table's
+own numbers.</p>
+<p>This page deliberately does <strong>not</strong> list the original (pre-redaction) wording:
+a before/after table would republish exactly the internal identifiers the
+redaction removed.</p>
 </section>
   <footer class="method-footer">
     <p>Generated by <code>build_method_page.py</code> from <code>docs/*.md</code> — not retyped. Re-run to regenerate after any doc change.</p>

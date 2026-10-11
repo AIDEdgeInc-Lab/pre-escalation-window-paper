@@ -1344,7 +1344,7 @@ This paper is a **reorganisation, not a replacement**. Every claim, caveat, numb
 
 The interactive instrument on the site's home page is generated from the same underlying data (`site/data/instrument.json`). Where a number appears in both, it is the same number; if they ever diverge, the CSVs in `data/` are authoritative.
 
-**Provenance note.** Three of the source documents are adapted from AID Edge Inc.'s internal research repository, with internal file, module and command references replaced by descriptions of the thing they named. No claim, caveat, number or argument was altered in that process; the full before/after list is in `docs/PROVENANCE.md`.
+**Provenance note.** Three of the source documents are adapted from AID Edge Inc.'s internal research repository, with internal file, module and command references replaced by descriptions of the thing they named. No claim, caveat, number or argument was altered in that process; the categories of change are listed in `docs/PROVENANCE.md`.
 
 ---
 
