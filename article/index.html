@@ -89,7 +89,7 @@
     <h1>The Pre-Escalation Window</h1>
     <h2>A comparative decision-intelligence study of terrestrial microwave backhaul and LEO/NTN</h2>
     <p class="paper-lede">What a read-only decision layer can observe before conventional monitoring escalates &mdash; and where that advantage breaks.</p>
-    <p class="paper-meta">Version 1.0 &middot; Velorona research programme &middot; Simulated networks, no operator data</p>
+    <p class="paper-meta">Version 1.1 (revision of 1.0, 2026-10-12) &middot; Velorona research programme &middot; Simulated networks, no operator data</p>
   </header>
   <nav class="paper-toc" aria-label="Contents">
     <p>Contents</p>
@@ -122,27 +122,27 @@
 <p><strong>VERIFY.</strong> Of 307 runs with an actionable output, the first recommendation was consistent with later telemetry in 266, inconsistent in 4 and unresolved in 37. This tests agreement with subsequent simulated telemetry under stated rules; it is not field truth.</p>
 <p><strong>Not regenerated.</strong> Figure 14 (residual diagnosis; the per-step trace is not republished) and Figure 16 (illustrative economic exposure; the exposure model credits the layer with the original lead in which a WAIT counts, so it overstates avoided exposure) have no corrected counterpart. Treat them as previous-model figures. No field or operator validation exists for any result here.</p>
 <figure class="fig">
-<img src="./figures/corrected/fig08-window-by-scenario.png" alt="Box plot of the like-for-like pre-escalation window by scenario with a zero reference line.">
+<a class="fig-open" href="./figures/corrected/fig08-window-by-scenario.png" title="Open the full-resolution figure"><img src="./figures/corrected/fig08-window-by-scenario.png" alt="Box plot of the like-for-like pre-escalation window by scenario with a zero reference line."></a>
 <figcaption><span class="fig-num">Figure C1</span> <strong>Pre-escalation window by scenario, like-for-like definition.</strong> All 11 scenarios are shown. The three self-clearing scenarios (<code>leo_ground_rain</code>, <code>leo_low_elevation</code>, <code>mw_rain_cell</code>) have no lead by construction and are labelled rows, not boxes; one <code>mw_rain_cell</code> run is a false escalation. Each box shows its sample size (runs with a resolved window / runs). Regenerated from <code>data/corrected/</code> by <code>replot_dark.py</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 <figure class="fig">
-<img src="./figures/corrected/fig09-cross-domain.png" alt="Box plots comparing microwave and LEO/NTN windows, time to correct diagnosis and ambiguous decisions.">
+<a class="fig-open" href="./figures/corrected/fig09-cross-domain.png" title="Open the full-resolution figure"><img src="./figures/corrected/fig09-cross-domain.png" alt="Box plots comparing microwave and LEO/NTN windows, time to correct diagnosis and ambiguous decisions."></a>
 <figcaption><span class="fig-num">Figure C2</span> <strong>Cross-domain comparison, corrected engine.</strong> n = runs contributing to each box. Regenerated from <code>data/corrected/</code> by <code>replot_dark.py</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 <figure class="fig">
-<img src="./figures/corrected/fig13-escalation-quality.png" alt="Escalation quality of the decision layer versus the conventional monitor.">
+<a class="fig-open" href="./figures/corrected/fig13-escalation-quality.png" title="Open the full-resolution figure"><img src="./figures/corrected/fig13-escalation-quality.png" alt="Escalation quality of the decision layer versus the conventional monitor."></a>
 <figcaption><span class="fig-num">Figure C3</span> <strong>Escalation quality, corrected engine.</strong> n/a marks an undefined metric (no persistent fault, or no escalation by the arm); it is not zero. Regenerated from <code>data/corrected/</code> by <code>replot_dark.py</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 <figure class="fig">
-<img src="./figures/corrected/fig11-comparator-sensitivity.png" alt="Comparator sensitivity of the pre-escalation window.">
+<a class="fig-open" href="./figures/corrected/fig11-comparator-sensitivity.png" title="Open the full-resolution figure"><img src="./figures/corrected/fig11-comparator-sensitivity.png" alt="Comparator sensitivity of the pre-escalation window."></a>
 <figcaption><span class="fig-num">Figure C4</span> <strong>Comparator sensitivity (original-definition window).</strong> Regenerated from <code>data/corrected/</code> by <code>replot_dark.py</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 <figure class="fig">
-<img src="./figures/corrected/fig12-latency-precision.png" alt="Latency versus precision trade-off by scenario.">
+<a class="fig-open" href="./figures/corrected/fig12-latency-precision.png" title="Open the full-resolution figure"><img src="./figures/corrected/fig12-latency-precision.png" alt="Latency versus precision trade-off by scenario."></a>
 <figcaption><span class="fig-num">Figure C5</span> <strong>Latency versus precision (original-definition window).</strong> Regenerated from <code>data/corrected/</code> by <code>replot_dark.py</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 <figure class="fig">
-<img src="./figures/corrected/fig15-severity-sensitivity.png" alt="Severity sensitivity of the pre-escalation window.">
+<a class="fig-open" href="./figures/corrected/fig15-severity-sensitivity.png" title="Open the full-resolution figure"><img src="./figures/corrected/fig15-severity-sensitivity.png" alt="Severity sensitivity of the pre-escalation window."></a>
 <figcaption><span class="fig-num">Figure C6</span> <strong>Severity sensitivity (original-definition window).</strong> Regenerated from <code>data/corrected/</code> by <code>replot_dark.py</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 <h2 id="abstract">Abstract</h2>
@@ -307,7 +307,7 @@ operational response  →  service impact  →  recovery
 </table>
 <p>Conventional threshold monitoring is a detection system that is used as if it were a decision system. That substitution is invisible while conditions are either clearly healthy or clearly broken. It becomes expensive in the region in between — which is exactly the region this study samples.</p>
 <figure class="fig">
-<img src="./figures/fig01-pre-escalation-timeline.svg" alt="Operational timeline showing physical onset, first detectable change, decision-layer actionable point, conventional escalation, ticket, service impact and recovery, with the pre-escalation window and false-calm window marked between them.">
+<a class="fig-open" href="./figures/fig01-pre-escalation-timeline.svg" title="Open the full-resolution figure"><img src="./figures/fig01-pre-escalation-timeline.svg" alt="Operational timeline showing physical onset, first detectable change, decision-layer actionable point, conventional escalation, ticket, service impact and recovery, with the pre-escalation window and false-calm window marked between them."></a>
 <figcaption><span class="fig-num">Figure 1</span> <strong>The pre-escalation operational timeline.</strong> Conceptual, not data. Marks are the timeline events instrumented in every run of this study (<code>t_fault_onset</code>, <code>t_first_detectable</code>, <code>t_decision_layer_actionable</code>, <code>t_conventional_escalation</code>, <code>t_ticket</code>, <code>t_service_impact</code>). The pre-escalation window is the interval between the layer's actionable point and conventional escalation; its sign is not guaranteed and depends on how the comparator is configured (Part IX). <span class="fig-tag fig-tag-concept">CONCEPTUAL</span></figcaption>
 </figure>
 
@@ -426,7 +426,7 @@ outage
 <p>That lag is the <em>entire</em> mechanism behind a positive pre-escalation window at the default comparator. It is a property of the comparator's configuration, not evidence of intelligence in the other arm. Part IX is what happens when that lag is removed.</p>
 <h2 id="2-10-microwave-summarised-as-a-causal-chain">2.10 Microwave, summarised as a causal chain</h2>
 <figure class="fig">
-<img src="./figures/fig02-microwave-causal-chain.svg" alt="Causal chain from rain rate through specific attenuation, path attenuation, received signal level, C/N, fade margin, ACM downshift, capacity, service margin and telemetry to conventional escalation, with branch points for ATPC masking, protection switching and self-clearing recovery.">
+<a class="fig-open" href="./figures/fig02-microwave-causal-chain.svg" title="Open the full-resolution figure"><img src="./figures/fig02-microwave-causal-chain.svg" alt="Causal chain from rain rate through specific attenuation, path attenuation, received signal level, C/N, fade margin, ACM downshift, capacity, service margin and telemetry to conventional escalation, with branch points for ATPC masking, protection switching and self-clearing recovery."></a>
 <figcaption><span class="fig-num">Figure 2</span> <strong>Terrestrial microwave: how a propagation change becomes an operational event.</strong> Blue path = physical mechanism; grey = what monitoring observes; gold = decision points. Two properties matter operationally: ATPC moves the evidence out of RSL and into TX-power telemetry, and a passing rain cell returns the link to nominal with no intervention at all. <span class="fig-tag fig-tag-concept">CONCEPTUAL</span></figcaption>
 </figure>
 
@@ -641,7 +641,7 @@ outage
 </table>
 <h2 id="3-10-leo-ntn-summarised-as-a-causal-chain">3.10 LEO/NTN, summarised as a causal chain</h2>
 <figure class="fig">
-<img src="./figures/fig03-leo-causal-chain.svg" alt="Causal chain from orbital geometry through elevation and slant range, propagation, link margin, serving satellite and beam state, handover and gateway state, to RTT, loss, throughput and capacity, then telemetry and conventional escalation, with branches for geometry-explained variation and serving-context conditioning.">
+<a class="fig-open" href="./figures/fig03-leo-causal-chain.svg" title="Open the full-resolution figure"><img src="./figures/fig03-leo-causal-chain.svg" alt="Causal chain from orbital geometry through elevation and slant range, propagation, link margin, serving satellite and beam state, handover and gateway state, to RTT, loss, throughput and capacity, then telemetry and conventional escalation, with branches for geometry-explained variation and serving-context conditioning."></a>
 <figcaption><span class="fig-num">Figure 3</span> <strong>LEO/NTN: how geometry, propagation and serving state combine into an operational event.</strong> Blue path = physical mechanism; grey = what monitoring observes; gold = decision points. The two branches that have no microwave equivalent are marked: <em>geometry-explained</em> variation, which must be removed before anything is called anomalous, and <em>serving-context</em> changes, which make an unconditioned baseline statistically blind to spacecraft-side faults. <span class="fig-tag fig-tag-concept">CONCEPTUAL</span></figcaption>
 </figure>
 
@@ -782,7 +782,7 @@ outage
 <p><strong>Does generalise:</strong> the shape of the decision. In both domains the operator is asking the same three questions in the same order — <em>what changed, what explains it, is acting justified now</em> — and in both domains a threshold answers only the first.</p>
 <p>That is the claim tested by H4 (Part X), using one shared feature extractor, one shared decision layer and one shared metric set across both domains, with only the physics models and the hypothesis catalogue differing.</p>
 <figure class="fig">
-<img src="./figures/fig04-domain-comparison.svg" alt="Side-by-side conceptual comparison: microwave shown as fixed endpoints with a changing atmosphere between them; LEO/NTN shown as moving spacecraft, changing elevation, handover boundaries and a gateway path, with a shared decision layer below both.">
+<a class="fig-open" href="./figures/fig04-domain-comparison.svg" title="Open the full-resolution figure"><img src="./figures/fig04-domain-comparison.svg" alt="Side-by-side conceptual comparison: microwave shown as fixed endpoints with a changing atmosphere between them; LEO/NTN shown as moving spacecraft, changing elevation, handover boundaries and a gateway path, with a shared decision layer below both."></a>
 <figcaption><span class="fig-num">Figure 4</span> <strong>Fixed infrastructure with changing propagation, versus changing infrastructure with changing propagation.</strong> The upper halves show what varies in each domain; the lower band shows what the two share — one decision pipeline, one feature vocabulary, one metric set, applied unmodified to both. <span class="fig-tag fig-tag-concept">CONCEPTUAL</span></figcaption>
 </figure>
 
@@ -846,7 +846,7 @@ outage
 </ol>
 <p>Each check is named and carries a human-readable reason. That is a requirement rather than a feature: an operational recommendation a VP cannot audit is an operational recommendation a VP cannot sign.</p>
 <figure class="fig">
-<img src="./figures/fig05-decision-architecture.svg" alt="Architecture diagram: telemetry sources feed a read-only ingestion layer, then feature extraction with context conditioning and geometry correction, then detection against frozen robust control limits, correlation across peer groups, differential diagnosis against hypothesis cards, decision-risk estimation, and a decision gate producing observe, wait, escalate or recommend outputs to a human operator, with verification feeding back.">
+<a class="fig-open" href="./figures/fig05-decision-architecture.svg" title="Open the full-resolution figure"><img src="./figures/fig05-decision-architecture.svg" alt="Architecture diagram: telemetry sources feed a read-only ingestion layer, then feature extraction with context conditioning and geometry correction, then detection against frozen robust control limits, correlation across peer groups, differential diagnosis against hypothesis cards, decision-risk estimation, and a decision gate producing observe, wait, escalate or recommend outputs to a human operator, with verification feeding back."></a>
 <figcaption><span class="fig-num">Figure 5</span> <strong>Decision architecture, read-only by construction.</strong> Signal → context → state → evidence → decision boundary → observe / wait / escalate / recommend. The dashed boundary marks the read-only edge: nothing to the right of it writes to a network. Confidence is ordinal at every stage that reports it. <span class="fig-tag fig-tag-concept">CONCEPTUAL</span></figcaption>
 </figure>
 
@@ -1300,7 +1300,7 @@ time_to_correct_diagnosis = first correct verdict − first detectable
 <p><strong>What the decision layer saw.</strong> The same telemetry, plus: the event was symmetric across both directions, it correlated with peer hops in the same weather, and an independent environmental signal corroborated it. Diagnosis: RAIN_FADE, self-clearing. Decision: WAIT.</p>
 <p><strong>Operational consequence.</strong> On the one microwave scenario where the correct action was to do nothing, the conventional arm generated 30 unnecessary escalations out of 30 and the layer generated 2.</p>
 <figure class="fig">
-<img src="./figures/fig06-timeline-microwave.png" alt="Timeline of one simulated microwave run, mw_hidden_in_storm, seed 1, showing fault onset, first detectable, decision-layer actionable, conventional escalation, ticket and service impact marks along an operational-time axis.">
+<a class="fig-open" href="./figures/fig06-timeline-microwave.png" title="Open the full-resolution figure"><img src="./figures/fig06-timeline-microwave.png" alt="Timeline of one simulated microwave run, mw_hidden_in_storm, seed 1, showing fault onset, first detectable, decision-layer actionable, conventional escalation, ticket and service impact marks along an operational-time axis."></a>
 <figcaption><span class="fig-num">Figure 6</span> <strong>One simulated microwave incident: <code>mw_hidden_in_storm</code>, seed 1.</strong> A directional hardware fault beginning inside an active fade — the hard case, because the environmental event masks the directional signature. Single run, not an aggregate; it illustrates the timeline vocabulary, it is not evidence of typical behaviour. Regenerated from <code>data/runs.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 
@@ -1379,25 +1379,25 @@ time_to_correct_diagnosis = first correct verdict − first detectable
 <p><strong>What the decision layer saw.</strong> The same telemetry with the geometry-predicted component removed and baselines conditioned on the serving satellite. Under conditioning, the fault stops being intermittent and becomes what it physically is: a persistent degradation of one spacecraft's RF chain, present whenever that spacecraft serves.</p>
 <p><strong>Operational consequence.</strong> For the space segment there is no truck. The decision is <em>which side of the link to investigate</em> and <em>whether the evidence survives the next handover</em>. A monitoring arm with escalation F1 of 0.34 on a real spacecraft fault does not support that decision; it produces intermittent tickets that close themselves.</p>
 <figure class="fig">
-<img src="./figures/fig07-timeline-leo.png" alt="Timeline of one simulated LEO/NTN run, leo_rf_subsystem, seed 1, showing fault onset, first detectable, decision-layer actionable, conventional escalation, ticket and service impact marks along an operational-time axis.">
+<a class="fig-open" href="./figures/fig07-timeline-leo.png" title="Open the full-resolution figure"><img src="./figures/fig07-timeline-leo.png" alt="Timeline of one simulated LEO/NTN run, leo_rf_subsystem, seed 1, showing fault onset, first detectable, decision-layer actionable, conventional escalation, ticket and service impact marks along an operational-time axis."></a>
 <figcaption><span class="fig-num">Figure 7</span> <strong>One simulated LEO/NTN incident: <code>leo_rf_subsystem</code>, seed 1.</strong> A spacecraft RF-chain degradation, common to every terminal that satellite serves and invisible between its passes. Single run, not an aggregate. Regenerated from <code>data/runs.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 
 <h2 id="8-3-cross-domain-comparison">8.3 Cross-domain comparison</h2>
 <figure class="fig">
-<img src="./figures/fig08-window-by-scenario.png" alt="Horizontal box plot of pre-escalation window by scenario, microwave and LEO scenarios coloured separately, with a zero reference line.">
+<a class="fig-open" href="./figures/fig08-window-by-scenario.png" title="Open the full-resolution figure"><img src="./figures/fig08-window-by-scenario.png" alt="Horizontal box plot of pre-escalation window by scenario, microwave and LEO scenarios coloured separately, with a zero reference line."></a>
 <figcaption><span class="fig-num">Figure 8</span> <strong>Pre-escalation window by scenario, default comparator.</strong> Box = IQR, line = median, whiskers = 1.5 IQR; values below zero mean the conventional baseline escalated first. Population P1, 30 seeds per scenario. This figure describes the <em>default comparator's</em> behaviour as much as the layer's — read it together with Figure 11. Regenerated from <code>data/runs.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 
 <figure class="fig">
-<img src="./figures/fig09-cross-domain.png" alt="Three box plots comparing microwave and LEO/NTN distributions of pre-escalation window, time to correct diagnosis, and ambiguous decisions per run.">
+<a class="fig-open" href="./figures/fig09-cross-domain.png" title="Open the full-resolution figure"><img src="./figures/fig09-cross-domain.png" alt="Three box plots comparing microwave and LEO/NTN distributions of pre-escalation window, time to correct diagnosis, and ambiguous decisions per run."></a>
 <figcaption><span class="fig-num">Figure 9</span> <strong>The physics change; the decision problem persists.</strong> Cross-domain comparison of the <em>decision</em> problem — window, time to correct diagnosis, ambiguity count — not of the technologies. Population P1. Regenerated from <code>data/runs.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 
 <p>Pooled medians at the default comparator (population P1): <strong>microwave 14 min, LEO/NTN 7 min, pooled 13 min</strong> (n = 274 of 330 runs where a window is defined; a window is undefined where the conventional arm never escalated).</p>
 <p>The distribution shapes differ more than the medians do. Microwave windows are tight and positive; LEO windows are bimodal — small where the conventional arm escalates normally, very large where it effectively never does.</p>
 <figure class="fig">
-<img src="./figures/fig10-coverage-derivation.png" alt="Derivation chart comparing microwave and LEO/NTN infrastructure for the same demand region: hops, radios, relay sites and aggregate capacity versus footprint area, instantaneous service coverage, satellites for continuous coverage and capacity attributable to the region.">
+<a class="fig-open" href="./figures/fig10-coverage-derivation.png" title="Open the full-resolution figure"><img src="./figures/fig10-coverage-derivation.png" alt="Derivation chart comparing microwave and LEO/NTN infrastructure for the same demand region: hops, radios, relay sites and aggregate capacity versus footprint area, instantaneous service coverage, satellites for continuous coverage and capacity attributable to the region."></a>
 <figcaption><span class="fig-num">Figure 10</span> <strong>Infrastructure and capacity derivation for the same demand region.</strong> Geographic coverage, instantaneous service coverage, capacity and continuity are reported <em>separately</em> and must not be collapsed into a single ratio. The 307-satellite figure is a geometric lower bound for continuous coverage, not a constellation design. Regenerated from <code>data/coverage_comparison.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 
@@ -1542,12 +1542,12 @@ time_to_correct_diagnosis = first correct verdict − first detectable
 <p><strong>All three at once, it inverts.</strong> The degenerate configuration collapses the pooled median from 13 min to −146 min. That is not a small extrapolation of the one-factor results; it is a qualitative change, and it is the reason the original hypothesis is reported as failed (Part IX).</p>
 <p><strong>And it is bought, not earned.</strong> In the same configuration, conventional escalation FPR rises from a median of 0.00 to 1.00 (mean 0.22 → 0.61) and conventional unnecessary escalation rises from 66.7% to 100%. The degenerate comparator escalates on everything — it is "earlier" in the same sense that a smoke detector triggered by toast is early.</p>
 <figure class="fig">
-<img src="./figures/fig11-comparator-sensitivity.png" alt="Three panels of box plots showing pre-escalation window distribution against smoothing window, persistence rule and escalation delay, with the degenerate configuration shown as a separate box far below zero.">
+<a class="fig-open" href="./figures/fig11-comparator-sensitivity.png" title="Open the full-resolution figure"><img src="./figures/fig11-comparator-sensitivity.png" alt="Three panels of box plots showing pre-escalation window distribution against smoothing window, persistence rule and escalation delay, with the degenerate configuration shown as a separate box far below zero."></a>
 <figcaption><span class="fig-num">Figure 11</span> <strong>Does the window survive a more aggressive comparator?</strong> All scenarios pooled, 15 seeds per configuration, declared severity. The degenerate box is the answer. Window shown here <em>without</em> its paired error rates for space — see Figure 12 and the table above for the pairing this study requires. Regenerated from <code>data/sensitivity_comparator.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 
 <figure class="fig">
-<img src="./figures/fig12-latency-precision.png" alt="Scatter of pre-escalation window against escalation false-positive rate for each comparator configuration, per domain, with the decision layer plotted as a separate point off the conventional curve.">
+<a class="fig-open" href="./figures/fig12-latency-precision.png" title="Open the full-resolution figure"><img src="./figures/fig12-latency-precision.png" alt="Scatter of pre-escalation window against escalation false-positive rate for each comparator configuration, per domain, with the decision layer plotted as a separate point off the conventional curve."></a>
 <figcaption><span class="fig-num">Figure 12</span> <strong>Latency versus precision.</strong> Each conventional point is one comparator configuration; the layer is a single point that does not move as the comparator is tuned. No conventional configuration reaches the layer's combination of near-zero escalation FPR and a non-negative window. Regenerated from <code>data/sensitivity_comparator.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 
@@ -1584,12 +1584,12 @@ time_to_correct_diagnosis = first correct verdict − first detectable
 </ul>
 <p>Both diagnoses point at a specific, nameable evidence gap rather than at a tuning constant. <strong>Tuning against three known seeds is exactly the overfitting this study exists to avoid</strong>, so the residual is published instead.</p>
 <figure class="fig">
-<img src="./figures/fig13-escalation-quality.png" alt="Grouped bar chart of escalation quality metrics per scenario for the conventional arm and the decision layer.">
+<a class="fig-open" href="./figures/fig13-escalation-quality.png" title="Open the full-resolution figure"><img src="./figures/fig13-escalation-quality.png" alt="Grouped bar chart of escalation quality metrics per scenario for the conventional arm and the decision layer."></a>
 <figcaption><span class="fig-num">Figure 13</span> <strong>Escalation quality: is the escalation about a real, persistent fault?</strong> Population P1. Escalating on a self-clearing cause is scored as a false positive, because operationally it is one. Regenerated from <code>data/runs.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 
 <figure class="fig">
-<img src="./figures/fig14-residual-diagnosis.png" alt="Three stacked time-series panels showing the feature traces of the three self-clearing runs where the decision layer escalated unnecessarily.">
+<a class="fig-open" href="./figures/fig14-residual-diagnosis.png" title="Open the full-resolution figure"><img src="./figures/fig14-residual-diagnosis.png" alt="Three stacked time-series panels showing the feature traces of the three self-clearing runs where the decision layer escalated unnecessarily."></a>
 <figcaption><span class="fig-num">Figure 14</span> <strong>The three self-clearing runs on which the decision layer escalated unnecessarily.</strong> Feature traces for <code>mw_rain_cell</code> seeds 12 and 21 and <code>leo_low_elevation</code> seed 1 (population P5). Published because a residual that is only summarised is a residual that cannot be checked. Regenerated from <code>data/sensitivity_residual_trace.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 
@@ -1630,7 +1630,7 @@ time_to_correct_diagnosis = first correct verdict − first detectable
 <p>Population <strong>P3</strong>: 10 scenarios × 15 seeds × 7 severity multipliers (0.4 → 2.2).</p>
 <p>The window is reported as a curve rather than at one chosen severity, because a single-severity result is a chosen point on an unpublished curve. The qualitative shape: the window opens where degradation is severe enough to be observable but not so severe that it crosses the conventional threshold immediately, and closes at both ends — at very low severity neither arm escalates, and at very high severity both escalate almost together.</p>
 <figure class="fig">
-<img src="./figures/fig15-severity-sensitivity.png" alt="Two panels, one per domain, plotting median pre-escalation window with interquartile band against severity multiplier for each scenario.">
+<a class="fig-open" href="./figures/fig15-severity-sensitivity.png" title="Open the full-resolution figure"><img src="./figures/fig15-severity-sensitivity.png" alt="Two panels, one per domain, plotting median pre-escalation window with interquartile band against severity multiplier for each scenario."></a>
 <figcaption><span class="fig-num">Figure 15</span> <strong>Where does the pre-escalation window open, and where does it close?</strong> 15 seeds per point; <code>leo_low_elevation</code> excluded (declared severity is zero — pure orbital geometry, nothing to scale). Regenerated from <code>data/sensitivity_severity.csv</code>. <span class="fig-tag">SIMULATED</span></figcaption>
 </figure>
 
@@ -1785,7 +1785,7 @@ time_to_correct_diagnosis = first correct verdict − first detectable
 <p><strong>H6 — the economics — is deliberately UNRESOLVED.</strong> Lead time converts to avoided exposure only through an <em>actionable fraction</em> and an <em>avoidance probability</em>, both less than 1, and it saturates. Acting on a self-clearing cause has strictly negative value. The model is parametric and every currency figure is labelled ILLUSTRATIVE, with the provenance string carried into every row of the results files.</p>
 <p><strong>No monetary claim may be published from this study until at least one operator supplies real cost inputs.</strong> This is the single largest open gap in the work, and it is a gap that no amount of additional simulation can close.</p>
 <figure class="fig">
-<img src="./figures/fig16-economic-exposure.png" alt="Box plot of modelled operational exposure per incident for the conventional arm and the decision layer, labelled illustrative.">
+<a class="fig-open" href="./figures/fig16-economic-exposure.png" title="Open the full-resolution figure"><img src="./figures/fig16-economic-exposure.png" alt="Box plot of modelled operational exposure per incident for the conventional arm and the decision layer, labelled illustrative."></a>
 <figcaption><span class="fig-num">Figure 16</span> <strong>Modelled operational exposure — ILLUSTRATIVE.</strong> Currency units are arbitrary and the assumptions are parametric. This figure is published to show that the economics model exists and is sensitive to its assumptions, not to support any value claim. Regenerated from <code>data/runs.csv</code>. <span class="fig-tag fig-tag-illustrative">ILLUSTRATIVE — NOT A VALUE CLAIM</span></figcaption>
 </figure>
 
