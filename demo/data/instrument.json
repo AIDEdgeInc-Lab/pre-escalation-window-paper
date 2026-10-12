@@ -1,5 +1,6 @@
 {
   "meta": {
+    "model_version": "previous-model (superseded P.838-0/-1 table; window counts the first WAIT). Corrected-engine results: data/corrected/ and CORRECTIONS.md",
     "generated_at": "2026-08-17T15:20:59Z",
     "newest_source_mtime": "2026-08-16T19:59:05Z",
     "n_seeds_per_config": 15,
