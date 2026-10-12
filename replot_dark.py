@@ -71,12 +71,29 @@ def _fonts(geist_dir: str | None) -> str | None:
             for f in GEIST_FILES:
                 font_manager.fontManager.addfont(str(p / f))
             return "Geist"
-    return None
+    # Fall back to the repository's own woff2 files, converted to TTF (needs fonttools + brotli; matplotlib reads TTF only)
+    try:
+        from fontTools.ttLib import TTFont
+        tmp = Path(tempfile.mkdtemp(prefix="geist-ttf-"))
+        for f in GEIST_FILES:
+            src = ROOT / "fonts" / f.replace(".ttf", ".woff2")
+            font = TTFont(str(src))
+            font.flavor = None
+            font.save(str(tmp / f))
+            font_manager.fontManager.addfont(str(tmp / f))
+        return "Geist"
+    except Exception:
+        return None
 
 
 def _apply_theme(family: str | None) -> None:
     replot.PALETTE.update(DARK_PALETTE)
+    from cycler import cycler
     rc = {
+        # Multi-scenario line charts (fig 15): brand blues, AID Edge gold and neutrals, told apart by line style as well as
+        # colour; replaces matplotlib's default saturated blue/orange/green/red/purple cycle.
+        "axes.prop_cycle": (cycler(color=["#99C6F3", "#5F98D1", "#C6A15B", "#DCE4EB", "#8794A0"])
+                            + cycler(linestyle=["-", "--", "-.", ":", "-"])),
         "figure.facecolor": PLATE, "savefig.facecolor": PLATE, "axes.facecolor": PANEL,
         "text.color": TEXT, "axes.labelcolor": MUTED, "axes.edgecolor": BORDER,
         "xtick.color": MUTED, "ytick.color": MUTED,
@@ -195,9 +212,10 @@ def _fix(fig):
     elif " / " in key and "pre-escalation window" in key:
         _fix_timeline(fig)
     else:
-        top = {"Does the window survive": 0.93, "Latency vs. precision": 0.92}
+        top = {"Does the window survive": 0.93, "Latency vs. precision": 0.92,
+               "Where does the pre-escalation window": 0.93}
         rect_top = next((v for k, v in top.items() if key.startswith(k)), None)
-        if key.startswith("Pre-escalation window by scenario"):
+        if key.startswith(("Pre-escalation window by scenario", "Like-for-like pre-escalation window")):
             rect_top = 1.0
         if rect_top is not None:
             h = _wrap_footer(fig)

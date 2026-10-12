@@ -1,5 +1,11 @@
 # Changelog
 
+## Figure presentation fixes (2026-10-12, no data or claim changes; content version stays 1.1)
+
+- `replot.py` / `replot_dark.py` (corrected set only; published-data figures are byte-identical to before): the like-for-like window figure now shows all 11 scenarios, draws the three self-clearing scenarios as labelled "not applicable" rows (never as boxes), shows resolved-runs/runs on each box, and no longer crowds the footer; the escalation-quality figure marks undefined metrics "n/a" instead of drawing them as zero; the cross-domain figure shows n per box.
+- `replot_dark.py`: article figures now use Geist (converted from the repository's woff2 files when `fonttools` + `brotli` are installed; otherwise the generator falls back to the default font), the multi-scenario severity chart uses the brand blues, AID Edge gold and neutrals distinguished by line style instead of matplotlib's default saturated orange/green/red cycle, and its footer is wrapped instead of cut off.
+- Regenerated: `figures/corrected/` fig01, fig01b, fig02, fig03 and `article/figures/corrected/` fig08, fig09, fig11, fig12, fig13, fig15. Light-theme figures fig05-fig10 are unchanged (their long footers are still cut off at the right edge in the light variants; the article uses the dark variants).
+
 ## Version archive (2026-10-12, not a research-content release; content version stays 1.1)
 
 - Homepage "Research versions": current version first, earlier versions as compact entries that open preserved copies under `versions/<id>/`.
