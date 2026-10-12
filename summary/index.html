@@ -159,7 +159,7 @@
 <!-- 1. TITLE BLOCK -->
 <p class="eyebrow">AID Edge Inc. &mdash; Published Research</p>
 <h1>The Pre-Escalation Window</h1>
-<p class="doc-banner" role="note"><strong>Corrected-engine results (2026-10).</strong> All figures and tables in the body of this page are from the <strong>previous model version</strong>. With the corrected engine (P.838-3 rain model, data-quality gate, evidence-based VERIFY; 30 seeds &times; 11 simulated scenarios, engine commit <code>58ce16a</code>) the window depends on its definition. <em>As originally defined</em> (clock starts at the layer&rsquo;s first WAIT, ESCALATE or ACT): pooled median 13 min, positive scenario medians in 10 of 11. <em>Like-for-like</em> (layer&rsquo;s first ESCALATE/ACT versus conventional escalation): pooled median 11 min over the 215 of 330 runs that have a resolved window; scenario medians are positive in 7 of 11 (one of them, <code>mw_rain_cell</code>, from a single resolved run), negative in two hidden-fault scenarios (<code>mw_hidden_in_storm</code> &minus;1 min, <code>leo_hidden_in_rain</code> &minus;109 min) and unresolved in two (<code>leo_ground_rain</code>, <code>leo_low_elevation</code>). Pooled medians over different resolved populations are not comparable and are not a universal performance claim. Simulation only: no field or operator validation. Data, provenance and definitions: <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>, <code>data/corrected/</code>.</p>
+<p class="doc-banner" role="note"><strong>Corrected-engine results (2026-10).</strong> All figures and tables in the body of this page are from the <strong>previous model version</strong>. With the corrected engine (P.838-3 rain model, data-quality gate, evidence-based VERIFY; 30 seeds &times; 11 simulated scenarios, engine commit <code>58ce16a</code>) the window depends on its definition. <em>As originally defined</em> (clock starts at the layer&rsquo;s first WAIT, ESCALATE or ACT): pooled median 13 min, positive scenario medians in 10 of 11. <em>Like-for-like</em> (layer&rsquo;s first ESCALATE/ACT versus conventional escalation): pooled median 11 min over the 215 of 330 runs that have a resolved window (one of them a false escalation); scenario medians are positive in 6 of 11, negative in two hidden-fault scenarios (<code>mw_hidden_in_storm</code> &minus;1 min, <code>leo_hidden_in_rain</code> &minus;109 min), and not applicable in the three self-clearing scenarios (<code>leo_ground_rain</code>, <code>leo_low_elevation</code>, <code>mw_rain_cell</code>), where the layer did not escalate in most runs; the layer&rsquo;s escalations there are false escalations (2 of 90 runs), not leads. Pooled medians over different resolved populations are not comparable and are not a universal performance claim. Simulation only: no field or operator validation. Data, provenance and definitions: <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>, <code>data/corrected/</code>.</p>
 <p class="lede">A comparative decision-intelligence study of terrestrial microwave backhaul and LEO/NTN &mdash; is there a measurable window during which operational degradation can be detected and acted on before conventional monitoring escalates?</p>
 <p class="meta">
   Author: Sara Khosravi, AID Edge Inc.<br>
@@ -467,7 +467,7 @@
 <section id="cite" aria-labelledby="h-cite">
   <h2 id="h-cite">How to cite</h2>
   <p>Plain text:</p>
-  <pre>Khosravi, S., AID Edge Inc. (2026, August 18). The Pre-Escalation Window (version 1.0). https://papers.aidedgeinc.com/</pre>
+  <pre>Khosravi, S., AID Edge Inc. (2026, August 18). The Pre-Escalation Window (version 1.0). https://researchlab.aidedgeinc.com/</pre>
   <p>BibTeX (the repository's existing entry, version updated and page URL added):</p>
   <pre>@software{aid_edge_pre_escalation_window,
   title        = {The Pre-Escalation Window},
@@ -476,7 +476,7 @@
   date         = {2026-08-18},
   version      = {1.0},
   url          = {https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper},
-  note         = {Article and demo: https://papers.aidedgeinc.com/}
+  note         = {Article and demo: https://researchlab.aidedgeinc.com/}
 }</pre>
   <p><span class="todo">[TODO: optional Zenodo DOI &mdash; none exists]</span></p>
 </section>

@@ -35,3 +35,9 @@ own numbers.
 This file deliberately does **not** list the original (pre-redaction) wording:
 a before/after table would republish exactly the internal identifiers the
 redaction removed.
+
+## Revision 1.1 additions (2026-10-12)
+
+- `data/corrected/PROVENANCE.json` now carries a `reproducibility` block: the sweep command, seeds, a SHA-256 of the engine's default configuration objects (integrity only; the engine and scenario definitions remain private), and the environments in which the sweep was regenerated. The 330-run sweep reproduces byte-identically on Python 3.12.3 and 3.13.16 with numpy 2.5.4 / pandas 3.0.6. Python 3.10 and 3.11 were not tested for the sweep outputs.
+- `python check_claims.py` verifies the file hashes and recomputes the headline numbers (pooled medians, scenario counts, self-clearing counts, VERIFY counts) from `data/corrected/`.
+- Standards: see `CORRECTIONS.md`. Only seven ITU-R P.838-3 rows were checked, against secondary excerpts; the official Recommendation text was not reachable from the environment that produced this revision (`itu.int` was blocked by its network policy). P.530-19 is unchecked. Neither is a standards verification of the model.
