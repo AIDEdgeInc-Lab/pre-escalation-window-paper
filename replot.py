@@ -23,20 +23,40 @@ import numpy as np
 import pandas as pd
 
 PALETTE = {
-    "conventional": "#8A8F98",
-    "decision": "#4A3DA0",
-    "accent": "#2E8FBB",
-    "warn": "#C7873F",
-    "bad": "#B2453D",
+    # Semantic roles: every key has ONE meaning. A theme (replot_dark.py) replaces values, never meanings.
+    # -- series: the two network domains
+    "series_leo": "#4A3DA0",          # LEO/NTN
+    "series_mw": "#2E8FBB",           # microwave
+    # -- arms: conventional monitoring vs the decision layer (the decision layer takes its domain's hue in the dark theme)
+    "arm_conventional": "#8A8F98",
+    "arm_decision_leo": "#4A3DA0",
+    "arm_decision_mw": "#4A3DA0",
+    # -- pooled comparator configurations (no domain split) and the one highlighted special case (degenerate comparator)
+    "pooled": "#2E8FBB",
+    "special": "#B2453D",
+    "special_hatch": "",              # fill pattern for the special case (the dark theme uses one, so it differs from pooled boxes)
+    # -- reference marks and chart furniture
+    "reference": "#B2453D",           # zero-reference lines
     "grid": "#DDE1E7",
-    # Two values that used to be hardcoded literals inside the plotting functions below
-    # (boxplot median lines, footer captions). Pulled into PALETTE so a caller that wants a
-    # different theme -- e.g. the dark research-paper page -- can override them by mutating
-    # this dict before calling into the module, the same way it already overrides the other
-    # entries. Defaults below reproduce the previously-hardcoded colours exactly, so the
-    # published light-theme figures in figures/ are unaffected.
     "median": "#000000",
     "footer": "#6B7280",
+    "box_alpha": 0.65,
+    "legend_fs": 8,
+    "legend_fs_small": 7,
+    "timeline_levels": [0.55, -0.55],  # label heights: two alternating rows; the dark theme uses four so clustered events never overlap
+    "timeline_height": 3.6,
+    "scenario_lines": "default",      # "domain": one hue per panel, scenarios told apart by line style and marker
+    # -- timeline events
+    "event_detect": "#2E8FBB",
+    "event_actionable_leo": "#4A3DA0",
+    "event_actionable_mw": "#4A3DA0",
+    "event_escalate_leo": "#2E8FBB",
+    "event_escalate_mw": "#2E8FBB",
+    "event_ticket": "#C7873F",
+    "event_impact": "#B2453D",
+    # -- residual-diagnosis trace
+    "trace": "#2E8FBB",
+    "marginal": "#B2453D",
 }
 
 
@@ -110,11 +130,11 @@ def fig_pre_escalation_window(df: pd.DataFrame, out: Path, col: str = "lead_gain
     pos = [scen_all.index(s) + 1 for s in plotted]
     bp = _boxplot(ax, data, plotted, horizontal=True, patch_artist=True, widths=0.6, positions=pos)
     for patch, s in zip(bp["boxes"], plotted):
-        patch.set_facecolor(PALETTE["decision"] if s.startswith("leo") else PALETTE["accent"])
-        patch.set_alpha(PALETTE.get("box_alpha", 0.65))
+        patch.set_facecolor(PALETTE["series_leo"] if s.startswith("leo") else PALETTE["series_mw"])
+        patch.set_alpha(PALETTE["box_alpha"])
     for med in bp["medians"]:
         med.set_color(PALETTE["median"])
-    ax.axvline(0, color=PALETTE.get("zero", PALETTE["bad"]), linewidth=1, linestyle=":")
+    ax.axvline(0, color=PALETTE["reference"], linewidth=1, linestyle=":")
     if CORRECTED:
         ax.set_yticks(range(1, len(scen_all) + 1))
         ax.set_yticklabels(scen_all)
@@ -136,8 +156,8 @@ def fig_pre_escalation_window(df: pd.DataFrame, out: Path, col: str = "lead_gain
                         ha="right", fontsize=8.5, color=PALETTE["footer"])
     if CORRECTED:
         from matplotlib.patches import Patch
-        ax.legend(handles=[Patch(facecolor=PALETTE["decision"], alpha=0.65, label="LEO/NTN scenarios"),
-                           Patch(facecolor=PALETTE["accent"], alpha=0.65, label="microwave scenarios")],
+        ax.legend(handles=[Patch(facecolor=PALETTE["series_leo"], alpha=PALETTE["box_alpha"], label="LEO/NTN scenarios"),
+                           Patch(facecolor=PALETTE["series_mw"], alpha=PALETTE["box_alpha"], label="microwave scenarios")],
                   loc="lower right", bbox_to_anchor=(1.0, 1.0), ncol=2, frameon=False, fontsize=9)
     if like_for_like:
         ax.set_xlabel("like-for-like window (min)  =  conventional escalation - decision-layer ESCALATE/ACT")
@@ -187,8 +207,8 @@ def fig_cross_domain(df: pd.DataFrame, out: Path) -> Optional[Path]:
         tick_labels = [f"{lab}\nn={v.size}" for lab, v in zip(labels, vals)] if CORRECTED else labels
         bp = _boxplot(ax, vals, tick_labels, patch_artist=True, widths=0.5)
         for patch, lab in zip(bp["boxes"], labels):
-            patch.set_facecolor(PALETTE["decision"] if lab == "leo_ntn" else PALETTE["accent"])
-            patch.set_alpha(PALETTE.get("box_alpha", 0.65))
+            patch.set_facecolor(PALETTE["series_leo"] if lab == "leo_ntn" else PALETTE["series_mw"])
+            patch.set_alpha(PALETTE["box_alpha"])
         for med in bp["medians"]:
             med.set_color(PALETTE["median"])
         ax.set_title(label, fontsize=10)
@@ -215,10 +235,9 @@ def fig_escalation_quality(df: pd.DataFrame, out: Path) -> Optional[Path]:
     ):
         conv = [df[df["scenario"] == s][f"conv_esc_{metric}"].median() for s in scen]
         lay = [df[df["scenario"] == s][f"layer_esc_{metric}"].median() for s in scen]
-        ax.bar(x - w / 2, np.nan_to_num(conv), w, label="conventional monitoring",
-               color=PALETTE["conventional"])
-        ax.bar(x + w / 2, np.nan_to_num(lay), w, label="Velorona decision layer",
-               color=PALETTE["decision"])
+        ax.bar(x - w / 2, np.nan_to_num(conv), w, color=PALETTE["arm_conventional"])
+        ax.bar(x + w / 2, np.nan_to_num(lay), w, color=[PALETTE["arm_decision_leo"] if sc.startswith("leo")
+                                                       else PALETTE["arm_decision_mw"] for sc in scen])
         if CORRECTED:
             # an undefined metric (no persistent fault / no escalation) is NOT zero: mark it explicitly
             for xi, c, l in zip(x, conv, lay):
@@ -228,7 +247,14 @@ def fig_escalation_quality(df: pd.DataFrame, out: Path) -> Optional[Path]:
                                 fontsize=7.5, color=PALETTE["footer"], style="italic")
         ax.set_ylabel(label, fontsize=9)
         _style(ax)
-    axes[0].legend(frameon=False, fontsize=9)
+    from matplotlib.patches import Patch
+    handles = [Patch(facecolor=PALETTE["arm_conventional"], label="conventional monitoring")]
+    if PALETTE["arm_decision_leo"] != PALETTE["arm_decision_mw"]:     # decision layer shown in its domain's hue
+        handles += [Patch(facecolor=PALETTE["arm_decision_leo"], label="decision layer, LEO/NTN scenarios"),
+                    Patch(facecolor=PALETTE["arm_decision_mw"], label="decision layer, microwave scenarios")]
+    else:
+        handles += [Patch(facecolor=PALETTE["arm_decision_leo"], label="Velorona decision layer")]
+    axes[0].legend(handles=handles, frameon=False, fontsize=9)
     axes[1].set_xticks(x)
     axes[1].set_xticklabels(scen, rotation=30, ha="right", fontsize=8)
     fig.suptitle("Escalation quality: is the escalation about a real, persistent fault?",
@@ -252,8 +278,8 @@ def fig_economic_exposure(df: pd.DataFrame, out: Path) -> Optional[Path]:
     x = np.arange(len(scen))
     w = 0.38
     fig, ax = plt.subplots(figsize=(12, 5))
-    ax.bar(x - w / 2, conv, w, label="conventional", color=PALETTE["conventional"])
-    ax.bar(x + w / 2, lay, w, label="decision layer", color=PALETTE["decision"])
+    ax.bar(x - w / 2, conv, w, label="conventional", color=PALETTE["arm_conventional"])
+    ax.bar(x + w / 2, lay, w, label="decision layer", color=PALETTE["arm_decision_leo"])
     ax.set_xticks(x)
     ax.set_xticklabels(scen, rotation=30, ha="right", fontsize=8)
     ax.set_ylabel("modelled operational exposure per incident (currency units)")
@@ -299,24 +325,28 @@ def fig_coverage_derivation(coverage: pd.DataFrame, out: Path) -> Optional[Path]
 
 
 def fig_timeline(row: pd.Series, out: Path) -> Optional[Path]:
+    dom = "leo" if str(row.get("domain")).startswith("leo") else "mw"      # decision-layer events take the run's domain hue
     marks = [
         ("fault onset", row.get("t_fault_onset"), PALETTE["grid"]),
-        ("first detectable", row.get("t_first_detectable"), PALETTE["accent"]),
-        ("decision layer actionable", row.get("t_decision_layer_actionable"), PALETTE["decision"]),
-        ("decision layer ESCALATE/ACT", row.get("t_decision_layer_escalation"), PALETTE["accent"]),
-        ("conventional escalation", row.get("t_conventional_escalation"), PALETTE["conventional"]),
-        ("ticket exists", row.get("t_ticket"), PALETTE["warn"]),
-        ("service impact", row.get("t_service_impact"), PALETTE["bad"]),
+        ("first detectable", row.get("t_first_detectable"), PALETTE["event_detect"]),
+        ("decision layer actionable", row.get("t_decision_layer_actionable"), PALETTE["event_actionable_" + dom]),
+        ("decision layer ESCALATE/ACT", row.get("t_decision_layer_escalation"), PALETTE["event_escalate_" + dom]),
+        ("conventional escalation", row.get("t_conventional_escalation"), PALETTE["arm_conventional"]),
+        ("ticket exists", row.get("t_ticket"), PALETTE["event_ticket"]),
+        ("service impact", row.get("t_service_impact"), PALETTE["event_impact"]),
     ]
     marks = [m for m in marks if m[1] is not None and m[1] == m[1]]
     if len(marks) < 2:
         return None
 
-    fig, ax = plt.subplots(figsize=(11, 3.6))
+    levels = PALETTE["timeline_levels"]
+    if len(levels) > 2:
+        marks.sort(key=lambda m: m[1])        # stagger in time order so events that cluster get different rows
+    fig, ax = plt.subplots(figsize=(11, PALETTE["timeline_height"]))
     xs = [m[1] for m in marks]
     ax.hlines(0, min(xs) - 20, max(xs) + 20, color=PALETTE["grid"], linewidth=2)
     for i, (label, t, colour) in enumerate(marks):
-        y = 0.55 if i % 2 == 0 else -0.55
+        y = levels[i % len(levels)]
         ax.scatter([t], [0], s=110, color=colour, zorder=3)
         ax.vlines(t, 0, y * 0.8, color=colour, linestyle="--", linewidth=1)
         ax.text(t, y, f"{label}\nt={t:.0f} min", ha="center",
@@ -325,8 +355,9 @@ def fig_timeline(row: pd.Series, out: Path) -> Optional[Path]:
     pre = row.get("pre_escalation_window_min")
     if pre == pre and row.get("t_decision_layer_actionable") == row.get("t_decision_layer_actionable"):
         ax.axvspan(row["t_decision_layer_actionable"], row["t_conventional_escalation"],
-                   color=PALETTE["decision"], alpha=0.08)
-    ax.set_ylim(-1.3, 1.3)
+                   color=PALETTE["event_actionable_" + dom], alpha=0.08)
+    reach = max(abs(v) for v in levels) + 0.75
+    ax.set_ylim(-reach, reach)
     ax.set_yticks([])
     ax.set_xlabel("operational time (min)")
     ax.spines["top"].set_visible(False)
@@ -351,6 +382,7 @@ SEVERITY_MULTIPLIERS = [0.4, 0.6, 0.8, 1.0, 1.3, 1.7, 2.2]
 SMOOTHING_GRID = [1, 3, 5, 10]
 PERSISTENCE_GRID = [(1, 1), (2, 5), (3, 5), (4, 5)]
 ESCALATION_DELAY_GRID = [0, 4, 8, 15]
+SCENARIO_LINE_STYLES = [("-", "o"), ("--", "s"), ("-.", "^"), (":", "D"), ("-", "v")]
 
 
 def fig_severity_sensitivity(df: pd.DataFrame, out: Path) -> Optional[Path]:
@@ -361,21 +393,25 @@ def fig_severity_sensitivity(df: pd.DataFrame, out: Path) -> Optional[Path]:
     axes = axes[0]
     for ax, dom in zip(axes, domains):
         d = df[df["domain"] == dom]
-        dom_cycle = PALETTE.get("scenario_cycle", {}).get(dom)
-        if dom_cycle:                                  # per-domain hue family; lines still differ by style
-            ax.set_prop_cycle(color=dom_cycle, linestyle=["-", "--", "-.", ":", "-"])
-        for scen in sorted(d["scenario"].unique()):
+        by_domain = PALETTE["scenario_lines"] == "domain"
+        dom_colour = PALETTE["series_leo"] if dom == "leo_ntn" else PALETTE["series_mw"]
+        for i, scen in enumerate(sorted(d["scenario"].unique())):
             ds = d[d["scenario"] == scen]
             g = ds.groupby("severity_multiplier")["pre_escalation_window_min"]
             med, p25, p75 = g.median(), g.quantile(0.25), g.quantile(0.75)
             x = med.index.values
-            ax.plot(x, med.values, marker="o", label=scen, linewidth=1.5)
-            ax.fill_between(x, p25.values, p75.values, alpha=0.12)
-        ax.axhline(0, color=PALETTE.get("zero", PALETTE["bad"]), linewidth=1, linestyle=":")
+            if by_domain:       # one hue per panel; scenarios are told apart by line style and marker, never by colour
+                ls, mk = SCENARIO_LINE_STYLES[i % len(SCENARIO_LINE_STYLES)]
+                ax.plot(x, med.values, color=dom_colour, linestyle=ls, marker=mk, label=scen, linewidth=1.5)
+                ax.fill_between(x, p25.values, p75.values, color=dom_colour, alpha=0.06)
+            else:
+                ax.plot(x, med.values, marker="o", label=scen, linewidth=1.5)
+                ax.fill_between(x, p25.values, p75.values, alpha=0.12)
+        ax.axhline(0, color=PALETTE["reference"], linewidth=1, linestyle=":")
         ax.set_xlabel("severity multiplier (relative to declared severity)")
         ax.set_ylabel("pre-escalation window (min, median +/- IQR)")
         ax.set_title(dom, fontsize=11, loc="left")
-        ax.legend(fontsize=7, frameon=False, ncol=1)
+        ax.legend(fontsize=PALETTE["legend_fs_small"], frameon=False, ncol=1)
         _style(ax)
     fig.suptitle("Where does the pre-escalation window open, and where does it close?",
                  fontsize=13, x=0.01, ha="left")
@@ -405,11 +441,13 @@ def fig_comparator_sensitivity(df: pd.DataFrame, out: Path) -> Optional[Path]:
         data.append(degenerate["pre_escalation_window_min"].dropna().values)
         bp = _boxplot(ax, data, labels, patch_artist=True, widths=0.6)
         for patch, lab in zip(bp["boxes"], labels):
-            patch.set_facecolor(PALETTE.get("degenerate", PALETTE["bad"]) if lab == "degenerate" else PALETTE.get("pooled", PALETTE["accent"]))
-            patch.set_alpha(PALETTE.get("box_alpha", 0.65))
+            patch.set_facecolor(PALETTE["special"] if lab == "degenerate" else PALETTE["pooled"])
+            patch.set_alpha(PALETTE["box_alpha"])
+            if lab == "degenerate":
+                patch.set_hatch(PALETTE["special_hatch"])
         for med in bp["medians"]:
             med.set_color(PALETTE["median"])
-        ax.axhline(0, color=PALETTE.get("zero", PALETTE["bad"]), linewidth=1, linestyle=":")
+        ax.axhline(0, color=PALETTE["reference"], linewidth=1, linestyle=":")
         ax.set_xlabel(label, fontsize=9)
         ax.set_ylabel("pre-escalation window (min)")
         _style(ax)
@@ -443,13 +481,13 @@ def fig_residual_diagnosis(trace_df: pd.DataFrame, out: Path) -> Optional[Path]:
         marginal_t = escalations["t_min"].iloc[0]
         candidates = ["level_drop_worst_db", "asymmetry_db", "quality_drop_db"]
         col = max(candidates, key=lambda c: trace[c].max() - trace[c].min())
-        ax.plot(trace["t_min"], trace[col], color=PALETTE["accent"], linewidth=1.2, label=col)
-        ax.axvline(marginal_t, color=PALETTE["bad"], linestyle="--", linewidth=1.2)
+        ax.plot(trace["t_min"], trace[col], color=PALETTE["trace"], linewidth=1.2, label=col)
+        ax.axvline(marginal_t, color=PALETTE["marginal"], linestyle="--", linewidth=1.2)
         y_at_marginal = trace.loc[trace["t_min"] == marginal_t, col].iloc[0]
-        ax.scatter([marginal_t], [y_at_marginal], color=PALETTE["bad"], zorder=3, s=50)
+        ax.scatter([marginal_t], [y_at_marginal], color=PALETTE["marginal"], zorder=3, s=50)
         action = escalations["action"].iloc[0]
         ax.text(marginal_t, trace[col].max(), f"  t={marginal_t:.0f}: {action}",
-                color=PALETTE["bad"], fontsize=8, va="top")
+                color=PALETTE["marginal"], fontsize=8, va="top")
         ax.set_title(f"{dom} / {scen} (seed {seed})", fontsize=11, loc="left")
         ax.set_ylabel(col)
         _style(ax)
@@ -500,20 +538,21 @@ def fig_latency_precision_tradeoff(df: pd.DataFrame, out: Path) -> Optional[Path
             elif (sw, pm, pn, ed) == (5.0, 3.0, 5.0, 8.0):
                 markers.append((conv_fpr, window, "default"))
         conv_pts.sort(key=lambda p: p[0])
-        ax.plot([p[0] for p in conv_pts], [p[1] for p in conv_pts], color=PALETTE["conventional"],
+        ax.plot([p[0] for p in conv_pts], [p[1] for p in conv_pts], color=PALETTE["arm_conventional"],
                 marker="o", linewidth=1.5, label="conventional (varies with tuning)", zorder=2)
         for fpr, window, kind in markers:
-            colour = PALETTE.get("degenerate", PALETTE["bad"]) if kind == "degenerate" else PALETTE.get("pooled", PALETTE["accent"])
+            colour = PALETTE["special"] if kind == "degenerate" else PALETTE["pooled"]
             ax.scatter([fpr], [window], color=colour, zorder=4, s=80)
             ax.annotate(kind, (fpr, window), textcoords="offset points",
                         xytext=(6, 6 if kind == "degenerate" else -12), fontsize=8, color=colour)
-        ax.scatter([p[0] for p in layer_pts], [p[1] for p in layer_pts], color=PALETTE["decision"],
+        ax.scatter([p[0] for p in layer_pts], [p[1] for p in layer_pts],
+                   color=PALETTE["arm_decision_leo"] if dom == "leo_ntn" else PALETTE["arm_decision_mw"],
                    marker="D", s=45, zorder=3, label="decision layer (does not move)")
         ax.axhline(0, color=PALETTE["grid"], linewidth=1, linestyle=":")
         ax.set_xlabel("escalation false-positive rate")
         ax.set_ylabel("pre-escalation window (min, median)")
         ax.set_title(dom, fontsize=11, loc="left")
-        ax.legend(fontsize=8, frameon=False)
+        ax.legend(fontsize=PALETTE["legend_fs"], frameon=False)
         _style(ax)
         conv_fprs = [p[0] for p in conv_pts]
         layer_fprs = [p[0] for p in layer_pts]

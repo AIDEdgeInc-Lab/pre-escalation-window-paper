@@ -16,3 +16,14 @@ from the corrected-engine files, with these differences from the published set:
 the generator is in this repository. Corrected-engine versions of the figures that have one are in `article/figures/corrected/`
 (`python replot_dark.py --data data/corrected --out <dir>`). Figures 14 and 16 have no corrected counterpart (see above). Re-running the generator on `data/`
 reproduces the published figures in content but not pixel-for-pixel (matplotlib/font versions differ). The interactive demo data is built by tooling not in this repository and still shows the previous model version.
+
+## Colour roles (dark article figures; defined once in `replot_dark.py`, as roles of `replot.PALETTE`)
+
+| Role | Colour | Meaning (only this) |
+|---|---|---|
+| `series_leo`, `arm_decision_leo` | brand blue `#68A9E0` | LEO/NTN series; the decision layer in LEO/NTN scenarios |
+| `series_mw`, `arm_decision_mw` | AID Edge gold `#C6A15B` | microwave series; the decision layer in microwave scenarios |
+| `arm_conventional`, `pooled`, `reference`, grid, footers | neutral greys | conventional monitoring; comparator configurations pooled across domains; zero lines; chart furniture |
+| `special` (+ hatch), `median`, `event_detect`, `event_impact` | near-white | the highlighted degenerate comparator; median lines; first-detectable and service-impact timeline marks |
+
+Colour separates series; it never encodes better or worse. The light theme keeps its original values for the same roles (figures regenerated from `data/` are pixel-identical to the published ones); the light corrected-set figures still use that palette and are not part of the blue-and-gold system.
