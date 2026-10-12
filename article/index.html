@@ -111,6 +111,7 @@
   </nav>
   <article class="paper-body">
 <p class="doc-banner"><strong>Read this first.</strong> The networks in this study are <strong>simulated</strong>. Ground truth is known by construction. <strong>No operator telemetry is used anywhere in this study.</strong> Every currency figure is ILLUSTRATIVE. The simulation engine is not published; what is published is the method, the results, the data needed to regenerate the figures, and the limitations. Nothing here is evidence about a real operator's network.</p>
+<p class="doc-banner"><strong>Correction (2026-10).</strong> The published results were generated with a rain-coefficient table that equals the superseded ITU-R P.838-0/-1 values at 12&ndash;100 GHz, not P.838-3 as stated in this paper. The engine now implements P.838-3. Effect: at most 1 minute on any scenario median; the derived microwave hop length changes from 18.32 km to 16.21 km (22 hops, 11 relay sites and 56 radios unchanged). The figures and data have not been regenerated. See <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.</p>
 <h2 id="abstract">Abstract</h2>
 <p>A service-impacting network incident is rarely instantaneous. It usually begins as a change in propagation conditions, link margin, geometry, capacity or system state, and only later becomes an alarm, a ticket and a truck roll. Conventional monitoring responds when observed variables cross configured thresholds, persist for a configured number of intervals, and survive a process delay. The interval between the first observable change and conventional escalation is what this study calls the <strong>pre-escalation window</strong>.</p>
 <p>We examine that interval in two network classes whose physics differ fundamentally: terrestrial microwave backhaul (fixed infrastructure, changing propagation) and LEO/NTN (changing infrastructure <em>and</em> changing propagation). Synthetic scenarios are generated from simplified physical and operational models — rain attenuation, path loss, fade margin, adaptive coding and modulation and capacity degradation for microwave; orbital geometry, elevation, slant range, serving-satellite state, handover and capacity for LEO/NTN. In every run, the <em>same</em> telemetry stream is presented to two arms: a modelled conventional threshold monitor and a read-only decision layer.</p>
@@ -369,13 +370,13 @@ outage
 <p><strong>ESTABLISHED.</strong> ACM is standard practice in fixed microwave systems and in satellite links; the ETSI fixed-service framework [R5] and DVB-S2X [R6] are the reference points for how the profile ladder is defined. <strong>SIMULATED / representative:</strong> our ACM ladder is representative rather than transcribed from a specific vendor datasheet (Part XI, item 8), so absolute capacity numbers from this study must not be quoted as product performance.</p>
 <p>The operational point survives the simplification. <strong>ACM converts an RF problem into a capacity problem before it converts it into an outage.</strong> A monitoring system watching only availability sees nothing during the entire downshift sequence. A monitoring system watching only throughput sees a capacity drop with no cause attached. Both are correct and neither is sufficient.</p>
 <h2 id="2-5-protection-reroute-and-blast-radius">2.5 Protection, reroute and blast radius</h2>
-<p>Where a protected path exists, the failure of one hop is absorbed. In the modelled network, protection and hop topology are explicit: a 12-site demand region requires 22 radio hops, 11 relay sites, 56 radios and 6 protection hops, at an engineered hop length of 18.32 km limited by rain rather than terrain (terrain would allow 45 km) [derived, <code>data/coverage_comparison.csv</code>].</p>
+<p>Where a protected path exists, the failure of one hop is absorbed. In the modelled network, protection and hop topology are explicit: a 12-site demand region requires 22 radio hops, 11 relay sites, 56 radios and 6 protection hops, at an engineered hop length of 18.32 km (16.21 km with the corrected rain coefficients) limited by rain rather than terrain (terrain would allow 45 km) [derived, <code>data/coverage_comparison.csv</code>].</p>
 <p><strong>DECISION IMPLICATION.</strong> Blast radius changes the cost of being wrong, and therefore changes the decision, not just the diagnosis. A degrading hop that carries a protected path and a degrading hop that isolates eleven downstream sites produce the same RSL telemetry and are not the same operational decision. Our microwave model computes downstream isolation for this reason; the LEO model does not model beam-sharing contention (Part XI, item 21).</p>
 <h2 id="2-6-what-we-did-not-model-and-why-it-matters">2.6 What we did <em>not</em> model, and why it matters</h2>
 <p><strong>NOT MODELLED.</strong> Multipath fading and atmospheric ducting are absent from the simulation. They are real, they dominate outage statistics on long, flat, over-water paths, and their signature — deep, fast, frequency-selective fades under clear-sky conditions, often at night — is precisely the case where a rain-correlation test would return "no environmental corroboration" and a naive diagnostic layer could reach for a hardware hypothesis.</p>
 <p>Stating this plainly: <strong>our microwave results are conditioned on a rain-dominated impairment population.</strong> Any operator whose outage statistics are multipath-dominated should expect different diagnostic performance, and that is a reason to run the field validation in Part XII rather than to extrapolate from these numbers. Wet-radome effects are likewise not modelled.</p>
 <h2 id="2-7-terrain-and-hop-length-are-constraints-not-variables">2.7 Terrain and hop length are constraints, not variables</h2>
-<p>Hop length is set at design time by terrain, clearance and the rain-rate statistics of the region. In the modelled region, rain (42 mm/h at 0.01% exceedance, 18 GHz, 35 dB fade margin, 99.99% availability target) is the binding constraint at 18.32 km against a terrain limit of 45 km. This matters to the study for one reason only: it fixes the physical scale at which a rain cell is or is not able to affect several hops at once, which is what makes <strong>peer correlation across adjacent hops</strong> a usable discriminator.</p>
+<p>Hop length is set at design time by terrain, clearance and the rain-rate statistics of the region. In the modelled region, rain (42 mm/h at 0.01% exceedance, 18 GHz, 35 dB fade margin, 99.99% availability target) is the binding constraint at 18.32 km (16.21 km with the corrected rain coefficients) against a terrain limit of 45 km. This matters to the study for one reason only: it fixes the physical scale at which a rain cell is or is not able to affect several hops at once, which is what makes <strong>peer correlation across adjacent hops</strong> a usable discriminator.</p>
 <h2 id="2-8-the-self-clearing-event-defined-physically">2.8 The self-clearing event, defined physically</h2>
 <p>A self-clearing event is one whose ground-truth cause resolves without intervention. For microwave, the canonical case is a rain cell crossing the path:</p>
 <pre><code>cell approaches → attenuation rises → margin erodes → ACM downshifts
@@ -577,7 +578,7 @@ outage
 </tr>
 <tr>
 <td>Rain attenuation coefficients</td>
-<td><strong>ESTABLISHED</strong>, ITU-R P.838-3 [R2] — transcribed, not independently verified (Part XI, item 4)</td>
+<td><strong>ESTABLISHED</strong>, ITU-R P.838-3 [R2] — the published runs used a superseded-revision table, since corrected (Part XI, item 4; CORRECTIONS.md)</td>
 </tr>
 <tr>
 <td>Slant-path reduction</td>
@@ -662,7 +663,7 @@ outage
 </tr>
 <tr>
 <td><strong>Rain sensitivity</strong></td>
-<td>dominant fast variable; sets hop length (18.32 km rain-limited vs 45 km terrain-limited in the modelled region)</td>
+<td>dominant fast variable; sets hop length (18.32 km rain-limited as published, 16.21 km with corrected coefficients, vs 45 km terrain-limited in the modelled region)</td>
 <td>present, but second to geometry; worst at low elevation, where our model over-estimates it</td>
 </tr>
 <tr>
@@ -1259,7 +1260,7 @@ time_to_correct_diagnosis = first correct verdict − first detectable
 </tbody>
 </table>
 <p>¹ Escalation F1 is undefined where the ground truth contains no persistent fault. The meaningful column for that row is unnecessary escalation.</p>
-<p><strong>What happened.</strong> Every microwave scenario produced a positive window at the default comparator, between 11 and 20 minutes. Both arms diagnosed the persistent-fault scenarios well; on <code>mw_hidden_in_storm</code> and <code>mw_config_change</code> the conventional arm's escalation F1 is actually <em>higher</em> than the layer's (0.98 vs 0.95, 0.98 vs 1.00 respectively — the layer leads on <code>mw_config_change</code>), which is reported rather than smoothed over. On a clean, dry-path, symmetric step, a threshold is a perfectly good instrument.</p>
+<p><strong>What happened.</strong> Every microwave scenario produced a positive window at the default comparator, between 11 and 20 minutes. Both arms diagnosed the persistent-fault scenarios well; on <code>mw_hidden_in_storm</code> and <code>mw_config_change</code> the conventional arm's escalation F1 is actually <em>higher</em> than the layer's (0.98 vs 0.95, 0.98 vs 1.00 respectively — the layer leads on <code>mw_config_change</code>), which is reported rather than smoothed over. On a clean, dry-path, symmetric step, a threshold is a perfectly good instrument. <strong>Correction (2026-10):</strong> for <code>mw_hidden_in_storm</code> the window counts a WAIT on the rain as the layer's first output; measured against the layer's own first ESCALATE it is &minus;1 min (median), not +13. See <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.</p>
 <p><strong>Why it happened.</strong> The mechanism behind the window is the comparator's own arithmetic (Part II.9): smoothing lags the ramp, persistence adds more, the process delay adds the rest. The mechanism behind the <em>diagnosis</em> differences is evidence the threshold does not use — per-direction asymmetry, peer correlation across hops sharing weather, and change-log corroboration.</p>
 <p><strong>What telemetry changed.</strong> Received level and C/N fall through the fade; per-direction asymmetry separates a directional hardware fault from a symmetric propagation event; on <code>mw_interference</code> the level stays healthy while C/(N+I) degrades, which is why the correct recommendation is a spectrum scan and not a truck.</p>
 <p><strong>What the conventional arm saw.</strong> A smoothed KPI crossing a fixed threshold, M-of-N times, then a delay. On <code>mw_rain_cell</code> it saw exactly that — and escalated, in <strong>all 30 seeds</strong>.</p>
@@ -1832,11 +1833,15 @@ time_to_correct_diagnosis = first correct verdict − first detectable
 </ol>
 <h2 id="11-2-physics-microwave">11.2 Physics — microwave</h2>
 <ol start="4">
-<li><strong>ITU-R P.838-3 coefficients are transcribed, not verified.</strong> They must be re-checked against the official publication before appearing in a peer-reviewed paper.</li>
-<li><strong>Design-rule and instantaneous attenuation are different quantities.</strong> The P.530-18 effective path length is a long-term statistical design rule. Using the same reduction on an instantaneous wet path is a modelling simplification, labelled in the source.</li>
+<li><strong>The published results did not use ITU-R P.838-3 coefficients.</strong> They used a table equal to the superseded P.838-0/-1 values for f &ge; 12 GHz, with 10&times; decimal errors at 6&ndash;10 GHz (not used in this study). The engine now implements the P.838-3 analytic fit; per-scenario median windows move by at most 1 minute and the derived hop length changes from 18.32 km to 16.21 km. See CORRECTIONS.md.</li>
+<li><strong>Design-rule and instantaneous attenuation are different quantities.</strong> The P.530-18 effective path length is a long-term statistical design rule. Using the same reduction on an instantaneous wet path is a modelling simplification, labelled in the source. The model uses the P.530-18 form; P.530-19 (2025-09) supersedes it and has not been checked.</li>
 <li><strong>The ACM ladder is representative, not from a vendor datasheet.</strong> Absolute capacity figures must be re-derived from a cited profile table before being quoted.</li>
 <li><strong>No multipath or ducting</strong>, no wet-radome effect. Multipath dominates outage statistics on long, flat and over-water paths; its absence means our microwave results are conditioned on a rain-dominated impairment population (Part II.6).</li>
 <li><strong>Blast radius is element-local.</strong> The microwave model computes downstream isolation; the LEO model does not model beam-sharing contention.</li>
+<li><strong>The decision layer's LEO geometry model has zero error by construction</strong> in the published runs; published LEO results are &ldquo;with a perfect geometry model&rdquo;.</li>
+<li><strong>The published version had no handling for missing, stale or invalid telemetry</strong>, and gave a satellite first seen after warm-up an empty baseline. Both are corrected in the engine; the published results predate the corrections.</li>
+<li><strong>LEO capacity attributable to the region is a bound</strong>: 43.3 Mbps assumes uniform sharing over the footprint; up to 3,000 Mbps if the 2 required beams are steered at the region.</li>
+<li><strong>Rain attenuation uses horizontal polarisation at zero elevation everywhere</strong>, including LEO (circular polarisation at 40&deg; is 5&ndash;11% lower at 18&ndash;30 GHz).</li>
 </ol>
 <h2 id="11-3-physics-leo-ntn">11.3 Physics — LEO / NTN</h2>
 <ol start="6">
@@ -2013,7 +2018,7 @@ prospective validation on live telemetry
 <p>Cited work is <strong>established prior art</strong>. None of the physics, standards or statistical methods below were developed by AID Edge Inc. Where this study applies them, it applies them with the simplifications recorded in Part XI.</p>
 <p><strong>Terrestrial propagation and fixed radio systems</strong></p>
 <ul>
-<li><strong>[R1]</strong> Recommendation ITU-R P.530-18 (09/2021), <em>Propagation data and prediction methods required for the design of terrestrial line-of-sight systems.</em> International Telecommunication Union.</li>
+<li><strong>[R1]</strong> Recommendation ITU-R P.530-18 (09/2021), <em>Propagation data and prediction methods required for the design of terrestrial line-of-sight systems.</em> International Telecommunication Union. (Superseded by P.530-19, 09/2025, which this study has not checked.)</li>
 <li><strong>[R2]</strong> Recommendation ITU-R P.838-3 (03/2005), <em>Specific attenuation model for rain for use in prediction methods.</em> ITU.</li>
 <li><strong>[R3]</strong> Recommendation ITU-R P.837, <em>Characteristics of precipitation for propagation modelling</em> (P.837-8, 09/2025, current at the time of writing). ITU.</li>
 <li><strong>[R4]</strong> Recommendation ITU-R P.676-13 (08/2022), <em>Attenuation by atmospheric gases and related effects.</em> ITU.</li>

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — corrections (prepared 2026-10-12, not yet merged)
+
+- Added `CORRECTIONS.md`: the published runs used a rain-coefficient table equal to the superseded ITU-R P.838-0/-1 values (not P.838-3 as stated); effect ≤ 1 min on scenario medians, derived hop length 18.32 → 16.21 km; residual mechanism corrected; P.530-19 not checked; levels of evidence.
+- `docs/LIMITATIONS.md`, `docs/ARTICLE.md`, `article/`, `method/`, `summary/`, `README.md` updated to match. No figure or `data/` file regenerated.
+
 ## 1.0 — landing-page restructure (unreleased, on branch `landing-restructure`)
 
 - **Version reconciliation:** the article states "Version 1.0" while the README

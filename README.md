@@ -6,10 +6,12 @@
 > decision-intelligence principle hold when the underlying network changes
 > from terrestrial microwave to LEO/NTN?
 
+> **Corrections after publication:** see [`CORRECTIONS.md`](CORRECTIONS.md) (rain-coefficient table, residual mechanism, levels of evidence). The figures and `data/` have not been regenerated.
+
 ## Honest labelling
 
 > - The networks are **simulated**. No result here is evidence about a real operator's network.
-> - Physics is drawn from published recommendations — ITU-R P.838-3 (rain attenuation), ITU-R P.530-18 (terrestrial line-of-sight design), and standard orbital mechanics — with every simplification stated in [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md).
+> - Physics is drawn from published recommendations — ITU-R P.838 (rain attenuation; **the published runs used a superseded coefficient table, since corrected — see [`CORRECTIONS.md`](CORRECTIONS.md)**), ITU-R P.530-18 (terrestrial line-of-sight design; P.530-19 supersedes it and has not been checked), and standard orbital mechanics — with every simplification stated in [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md).
 > - **No operator data is used anywhere in this repository.**
 > - **All currency figures are ILLUSTRATIVE.** The economics model is parametric and labelled as such; no monetary claim should be read as measured.
 > - **The simulation engine is not published.** This repository contains the published results, the method description, the figures, and the data needed to regenerate the figures — not the code that produced the data.
@@ -39,7 +41,7 @@
 <!-- FINDINGS:START -->
 - Across the 90 self-clearing runs (three scenarios x 30 seeds), the conventional arm escalated unnecessarily in 60 (67%); the decision layer did so in 3 (3%; 3.3% of 90 runs) — a residual, not zero, and the single most operationally relevant result in this study.
 - The pre-escalation window is not a fixed detection-speed advantage: a comparator sweep (`data/sensitivity_comparator.csv`) shows it trading against precision. At the default comparator, pooled median window 13 min, conventional escalation FPR 0%, conventional unnecessary dispatch 67%. At a DEGENERATE comparator (a perfect, instantaneous, unsmoothed threshold monitor), window -146 min, conventional escalation FPR 100%, conventional unnecessary dispatch 100% — it buys the apparent lead with false alarms. The decision layer's own escalation FPR (0%) and unnecessary-dispatch rate (4%; 4.4%, 2 of 45 self-clearing runs per comparator configuration — a different population from the 3.3% on 90 runs above) do not move under any comparator tuning. See `figures/fig10_latency_precision_tradeoff.png`.
-- A positive pre-escalation window at the default comparator is observed in 10 of 11 scenarios, with medians ranging from 7 to 250 minutes — but this range describes the default comparator's behaviour as much as the decision layer's; see the trade-off finding above.
+- A positive pre-escalation window at the default comparator is observed in 10 of 11 scenarios, with medians ranging from 7 to 250 minutes — but this range describes the default comparator's behaviour as much as the decision layer's; see the trade-off finding above. **Correction (2026-10):** this window starts the layer's clock at its first WAIT, ESCALATE or ACT output. Measured like-for-like against the layer's own first ESCALATE/ACT, it is positive in 6 of 11 scenarios, about zero in `mw_hidden_in_storm` (median −1 min) and −109 min in `leo_hidden_in_rain`, and not applicable in the three self-clearing scenarios, where the layer correctly does not escalate. See [CORRECTIONS.md](CORRECTIONS.md).
 - `leo_low_elevation` is the only scenario in which the conventional arm never escalates, in any of the 30 seeds — its pre-escalation window is undefined for every seed as a result. The decision layer nonetheless escalated unnecessarily in 1 of 30 seeds, part of the residual above.
 <!-- FINDINGS:END -->
 
