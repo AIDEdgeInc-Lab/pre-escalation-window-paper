@@ -47,6 +47,7 @@ PALETTE = {
     "timeline_height": 3.6,
     "scenario_lines": "default",      # "domain": one hue per panel, scenarios told apart by line style and marker
     # -- timeline events
+    "event_onset": "#DDE1E7",          # fault onset (the pale grid tone in the original light theme)
     "event_detect": "#2E8FBB",
     "event_actionable_leo": "#4A3DA0",
     "event_actionable_mw": "#4A3DA0",
@@ -57,6 +58,19 @@ PALETTE = {
     # -- residual-diagnosis trace
     "trace": "#2E8FBB",
     "marginal": "#B2453D",
+}
+
+# Light-theme roles for the corrected-engine figures: the same blue / gold semantics as the dark theme, in tones with
+# enough contrast on white (blue 5.8:1, AID Edge deep gold #8F6A2D 4.9:1, grey 5.8:1). Figures from the published data keep PALETTE above.
+LIGHT_BRAND = {
+    "series_leo": "#2A68A8", "series_mw": "#8F6A2D",
+    "arm_conventional": "#5B6772", "arm_decision_leo": "#2A68A8", "arm_decision_mw": "#8F6A2D",
+    "pooled": "#5B6772", "special": "#0B1620", "special_hatch": "///",
+    "reference": "#5B6772", "median": "#0B1620", "box_alpha": 0.85, "legend_fs": 9, "legend_fs_small": 8,
+    "scenario_lines": "domain", "timeline_levels": [0.45, -0.45, 1.25, -1.25], "timeline_height": 5.0,
+    "event_onset": "#5B6772", "event_detect": "#0B1620", "event_actionable_leo": "#2A68A8", "event_actionable_mw": "#8F6A2D",
+    "event_escalate_leo": "#2A68A8", "event_escalate_mw": "#8F6A2D", "event_ticket": "#5B6772", "event_impact": "#0B1620",
+    "trace": "#2A68A8", "marginal": "#0B1620",
 }
 
 
@@ -87,20 +101,54 @@ def _boxplot(ax, data, tick_labels, horizontal=False, **kwargs):
 # (detected by the presence of the like-for-like window column).
 DATA_LABEL = "data"
 CORRECTED = False
+THEME = "light"          # replot_dark.py sets "dark" before calling main()
 ORIGINAL_WINDOW_NOTE = (" Window = ORIGINAL definition: the layer's clock starts at its first WAIT, ESCALATE or ACT output "
                         "(see CORRECTIONS.md).")
 
 
-def _footer(fig, text: str, original_window: bool = False, wrap: bool = False) -> int:
+def _footer(fig, text: str, original_window: bool = False) -> None:
     if DATA_LABEL != "data":
         text = text.replace("data/", DATA_LABEL + "/")
     if CORRECTED:
         text = "CORRECTED ENGINE (see CORRECTIONS.md). " + text + (ORIGINAL_WINDOW_NOTE if original_window else "")
-    if CORRECTED and wrap:                            # the longer corrected-set footer must not run off the canvas
-        import textwrap
-        text = textwrap.fill(text, width=int(fig.get_figwidth() * 15))
     fig.text(0.01, 0.01, text, fontsize=7.5, color=PALETTE["footer"], ha="left")
-    return text.count("\n") + 1
+
+
+def _wrap_footer(fig) -> float:
+    """Wrap the footer to the canvas width; return its height as a figure fraction (0 if there is none)."""
+    import math
+    import textwrap
+    foot = next((t for t in fig.texts if tuple(round(v, 3) for v in t.get_position()) == (0.01, 0.01)), None)
+    if foot is None:
+        return 0.0
+    renderer = fig.canvas.get_renderer()
+    foot.set_va("bottom")
+    foot.set_position((0.01, 0.008))
+    text = " ".join(foot.get_text().split())
+    foot.set_text(text)
+    avail = fig.get_figwidth() * fig.dpi * 0.965
+    width = foot.get_window_extent(renderer).width
+    if width > avail:
+        foot.set_text(textwrap.fill(text, width=int(len(text) / math.ceil(width / avail))))
+        foot.set_linespacing(1.3)
+    return foot.get_window_extent(renderer).height / (fig.get_figheight() * fig.dpi)
+
+
+def _finish(fig, out: Path, rect=None) -> Path:
+    """Lay out, save and close. In the light corrected set the footer is wrapped to the canvas and the plot area keeps
+    clear of it; everywhere else (published-data figures, the dark theme, which does its own footer layout) the layout
+    is exactly the original tight_layout."""
+    if CORRECTED and THEME == "light":
+        top = rect[3] if rect else 1.0
+        bottom = max(_wrap_footer(fig) + 0.012, rect[1] if rect else 0.0)
+        fig.tight_layout(rect=[0, bottom, 1, top])
+    elif rect is not None:
+        fig.tight_layout(rect=rect)
+    else:
+        fig.tight_layout()
+    fig.savefig(out, dpi=200)
+    plt.close(fig)
+    return out
 
 
 def _self_clearing_scenarios(df: pd.DataFrame) -> set:
@@ -171,17 +219,11 @@ def fig_pre_escalation_window(df: pd.DataFrame, out: Path, col: str = "lead_gain
     else:
         sz = df[df[col].notna()].groupby("scenario").size()
         ax.set_title(f"{head} (n={sz.min()}-{sz.max()} seeds each)", fontsize=12, loc="left")
-    n_lines = _footer(fig, ("n = runs with a resolved window / runs. " if CORRECTED else "")
-                           + "Box = IQR, line = median, whiskers = 1.5 IQR. Values below zero mean the "
-                           "conventional baseline escalated FIRST. Regenerated from data/runs.csv by replot.py.",
-                      original_window=CORRECTED and not like_for_like, wrap=True)
-    if CORRECTED:
-        fig.tight_layout(rect=[0, 0.025 + 0.022 * n_lines, 1, 1])
-    else:
-        fig.tight_layout()
-    fig.savefig(out, dpi=200)
-    plt.close(fig)
-    return out
+    _footer(fig, ("n = runs with a resolved window / runs. " if CORRECTED else "")
+                 + "Box = IQR, line = median, whiskers = 1.5 IQR. Values below zero mean the "
+                 "conventional baseline escalated FIRST. Regenerated from data/runs.csv by replot.py.",
+            original_window=CORRECTED and not like_for_like)
+    return _finish(fig, out)
 
 
 def fig_cross_domain(df: pd.DataFrame, out: Path) -> Optional[Path]:
@@ -216,10 +258,7 @@ def fig_cross_domain(df: pd.DataFrame, out: Path) -> Optional[Path]:
     fig.suptitle("The physics change. The decision problem persists.", fontsize=13, x=0.01, ha="left")
     _footer(fig, "Cross-domain comparison of the DECISION problem, not of the technologies. "
                  "Regenerated from data/runs.csv by replot.py.")
-    fig.tight_layout(rect=[0, 0.03, 1, 0.94])
-    fig.savefig(out, dpi=200)
-    plt.close(fig)
-    return out
+    return _finish(fig, out, rect=[0, 0.03, 1, 0.94])
 
 
 def fig_escalation_quality(df: pd.DataFrame, out: Path) -> Optional[Path]:
@@ -254,7 +293,11 @@ def fig_escalation_quality(df: pd.DataFrame, out: Path) -> Optional[Path]:
                     Patch(facecolor=PALETTE["arm_decision_mw"], label="decision layer, microwave scenarios")]
     else:
         handles += [Patch(facecolor=PALETTE["arm_decision_leo"], label="Velorona decision layer")]
-    axes[0].legend(handles=handles, frameon=False, fontsize=9)
+    if CORRECTED:                         # above the plot area, clear of the bars (both themes)
+        axes[0].legend(handles=handles, loc="lower right", bbox_to_anchor=(1.0, 1.02), ncol=len(handles),
+                       frameon=False, fontsize=PALETTE["legend_fs"])
+    else:
+        axes[0].legend(handles=handles, frameon=False, fontsize=9)
     axes[1].set_xticks(x)
     axes[1].set_xticklabels(scen, rotation=30, ha="right", fontsize=8)
     fig.suptitle("Escalation quality: is the escalation about a real, persistent fault?",
@@ -262,10 +305,7 @@ def fig_escalation_quality(df: pd.DataFrame, out: Path) -> Optional[Path]:
     _footer(fig, ("Medians across seeds. n/a = metric undefined (no persistent fault, or no escalation by the arm); not zero. "
                   if CORRECTED else "Medians across seeds. NaN (no escalation by either arm) plotted as zero. ")
                 + "Regenerated from data/runs.csv by replot.py.")
-    fig.tight_layout(rect=[0, 0.02, 1, 0.95])
-    fig.savefig(out, dpi=200)
-    plt.close(fig)
-    return out
+    return _finish(fig, out, rect=[0, 0.02, 1, 0.95])
 
 
 def fig_economic_exposure(df: pd.DataFrame, out: Path) -> Optional[Path]:
@@ -288,10 +328,7 @@ def fig_economic_exposure(df: pd.DataFrame, out: Path) -> Optional[Path]:
     ax.set_title("Modelled operational exposure - ILLUSTRATIVE", fontsize=12, loc="left")
     _footer(fig, "ILLUSTRATIVE ONLY, NOT from operator financial data. Medians across seeds. "
                  "Regenerated from data/runs.csv by replot.py.")
-    fig.tight_layout()
-    fig.savefig(out, dpi=200)
-    plt.close(fig)
-    return out
+    return _finish(fig, out)
 
 
 def fig_coverage_derivation(coverage: pd.DataFrame, out: Path) -> Optional[Path]:
@@ -318,16 +355,13 @@ def fig_coverage_derivation(coverage: pd.DataFrame, out: Path) -> Optional[Path]
     _footer(fig, "Coverage != capacity != availability. Every value is DERIVED from stated "
                  "assumptions; no fixed satellite-to-microwave ratio is asserted. "
                  "Regenerated from data/coverage_comparison.csv by replot.py.")
-    fig.tight_layout()
-    fig.savefig(out, dpi=200)
-    plt.close(fig)
-    return out
+    return _finish(fig, out)
 
 
 def fig_timeline(row: pd.Series, out: Path) -> Optional[Path]:
     dom = "leo" if str(row.get("domain")).startswith("leo") else "mw"      # decision-layer events take the run's domain hue
     marks = [
-        ("fault onset", row.get("t_fault_onset"), PALETTE["grid"]),
+        ("fault onset", row.get("t_fault_onset"), PALETTE["event_onset"]),
         ("first detectable", row.get("t_first_detectable"), PALETTE["event_detect"]),
         ("decision layer actionable", row.get("t_decision_layer_actionable"), PALETTE["event_actionable_" + dom]),
         ("decision layer ESCALATE/ACT", row.get("t_decision_layer_escalation"), PALETTE["event_escalate_" + dom]),
@@ -350,7 +384,20 @@ def fig_timeline(row: pd.Series, out: Path) -> Optional[Path]:
         ax.scatter([t], [0], s=110, color=colour, zorder=3)
         ax.vlines(t, 0, y * 0.8, color=colour, linestyle="--", linewidth=1)
         ax.text(t, y, f"{label}\nt={t:.0f} min", ha="center",
-                va="bottom" if y > 0 else "top", fontsize=9, color=colour)
+                va="bottom" if y > 0 else "top", fontsize=9, color=colour,
+                bbox=dict(facecolor=ax.get_facecolor(), edgecolor="none", pad=1.5) if len(levels) > 2 else None)
+
+    if len(levels) > 2:                       # labels sharing a row: the left one right-aligned, the right one left-aligned
+        renderer = fig.canvas.get_renderer()
+        rows = {}
+        for txt in ax.texts:
+            rows.setdefault(txt.get_position()[1], []).append(txt)
+        for row_texts in rows.values():
+            row_texts.sort(key=lambda t_: t_.get_position()[0])
+            for left, right in zip(row_texts, row_texts[1:]):
+                if left.get_window_extent(renderer).overlaps(right.get_window_extent(renderer)):
+                    left.set_ha("right")
+                    right.set_ha("left")
 
     pre = row.get("pre_escalation_window_min")
     if pre == pre and row.get("t_decision_layer_actionable") == row.get("t_decision_layer_actionable"):
@@ -372,10 +419,7 @@ def fig_timeline(row: pd.Series, out: Path) -> Optional[Path]:
     ax.set_title(title, fontsize=12, loc="left")
     _footer(fig, "Single run from data/runs.csv. Simulated network; see docs for stated "
                  "assumptions and limitations. Regenerated by replot.py.")
-    fig.tight_layout()
-    fig.savefig(out, dpi=200)
-    plt.close(fig)
-    return out
+    return _finish(fig, out)
 
 
 SEVERITY_MULTIPLIERS = [0.4, 0.6, 0.8, 1.0, 1.3, 1.7, 2.2]
@@ -418,10 +462,7 @@ def fig_severity_sensitivity(df: pd.DataFrame, out: Path) -> Optional[Path]:
     _footer(fig, "15 seeds per point. leo_low_elevation excluded (declared severity is 0 -- pure "
                  "orbital geometry, no severity to scale). Regenerated from "
                  "data/sensitivity_severity.csv by replot.py.", original_window=True)
-    fig.tight_layout(rect=[0, 0.03, 1, 0.93])
-    fig.savefig(out, dpi=200)
-    plt.close(fig)
-    return out
+    return _finish(fig, out, rect=[0, 0.03, 1, 0.93])
 
 
 def fig_comparator_sensitivity(df: pd.DataFrame, out: Path) -> Optional[Path]:
@@ -459,10 +500,7 @@ def fig_comparator_sensitivity(df: pd.DataFrame, out: Path) -> Optional[Path]:
                  "paired error rates for space -- see fig10 and README for the FPR/unnecessary-"
                  "dispatch pairing this study requires. Regenerated from "
                  "data/sensitivity_comparator.csv by replot.py.", original_window=True)
-    fig.tight_layout(rect=[0, 0.03, 1, 0.93])
-    fig.savefig(out, dpi=200)
-    plt.close(fig)
-    return out
+    return _finish(fig, out, rect=[0, 0.03, 1, 0.93])
 
 
 def fig_residual_diagnosis(trace_df: pd.DataFrame, out: Path) -> Optional[Path]:
@@ -497,10 +535,7 @@ def fig_residual_diagnosis(trace_df: pd.DataFrame, out: Path) -> Optional[Path]:
     _footer(fig, "Vertical line = the step at which the layer first escalated or recommended action. "
                  "See docs/LIMITATIONS.md for the diagnosis of each. Regenerated from "
                  "data/sensitivity_residual_trace.csv by replot.py.")
-    fig.tight_layout(rect=[0, 0.02, 1, 0.94])
-    fig.savefig(out, dpi=200)
-    plt.close(fig)
-    return out
+    return _finish(fig, out, rect=[0, 0.02, 1, 0.94])
 
 
 def _unique_comparator_configs(df: pd.DataFrame):
@@ -566,10 +601,7 @@ def fig_latency_precision_tradeoff(df: pd.DataFrame, out: Path) -> Optional[Path
                  "escalation FPR, its points cluster near a single x-value while spanning the SAME "
                  "window values as the conventional curve. It does not lie on the conventional "
                  "trade-off curve. Regenerated from data/sensitivity_comparator.csv by replot.py.", original_window=True)
-    fig.tight_layout(rect=[0, 0.05, 1, 0.92])
-    fig.savefig(out, dpi=200)
-    plt.close(fig)
-    return out
+    return _finish(fig, out, rect=[0, 0.05, 1, 0.92])
 
 
 EXEMPLARS = [
@@ -596,6 +628,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     DATA_LABEL = str(data_dir).rstrip("/")
     df = pd.read_csv(data_dir / "runs.csv")
     CORRECTED = "escalation_window_min" in df.columns
+    if CORRECTED and THEME == "light":
+        PALETTE.update(LIGHT_BRAND)
     coverage = pd.read_csv(data_dir / "coverage_comparison.csv")
 
     made: List[Path] = []

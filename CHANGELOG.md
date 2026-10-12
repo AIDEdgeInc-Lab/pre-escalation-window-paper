@@ -7,6 +7,12 @@
 - Severity chart: one hue per panel, scenarios told apart by line style and marker (no shade families). Escalation-quality chart: the legend sits above the plot and names all three bar colours. Timeline figures: labels staggered on four rows so clustered events no longer overprint. Legends and footers larger.
 - Phones: figures keep a legible 1100 px width and pan inside their own box (the page never scrolls sideways) instead of being squeezed to ~350 px; tapping opens the full-resolution file.
 
+## Light corrected figures follow the same system (presentation only; content version stays 1.1)
+
+- `replot.LIGHT_BRAND`: the corrected-set light figures (`figures/corrected/`) use the same semantic roles as the dark theme in white-background tones (blue `#2A68A8`, AID Edge deep gold `#8F6A2D`, grey `#5B6772`, near-black + hatch for the degenerate comparator). Selected by theme (`replot.THEME`), so figures from the published `data/` are unchanged and remain pixel-identical to the published PNGs.
+- Footer text in the corrected set is wrapped to the canvas and the plot area keeps clear of it (`_finish`); the escalation-quality legend sits above the plot in both themes; timeline labels are staggered, masked against the stems and de-overlapped in both themes, and the pale "fault onset" mark is visible on white.
+- Figure 09 (cross-domain) needed no change.
+
 ## Blue-and-gold figure palette (presentation only; content version stays 1.1)
 
 - One colour rule for the article figures: brand blue `#68A9E0` = LEO/NTN series (and the decision-layer arm where arms are compared); gold `#C6A15B` = microwave series and the highlighted "degenerate" comparator; neutrals = conventional arm, pooled comparator configurations and reference lines. Colour separates series; it does not encode better or worse. Box fills are more opaque so gold reads as gold on the dark plate.

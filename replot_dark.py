@@ -61,7 +61,7 @@ DARK_PALETTE = {
     "pooled": NEUTRAL, "special": "#F2F5F7", "special_hatch": "///",
     "reference": FAINT, "grid": "#1B252C", "median": WHITE, "footer": "#A3B0BB",
     "box_alpha": 0.85, "legend_fs": 10, "legend_fs_small": 9, "scenario_lines": "domain",
-    "event_detect": WHITE, "event_actionable_leo": BLUE, "event_actionable_mw": GOLD,
+    "event_onset": FAINT, "event_detect": WHITE, "event_actionable_leo": BLUE, "event_actionable_mw": GOLD,
     "event_escalate_leo": BLUE, "event_escalate_mw": GOLD, "event_ticket": FAINT, "event_impact": WHITE,
     "trace": BLUE, "marginal": WHITE,
     "timeline_levels": [0.45, -0.45, 1.25, -1.25], "timeline_height": 5.0,
@@ -96,6 +96,7 @@ def _fonts(geist_dir: str | None) -> str | None:
 
 def _apply_theme(family: str | None) -> None:
     replot.PALETTE.update(DARK_PALETTE)
+    replot.THEME = "dark"
     rc = {
         "figure.facecolor": PLATE, "savefig.facecolor": PLATE, "axes.facecolor": PANEL,
         "text.color": TEXT, "axes.labelcolor": MUTED, "axes.edgecolor": BORDER,
