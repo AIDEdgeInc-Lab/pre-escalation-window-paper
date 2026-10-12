@@ -111,10 +111,10 @@ def fig_pre_escalation_window(df: pd.DataFrame, out: Path, col: str = "lead_gain
     bp = _boxplot(ax, data, plotted, horizontal=True, patch_artist=True, widths=0.6, positions=pos)
     for patch, s in zip(bp["boxes"], plotted):
         patch.set_facecolor(PALETTE["decision"] if s.startswith("leo") else PALETTE["accent"])
-        patch.set_alpha(0.65)
+        patch.set_alpha(PALETTE.get("box_alpha", 0.65))
     for med in bp["medians"]:
         med.set_color(PALETTE["median"])
-    ax.axvline(0, color=PALETTE["bad"], linewidth=1, linestyle=":")
+    ax.axvline(0, color=PALETTE.get("zero", PALETTE["bad"]), linewidth=1, linestyle=":")
     if CORRECTED:
         ax.set_yticks(range(1, len(scen_all) + 1))
         ax.set_yticklabels(scen_all)
@@ -134,6 +134,11 @@ def fig_pre_escalation_window(df: pd.DataFrame, out: Path, col: str = "lead_gain
             else:
                 ax.text(0.995, i, f"n={int(sub[col].notna().sum())}/{len(sub)}", transform=edge, va="center",
                         ha="right", fontsize=8.5, color=PALETTE["footer"])
+    if CORRECTED:
+        from matplotlib.patches import Patch
+        ax.legend(handles=[Patch(facecolor=PALETTE["decision"], alpha=0.65, label="LEO/NTN scenarios"),
+                           Patch(facecolor=PALETTE["accent"], alpha=0.65, label="microwave scenarios")],
+                  loc="lower right", bbox_to_anchor=(1.0, 1.0), ncol=2, frameon=False, fontsize=9)
     if like_for_like:
         ax.set_xlabel("like-for-like window (min)  =  conventional escalation - decision-layer ESCALATE/ACT")
         head = "Like-for-like pre-escalation window by scenario"
@@ -142,11 +147,12 @@ def fig_pre_escalation_window(df: pd.DataFrame, out: Path, col: str = "lead_gain
         head = "Pre-escalation window by scenario" + (" (ORIGINAL definition)" if CORRECTED else "")
     _style(ax)
     if CORRECTED:
-        ax.set_title(f"{head} (n = runs with a resolved window / runs)", fontsize=12, loc="left")
+        ax.set_title(head, fontsize=12, loc="left")
     else:
         sz = df[df[col].notna()].groupby("scenario").size()
         ax.set_title(f"{head} (n={sz.min()}-{sz.max()} seeds each)", fontsize=12, loc="left")
-    n_lines = _footer(fig, "Box = IQR, line = median, whiskers = 1.5 IQR. Values below zero mean the "
+    n_lines = _footer(fig, ("n = runs with a resolved window / runs. " if CORRECTED else "")
+                           + "Box = IQR, line = median, whiskers = 1.5 IQR. Values below zero mean the "
                            "conventional baseline escalated FIRST. Regenerated from data/runs.csv by replot.py.",
                       original_window=CORRECTED and not like_for_like, wrap=True)
     if CORRECTED:
@@ -182,7 +188,7 @@ def fig_cross_domain(df: pd.DataFrame, out: Path) -> Optional[Path]:
         bp = _boxplot(ax, vals, tick_labels, patch_artist=True, widths=0.5)
         for patch, lab in zip(bp["boxes"], labels):
             patch.set_facecolor(PALETTE["decision"] if lab == "leo_ntn" else PALETTE["accent"])
-            patch.set_alpha(0.65)
+            patch.set_alpha(PALETTE.get("box_alpha", 0.65))
         for med in bp["medians"]:
             med.set_color(PALETTE["median"])
         ax.set_title(label, fontsize=10)
@@ -355,6 +361,9 @@ def fig_severity_sensitivity(df: pd.DataFrame, out: Path) -> Optional[Path]:
     axes = axes[0]
     for ax, dom in zip(axes, domains):
         d = df[df["domain"] == dom]
+        dom_cycle = PALETTE.get("scenario_cycle", {}).get(dom)
+        if dom_cycle:                                  # per-domain hue family; lines still differ by style
+            ax.set_prop_cycle(color=dom_cycle, linestyle=["-", "--", "-.", ":", "-"])
         for scen in sorted(d["scenario"].unique()):
             ds = d[d["scenario"] == scen]
             g = ds.groupby("severity_multiplier")["pre_escalation_window_min"]
@@ -362,7 +371,7 @@ def fig_severity_sensitivity(df: pd.DataFrame, out: Path) -> Optional[Path]:
             x = med.index.values
             ax.plot(x, med.values, marker="o", label=scen, linewidth=1.5)
             ax.fill_between(x, p25.values, p75.values, alpha=0.12)
-        ax.axhline(0, color=PALETTE["bad"], linewidth=1, linestyle=":")
+        ax.axhline(0, color=PALETTE.get("zero", PALETTE["bad"]), linewidth=1, linestyle=":")
         ax.set_xlabel("severity multiplier (relative to declared severity)")
         ax.set_ylabel("pre-escalation window (min, median +/- IQR)")
         ax.set_title(dom, fontsize=11, loc="left")
@@ -396,11 +405,11 @@ def fig_comparator_sensitivity(df: pd.DataFrame, out: Path) -> Optional[Path]:
         data.append(degenerate["pre_escalation_window_min"].dropna().values)
         bp = _boxplot(ax, data, labels, patch_artist=True, widths=0.6)
         for patch, lab in zip(bp["boxes"], labels):
-            patch.set_facecolor(PALETTE["bad"] if lab == "degenerate" else PALETTE["accent"])
-            patch.set_alpha(0.65)
+            patch.set_facecolor(PALETTE.get("degenerate", PALETTE["bad"]) if lab == "degenerate" else PALETTE.get("pooled", PALETTE["accent"]))
+            patch.set_alpha(PALETTE.get("box_alpha", 0.65))
         for med in bp["medians"]:
             med.set_color(PALETTE["median"])
-        ax.axhline(0, color=PALETTE["bad"], linewidth=1, linestyle=":")
+        ax.axhline(0, color=PALETTE.get("zero", PALETTE["bad"]), linewidth=1, linestyle=":")
         ax.set_xlabel(label, fontsize=9)
         ax.set_ylabel("pre-escalation window (min)")
         _style(ax)
@@ -494,7 +503,7 @@ def fig_latency_precision_tradeoff(df: pd.DataFrame, out: Path) -> Optional[Path
         ax.plot([p[0] for p in conv_pts], [p[1] for p in conv_pts], color=PALETTE["conventional"],
                 marker="o", linewidth=1.5, label="conventional (varies with tuning)", zorder=2)
         for fpr, window, kind in markers:
-            colour = PALETTE["bad"] if kind == "degenerate" else PALETTE["accent"]
+            colour = PALETTE.get("degenerate", PALETTE["bad"]) if kind == "degenerate" else PALETTE.get("pooled", PALETTE["accent"])
             ax.scatter([fpr], [window], color=colour, zorder=4, s=80)
             ax.annotate(kind, (fpr, window), textcoords="offset points",
                         xytext=(6, 6 if kind == "degenerate" else -12), fontsize=8, color=colour)

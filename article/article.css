@@ -194,3 +194,10 @@ figure.fig figcaption { max-width: 78ch; line-height: 1.6; }
   html[data-brand='aidedge'] .paper-body h1 { font-size: 24px; margin-top: 64px; }
   html[data-brand='aidedge'] .paper-body h2 { font-size: 20px; margin-top: 44px; }
 }
+
+/* ---- figure captions: label / title / description are three distinct levels; gold marks the label ---- */
+.fig-num { color: var(--gold); }
+figure.fig figcaption { color: var(--ui-text-3); }
+figure.fig figcaption strong:first-of-type { display: block; margin: 2px 0 6px; font-size: var(--ui-fs-body); font-weight: 600; line-height: 1.35; color: var(--ui-text-1); }
+figure.fig a.fig-open img { transition: border-color 0.2s; }
+figure.fig a.fig-open:hover img { border-color: var(--gold-line); }
