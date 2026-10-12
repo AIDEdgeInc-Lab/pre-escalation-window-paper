@@ -157,6 +157,6 @@ Median in minutes over runs with a resolved window; "n/a" = no run resolved. Ori
 | Microwave | mw_directional_hardware | 12 | 12 | 30 / 0 / 0 |
 | Microwave | mw_hidden_in_storm | 14 | -1 | 12 / 15 / 0 (3 runs equal 0) |
 | Microwave | mw_interference | 21 | 21 | 30 / 0 / 0 |
-| Microwave | mw_rain_cell | 16 | 11 | 1 / 0 / 29 |
+| Microwave | mw_rain_cell | 16 | 11 (one run; a false escalation on a self-clearing event) | 1 / 0 / 29 (self-clearing: not applicable) |
 
-Scenario medians are positive in 10 of 11 under the original definition and in 7 of 11 like-for-like (`mw_rain_cell` from one resolved run). Pooled like-for-like median: 11 min over 215 of 330 runs. Pooling across scenarios is descriptive only, not a performance claim. Simulation only; no field validation.
+Scenario medians are positive in 10 of 11 under the original definition and in 6 of 11 like-for-like. The three self-clearing scenarios (`leo_ground_rain`, `leo_low_elevation`, `mw_rain_cell`) have no like-for-like window because the layer did not escalate in most runs; the one resolved `mw_rain_cell` value is a false escalation, not a lead, and is not counted as positive. (An earlier version of this table, PR #5, counted it as a seventh positive scenario; that was incorrect and is corrected here.) Pooled like-for-like median: 11 min over 215 of 330 runs. Pooling across scenarios is descriptive only, not a performance claim. Simulation only; no field validation.

@@ -38,5 +38,19 @@
     "sensitivity_severity.csv": "f11211e88dace4bb66328e3c41877ef62db31add69f90c08a042b066eb96c59a",
     "sensitivity_warmup.csv": "d4ea9322d678fae45428f38a375226ce47e89a7df2afa9232ee689bd5a4eb86c",
     "summary.csv": "4e51cfb543bda1252d552cce9e2d42eb7a1b48b7eb3153ba55f9cd1f1a1c5be0"
+  },
+  "reproducibility": {
+    "engine_main_merge_commit": "c491427 (tree identical to 58ce16a)",
+    "command": "python -m velorona_research.cli sweep --seeds 30 --duration 600 --out <dir>   (sensitivity files: ... sensitivity --out <dir>)",
+    "seeds": "1..30 for the sweep; 15 seeds per configuration for the sensitivity files",
+    "default_configuration_sha256": "ed70cf07849c939f6f638a3aa7a1f3836b7b2788de3990c28170ec99d6fdc827",
+    "default_configuration_note": "SHA-256 of the canonical JSON (sorted keys) of the default FeatureConfig, DecisionConfig and RunConfig objects of the private engine. It verifies the identity of that configuration artifact; it does not reproduce results without access to the engine. Scenario definitions are not covered by this hash.",
+    "environment_reproduction": {
+      "python_3.13.16_numpy_2.5.4_pandas_3.0.6": "runs.csv and summary.csv byte-identical to the published files (this record's original run)",
+      "python_3.12.3_numpy_2.5.4_pandas_3.0.6": "full 330-run sweep regenerated 2026-10-12: runs.csv and summary.csv byte-identical (same SHA-256)",
+      "not_tested": "Python 3.10 and 3.11 (CI covers 3.10-3.12 for the engine tests; the sweep outputs were not regenerated there); sensitivity_*.csv and coverage_comparison.csv were not regenerated on 3.12"
+    },
+    "figure_generation": "python replot.py --data data/corrected --out figures/corrected ; python replot_dark.py --data data/corrected --out <dir> (article variants)",
+    "claim_check": "python check_claims.py"
   }
 }
