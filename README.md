@@ -127,7 +127,7 @@ published and is not licensed for use.
   title        = {The Pre-Escalation Window},
   author       = {{AID Edge Inc.}},
   year         = {2026},
-  version      = {1.0},
+  version      = {1.1},
   url          = {https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper}
 }
 ```

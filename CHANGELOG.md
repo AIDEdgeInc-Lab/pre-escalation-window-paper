@@ -1,5 +1,11 @@
 # Changelog
 
+## Article reading refinements and version labels (2026-10-12; presentation only, content version stays 1.1)
+
+- `article/article.css`: a final block, using the same `html[data-brand]` selectors as the shared foundation (`ui-foundation.css`), so it wins over the foundation's marketing-copy text geometry: tighter heading leading and measures (section titles no longer wrap into stranded short lines), prose measure 62ch -> 70ch for technical text, the dashed notice box replaced by a hairline box with a gold rule, figure captions on a 78ch measure, more air in table rows, mobile heading sizes. No new colours; the foundation's left-anchored layout is kept.
+- Article figures link to their full-resolution files (the wide multi-panel charts are not legible at page width).
+- Version labels made consistent with the homepage: article title block, summary header, summary citation (plain text and BibTeX) and footer, README BibTeX and `docs/ARTICLE.md` now say 1.1 (revision of 1.0, 2026-10-12). Archived copies keep their original labels.
+
 ## Figure presentation fixes (2026-10-12, no data or claim changes; content version stays 1.1)
 
 - `replot.py` / `replot_dark.py` (corrected set only; published-data figures are byte-identical to before): the like-for-like window figure now shows all 11 scenarios, draws the three self-clearing scenarios as labelled "not applicable" rows (never as boxes), shows resolved-runs/runs on each box, and no longer crowds the footer; the escalation-quality figure marks undefined metrics "n/a" instead of drawing them as zero; the cross-domain figure shows n per box.

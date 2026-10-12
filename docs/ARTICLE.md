@@ -4,7 +4,7 @@
 
 **What a read-only decision layer can observe before conventional monitoring escalates — and where that advantage breaks.**
 
-AID Edge Inc. · Velorona research programme · Version 1.0
+AID Edge Inc. · Velorona research programme · Version 1.1 (revision of 1.0, 2026-10-12)
 
 <p class="doc-banner"><strong>Read this first.</strong> The networks in this study are <strong>simulated</strong>. Ground truth is known by construction. <strong>No operator telemetry is used anywhere in this study.</strong> Every currency figure is ILLUSTRATIVE. The simulation engine is not published; what is published is the method, the results, the data needed to regenerate the figures, and the limitations. Nothing here is evidence about a real operator's network.</p>
 
