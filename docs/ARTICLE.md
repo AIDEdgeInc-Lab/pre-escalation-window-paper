@@ -502,7 +502,7 @@ OBSERVE → DETECT → CORRELATE → DIAGNOSE → ESTIMATE DECISION RISK
 - **DIAGNOSE** — evidence-based differential diagnosis across candidate fault classes (§5.5).
 - **ESTIMATE DECISION RISK** — what does acting cost if the diagnosis is wrong, given the blast radius of the affected element?
 - **WAIT / ESCALATE / RECOMMEND ACTION** — the decision gate: a list of *named* checks, each with a pass/fail and a human-readable reason.
-- **VERIFY** — did the recommendation hold up against what actually happened?
+- **VERIFY** — did the recommendation hold up against what actually happened? *(Correction, 2026-10: in the version that produced the published results this stage did not reliably resolve — the recorded flag was set from the recommendation's own prediction rather than from later evidence. The corrected engine judges it on post-deadline evidence; see CORRECTIONS.md.)*
 
 Stages 2, 4 and 6 map onto the three problems separated in Part I.5: detection, diagnosis, decision. Conventional threshold monitoring implements stage 2 and treats its output as if it were stage 6.
 
@@ -1140,6 +1140,7 @@ Stated in full, not summarised. Every item is a question a reviewer or a VP of n
 23. **The published version had no handling for missing, stale or invalid telemetry**, and gave a satellite first seen after warm-up an empty baseline. Both are corrected in the engine; the published results predate the corrections.
 24. **LEO capacity attributable to the region is a bound**: 43.3 Mbps assumes uniform sharing over the footprint; up to 3,000 Mbps if the 2 required beams are steered at the region.
 25. **Rain attenuation uses horizontal polarisation at zero elevation everywhere**, including LEO (circular polarisation at 40° is 5–11% lower at 18–30 GHz).
+26. **VERIFY did not reliably resolve in the published version.** The recorded flag came from the recommendation's own prediction, not from later evidence; the corrected engine judges it on post-deadline evidence in the finding's own serving context. See CORRECTIONS.md.
 
 ## 11.3 Physics — LEO / NTN
 

@@ -75,7 +75,7 @@ seven named stages:</p>
 <li><strong>WAIT / ESCALATE / RECOMMEND ACTION</strong> — the decision gate: a list of
   <em>named</em> checks, each with a pass/fail and a human-readable reason.</li>
 <li><strong>VERIFY</strong> — did the recommendation hold up against what actually
-  happened?</li>
+  happened? <em>(Correction, 2026-10: in the version that produced the published results this stage did not reliably resolve &mdash; the recorded flag was set from the recommendation&rsquo;s own prediction rather than from later evidence. The corrected engine judges it on post-deadline evidence; see <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.)</em></li>
 </ul>
 <p>The decision layer is read-only by construction: <code>RECOMMEND_ACTION</code> is a
 recommendation carried to a human with its own audit trail, never an
@@ -673,7 +673,7 @@ network operations will ask.</p>
    study operates there). The engine now implements the P.838-3 analytic fit. Specific attenuation at the study's
    frequencies changes by &minus;6.2% / &minus;4.0% / +2.1% (18 / 20 / 30 GHz), per-scenario median windows by at most 1
    minute, and the derived microwave hop length from 18.32 km to 16.21 km; headline results are otherwise unchanged. The
-   files in <code>data/</code> correspond to the old table. See <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.</li>
+   files in <code>data/</code> correspond to the old table. The new coefficients' constants come from the <code>itur</code> package; seven rows of the official Table 5 (6, 8, 12, 15, 20, 30, 40&nbsp;GHz) agree with them to 1e-4, other frequencies and everything above 40&nbsp;GHz are unchecked. See <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.</li>
 <li><strong>Design-rule vs instantaneous attenuation are different quantities.</strong> The
    P.530-18 effective path length is a long-term statistical design rule. Using
    the same reduction on an instantaneous wet path is a modelling
@@ -784,6 +784,7 @@ seeds is exactly the overfitting this rewrite exists to avoid.</p>
 <li><strong>The published version had no handling for missing, stale or invalid telemetry</strong>, and gave a satellite first seen after warm-up an empty baseline. Both are corrected in the engine; the published results predate the corrections.</li>
 <li><strong>LEO capacity attributable to the region is a bound</strong>: 43.3 Mbps assumes uniform sharing over the footprint; up to 3,000 Mbps if the 2 required beams are steered at the region.</li>
 <li><strong>Rain attenuation uses horizontal polarisation at zero elevation everywhere</strong>, including LEO (circular polarisation at 40&deg; is 5&ndash;11% lower at 18&ndash;30 GHz).</li>
+<li><strong>VERIFY did not reliably resolve in the published version.</strong> The recorded flag came from the recommendation's own prediction, not from later evidence. The corrected engine judges a prediction on evidence after its deadline, in the finding's own serving context; <code>verified</code> means &ldquo;the layer's prediction matched later telemetry&rdquo;, not field ground truth. See <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.</li>
 </ol>
 </section>
 

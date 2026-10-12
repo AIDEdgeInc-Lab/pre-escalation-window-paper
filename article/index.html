@@ -774,7 +774,7 @@ outage
 <li><strong>DIAGNOSE</strong> — evidence-based differential diagnosis across candidate fault classes (§5.5).</li>
 <li><strong>ESTIMATE DECISION RISK</strong> — what does acting cost if the diagnosis is wrong, given the blast radius of the affected element?</li>
 <li><strong>WAIT / ESCALATE / RECOMMEND ACTION</strong> — the decision gate: a list of <em>named</em> checks, each with a pass/fail and a human-readable reason.</li>
-<li><strong>VERIFY</strong> — did the recommendation hold up against what actually happened?</li>
+<li><strong>VERIFY</strong> — did the recommendation hold up against what actually happened? <em>(Correction, 2026-10: in the version that produced the published results this stage did not reliably resolve &mdash; the recorded flag was set from the recommendation&rsquo;s own prediction rather than from later evidence. The corrected engine judges it on post-deadline evidence; see <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.)</em></li>
 </ul>
 <p>Stages 2, 4 and 6 map onto the three problems separated in Part I.5: detection, diagnosis, decision. Conventional threshold monitoring implements stage 2 and treats its output as if it were stage 6.</p>
 <h2 id="5-3-control-limits-whose-normal">5.3 Control limits: whose "normal"?</h2>
@@ -1842,6 +1842,7 @@ time_to_correct_diagnosis = first correct verdict − first detectable
 <li><strong>The published version had no handling for missing, stale or invalid telemetry</strong>, and gave a satellite first seen after warm-up an empty baseline. Both are corrected in the engine; the published results predate the corrections.</li>
 <li><strong>LEO capacity attributable to the region is a bound</strong>: 43.3 Mbps assumes uniform sharing over the footprint; up to 3,000 Mbps if the 2 required beams are steered at the region.</li>
 <li><strong>Rain attenuation uses horizontal polarisation at zero elevation everywhere</strong>, including LEO (circular polarisation at 40&deg; is 5&ndash;11% lower at 18&ndash;30 GHz).</li>
+<li><strong>VERIFY did not reliably resolve in the published version.</strong> The recorded flag came from the recommendation's own prediction, not from later evidence; the corrected engine judges it on post-deadline evidence in the finding's own serving context. See CORRECTIONS.md.</li>
 </ol>
 <h2 id="11-3-physics-leo-ntn">11.3 Physics — LEO / NTN</h2>
 <ol start="6">

@@ -22,8 +22,9 @@ network operations will ask.
    study operates there). The engine now implements the P.838-3 analytic fit. Specific attenuation at the
    study's frequencies changes by −6.2% / −4.0% / +2.1% (18 / 20 / 30 GHz), per-scenario median windows by at
    most 1 minute, and the derived microwave hop length from 18.32 km to 16.21 km; headline results are
-   otherwise unchanged. The files in `data/` correspond to the old table. The new coefficients still need
-   checking against the full official table. See [CORRECTIONS.md](../CORRECTIONS.md).
+   otherwise unchanged. The files in `data/` correspond to the old table. The new coefficients' constants
+   come from the `itur` package; seven rows of the official Table 5 (6, 8, 12, 15, 20, 30, 40 GHz) agree with them to 1e-4, other
+   frequencies and everything above 40 GHz are unchecked. See [CORRECTIONS.md](../CORRECTIONS.md).
 5. **Design-rule vs instantaneous attenuation are different quantities.** The
    P.530-18 effective path length is a long-term statistical design rule. Using
    the same reduction on an instantaneous wet path is a modelling
@@ -139,3 +140,4 @@ network operations will ask.
 26. **Levels of evidence.** Software tests, numerical verification against reference implementations, validation against
     independent data, evaluation on labelled real telemetry and validation in live networks are different things; this study
     reaches the first two only (partially). See [CORRECTIONS.md](../CORRECTIONS.md).
+27. **VERIFY did not reliably resolve in the published version.** The recorded flag came from the recommendation's own prediction, not from later evidence. The corrected engine judges a prediction on evidence after its deadline, in the finding's own serving context; `verified` means "the layer's prediction matched later telemetry", not field ground truth. See [CORRECTIONS.md](../CORRECTIONS.md).

@@ -1,0 +1,42 @@
+{
+  "what": "Results regenerated with the corrected simulation engine (same scenarios, same seeds as the published set).",
+  "engine_commit_private_repo": "58ce16a741eafda6dca5638985ace05af9f294d4",
+  "engine_working_tree_clean": true,
+  "software": {
+    "python": "3.13.16",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6"
+  },
+  "physics_models": {
+    "leo_slant_rain": "gamma * h_rain / sin(el); no P.618 reduction factors",
+    "orbit": "circular, spherical Earth, no J2, no Earth rotation in pass timing",
+    "rain_specific_attenuation": "ITU-R P.838-3 analytic fit (1-100 GHz), pure H polarization, theta=0",
+    "terrestrial_distance_factor": "ITU-R P.530-18 form (P.530-19 not adopted; see docs/LIMITATIONS.md)"
+  },
+  "sweep": {
+    "seeds": "1..30",
+    "duration_min": 600,
+    "scenarios": 11,
+    "runs": 330
+  },
+  "sensitivity": {
+    "seeds_per_config": 15,
+    "command": "sensitivity"
+  },
+  "differences_vs_published": [
+    "rain model: ITU-R P.838-3 analytic fit (published set: superseded P.838-0/-1 table)",
+    "data-quality gate: newly seen serving contexts learn a baseline from their first 20 valid samples",
+    "evidence-based VERIFY (serving-context aware, ATPC-masking aware); new columns first_action, verify_outcome_first, verified_first, verify_outcome_escalation, verified_escalation",
+    "new columns t_decision_layer_escalation and escalation_window_min (like-for-like window)",
+    "coverage_comparison.csv: two added LEO capacity-bound rows; microwave hop 18.32 -> 16.21 km"
+  ],
+  "not_included": "decision-layer parameters and scenario definitions are deliberately not part of this record",
+  "sha256": {
+    "coverage_comparison.csv": "f8199a8dae9e5f604ff7397f04010a6452b0675c1d9655e4b999402fbcfe98b3",
+    "runs.csv": "38f9d0edf84e060eb7c9533457d66827d1c077ef4b9afcf68d752e371e046fcf",
+    "sensitivity_comparator.csv": "4a1bbdc8a688a6814b2061e1fc3756d175fdcb7bee587bffb441ff48b6710da9",
+    "sensitivity_severity.csv": "f11211e88dace4bb66328e3c41877ef62db31add69f90c08a042b066eb96c59a",
+    "sensitivity_warmup.csv": "d4ea9322d678fae45428f38a375226ce47e89a7df2afa9232ee689bd5a4eb86c",
+    "summary.csv": "4e51cfb543bda1252d552cce9e2d42eb7a1b48b7eb3153ba55f9cd1f1a1c5be0"
+  }
+}
