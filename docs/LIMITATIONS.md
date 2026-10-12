@@ -17,13 +17,17 @@ network operations will ask.
 
 ## Physics
 
-4. **ITU-R P.838-3 coefficients are transcribed, not verified.** They must be
-   re-checked against the official publication before appearing in a paper.
-   (rain-attenuation model)
+4. **The published results did not use ITU-R P.838-3 coefficients.** They used a table equal to the
+   superseded P.838-0/-1 values for f ≥ 12 GHz and with 10× decimal errors at 6–10 GHz (no scenario in this
+   study operates there). The engine now implements the P.838-3 analytic fit. Specific attenuation at the
+   study's frequencies changes by −6.2% / −4.0% / +2.1% (18 / 20 / 30 GHz), per-scenario median windows by at
+   most 1 minute, and the derived microwave hop length from 18.32 km to 16.21 km; headline results are
+   otherwise unchanged. The files in `data/` correspond to the old table. The new coefficients still need
+   checking against the full official table. See [CORRECTIONS.md](../CORRECTIONS.md).
 5. **Design-rule vs instantaneous attenuation are different quantities.** The
    P.530-18 effective path length is a long-term statistical design rule. Using
    the same reduction on an instantaneous wet path is a modelling
-   simplification, labelled in the source.
+   simplification, labelled in the source. The model uses the P.530-18 form; P.530-19 (2025-09) supersedes it and has not been checked.
 6. **LEO slant-path rain omits ITU-R P.618 reduction factors** and therefore
    over-estimates fade at low elevation.
 7. **Orbits are circular, Earth is spherical, no J2, no Earth rotation** in
@@ -122,3 +126,16 @@ network operations will ask.
     no beam-shape roll-off, no traffic-dependent congestion in the LEO domain.
 21. **Blast radius is element-local.** The microwave model computes downstream
     isolation; the LEO model does not model beam-sharing contention.
+22. **The decision layer's LEO geometry model has zero error by construction.** In the published runs the layer is given the
+    simulator's own clear-sky model. Published LEO results are "with a perfect geometry model"; sensitivity to a wrong model
+    has been measured in simulation but not published here, and no real terminal's model error has been measured.
+23. **The published version had no handling for missing, stale or invalid telemetry.** A feed that went silent was reported
+    as "no deviation", and a satellite first seen after warm-up was given an empty baseline. A data-quality gate now exists in the
+    engine; the published results predate it.
+24. **LEO capacity attributable to the region is a bound, not a measurement.** 43.3 Mbps (ratio 0.012) assumes uniform sharing
+    over the footprint; steering the 2 beams the model says are needed at the region gives up to 3,000 Mbps (ratio 0.83).
+25. **Rain attenuation uses horizontal polarisation at zero path elevation everywhere, including LEO.** Circular polarisation at
+    40° elevation is 5–11% lower at 18–30 GHz.
+26. **Levels of evidence.** Software tests, numerical verification against reference implementations, validation against
+    independent data, evaluation on labelled real telemetry and validation in live networks are different things; this study
+    reaches the first two only (partially). See [CORRECTIONS.md](../CORRECTIONS.md).

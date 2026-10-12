@@ -668,13 +668,16 @@ network operations will ask.</p>
 </ol>
 <h2>Physics</h2>
 <ol start="4">
-<li><strong>ITU-R P.838-3 coefficients are transcribed, not verified.</strong> They must be
-   re-checked against the official publication before appearing in a paper.
-   (rain-attenuation model)</li>
+<li><strong>The published results did not use ITU-R P.838-3 coefficients.</strong> They used a table equal to the
+   superseded P.838-0/-1 values for f &ge; 12 GHz and with 10&times; decimal errors at 6&ndash;10 GHz (no scenario in this
+   study operates there). The engine now implements the P.838-3 analytic fit. Specific attenuation at the study's
+   frequencies changes by &minus;6.2% / &minus;4.0% / +2.1% (18 / 20 / 30 GHz), per-scenario median windows by at most 1
+   minute, and the derived microwave hop length from 18.32 km to 16.21 km; headline results are otherwise unchanged. The
+   files in <code>data/</code> correspond to the old table. See <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.</li>
 <li><strong>Design-rule vs instantaneous attenuation are different quantities.</strong> The
    P.530-18 effective path length is a long-term statistical design rule. Using
    the same reduction on an instantaneous wet path is a modelling
-   simplification, labelled in the source.</li>
+   simplification, labelled in the source. The model uses the P.530-18 form; P.530-19 (2025-09) supersedes it and has not been checked.</li>
 <li><strong>LEO slant-path rain omits ITU-R P.618 reduction factors</strong> and therefore
    over-estimates fade at low elevation.</li>
 <li><strong>Orbits are circular, Earth is spherical, no J2, no Earth rotation</strong> in
@@ -749,7 +752,8 @@ network operations will ask.</p>
   samples, during an active, symmetric rain event. ATPC's independent
   per-direction compensation noise occasionally produces a directional
   signature by chance; the asymmetry barely clears the floor in both
-  cases (0.7-0.75 dB above it).</li>
+  cases (0.7-0.75 dB above it).<br>
+  <strong>Update (2026-10).</strong> After the rain-coefficient correction these two seeds no longer fire; <code>mw_rain_cell</code> seed 10 does, with a ~5 dB asymmetry during active rain. Tracing it shows differential ATPC saturation, not a chance crossing just above the floor; the explanation above describes two seeds, not the mechanism. See <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.</li>
 <li><code>leo_low_elevation</code> seed 1 fired the GATEWAY_SIDE hypothesis at HIGH
   confidence: co-located terminals sharing a gateway happened to
   co-degrade from orbital geometry alone (all terminals on a gateway see
@@ -776,6 +780,10 @@ seeds is exactly the overfitting this rewrite exists to avoid.</p>
     no beam-shape roll-off, no traffic-dependent congestion in the LEO domain.</li>
 <li><strong>Blast radius is element-local.</strong> The microwave model computes downstream
     isolation; the LEO model does not model beam-sharing contention.</li>
+<li><strong>The decision layer's LEO geometry model has zero error by construction</strong> in the published runs; published LEO results are &ldquo;with a perfect geometry model&rdquo;.</li>
+<li><strong>The published version had no handling for missing, stale or invalid telemetry</strong>, and gave a satellite first seen after warm-up an empty baseline. Both are corrected in the engine; the published results predate the corrections.</li>
+<li><strong>LEO capacity attributable to the region is a bound</strong>: 43.3 Mbps assumes uniform sharing over the footprint; up to 3,000 Mbps if the 2 required beams are steered at the region.</li>
+<li><strong>Rain attenuation uses horizontal polarisation at zero elevation everywhere</strong>, including LEO (circular polarisation at 40&deg; is 5&ndash;11% lower at 18&ndash;30 GHz).</li>
 </ol>
 </section>
 
