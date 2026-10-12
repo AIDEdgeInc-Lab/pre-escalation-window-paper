@@ -71,29 +71,69 @@ ORIGINAL_WINDOW_NOTE = (" Window = ORIGINAL definition: the layer's clock starts
                         "(see CORRECTIONS.md).")
 
 
-def _footer(fig, text: str, original_window: bool = False) -> None:
+def _footer(fig, text: str, original_window: bool = False, wrap: bool = False) -> int:
     if DATA_LABEL != "data":
         text = text.replace("data/", DATA_LABEL + "/")
     if CORRECTED:
         text = "CORRECTED ENGINE (see CORRECTIONS.md). " + text + (ORIGINAL_WINDOW_NOTE if original_window else "")
+    if CORRECTED and wrap:                            # the longer corrected-set footer must not run off the canvas
+        import textwrap
+        text = textwrap.fill(text, width=int(fig.get_figwidth() * 15))
     fig.text(0.01, 0.01, text, fontsize=7.5, color=PALETTE["footer"], ha="left")
+    return text.count("\n") + 1
+
+
+def _self_clearing_scenarios(df: pd.DataFrame) -> set:
+    if "gt_self_clearing" not in df.columns:
+        return set()
+    g = df.groupby("scenario")["gt_self_clearing"].apply(lambda x: bool(x.astype(bool).all()))
+    return set(g.index[g])
 
 
 def fig_pre_escalation_window(df: pd.DataFrame, out: Path, col: str = "lead_gain_min") -> Optional[Path]:
     like_for_like = col == "escalation_window_min"
-    d = df[df[col].notna()]
-    if d.empty:
+    if df[col].notna().sum() == 0:
         return None
-    scenarios = sorted(d["scenario"].unique())
-    data = [d[d["scenario"] == s][col].values for s in scenarios]
-    fig, ax = plt.subplots(figsize=(11, 0.55 * len(scenarios) + 2.6))
-    bp = _boxplot(ax, data, scenarios, horizontal=True, patch_artist=True, widths=0.6)
-    for patch, s in zip(bp["boxes"], scenarios):
+    if CORRECTED:
+        # Corrected set: ALL scenarios appear. Self-clearing scenarios have no lead by construction (the layer
+        # should not escalate); they are drawn as labelled rows, never as boxes, so a false escalation or a
+        # counted WAIT cannot read as a lead time. Every box carries its sample size (resolved runs / runs).
+        scen_all = sorted(df["scenario"].unique())
+        selfc = _self_clearing_scenarios(df)
+        plotted = [s for s in scen_all if s not in selfc and df[df["scenario"] == s][col].notna().any()]
+    else:
+        d0 = df[df[col].notna()]
+        scen_all = plotted = sorted(d0["scenario"].unique())
+        selfc = set()
+    data = [df[df["scenario"] == s][col].dropna().values for s in plotted]
+    fig, ax = plt.subplots(figsize=(11, 0.55 * len(scen_all) + 2.6))
+    pos = [scen_all.index(s) + 1 for s in plotted]
+    bp = _boxplot(ax, data, plotted, horizontal=True, patch_artist=True, widths=0.6, positions=pos)
+    for patch, s in zip(bp["boxes"], plotted):
         patch.set_facecolor(PALETTE["decision"] if s.startswith("leo") else PALETTE["accent"])
         patch.set_alpha(0.65)
     for med in bp["medians"]:
         med.set_color(PALETTE["median"])
     ax.axvline(0, color=PALETTE["bad"], linewidth=1, linestyle=":")
+    if CORRECTED:
+        ax.set_yticks(range(1, len(scen_all) + 1))
+        ax.set_yticklabels(scen_all)
+        ax.set_ylim(0.4, len(scen_all) + 0.6)
+        x0, x1 = ax.get_xlim()
+        ax.set_xlim(x0, x1 + 0.10 * (x1 - x0))        # reserve a right-hand column for the sample-size labels
+        edge = ax.get_yaxis_transform()
+        for i, s in enumerate(scen_all, start=1):
+            sub = df[df["scenario"] == s]
+            if s in selfc:
+                k = int(sub[col].notna().sum())
+                why = "layer escalated falsely, not a lead" if like_for_like else "window counts a WAIT, not an escalation"
+                extra = (f"  ({k} of {len(sub)} runs: {why})" if k else "")
+                note = "self-clearing: not applicable (no lead is possible)" + extra
+                ax.text(0.015, i, note, transform=edge, va="center", ha="left", fontsize=8.5,
+                        color=PALETTE["footer"], style="italic")
+            else:
+                ax.text(0.995, i, f"n={int(sub[col].notna().sum())}/{len(sub)}", transform=edge, va="center",
+                        ha="right", fontsize=8.5, color=PALETTE["footer"])
     if like_for_like:
         ax.set_xlabel("like-for-like window (min)  =  conventional escalation - decision-layer ESCALATE/ACT")
         head = "Like-for-like pre-escalation window by scenario"
@@ -101,12 +141,18 @@ def fig_pre_escalation_window(df: pd.DataFrame, out: Path, col: str = "lead_gain
         ax.set_xlabel("pre-escalation window (min)  =  conventional escalation - decision-layer actionable")
         head = "Pre-escalation window by scenario" + (" (ORIGINAL definition)" if CORRECTED else "")
     _style(ax)
-    ax.set_title(f"{head} (n={d.groupby('scenario').size().min()}"
-                 f"-{d.groupby('scenario').size().max()} seeds each)", fontsize=12, loc="left")
-    _footer(fig, "Box = IQR, line = median, whiskers = 1.5 IQR. Values below zero mean the "
-                 "conventional baseline escalated FIRST. Regenerated from data/runs.csv by replot.py.",
-            original_window=CORRECTED and not like_for_like)
-    fig.tight_layout()
+    if CORRECTED:
+        ax.set_title(f"{head} (n = runs with a resolved window / runs)", fontsize=12, loc="left")
+    else:
+        sz = df[df[col].notna()].groupby("scenario").size()
+        ax.set_title(f"{head} (n={sz.min()}-{sz.max()} seeds each)", fontsize=12, loc="left")
+    n_lines = _footer(fig, "Box = IQR, line = median, whiskers = 1.5 IQR. Values below zero mean the "
+                           "conventional baseline escalated FIRST. Regenerated from data/runs.csv by replot.py.",
+                      original_window=CORRECTED and not like_for_like, wrap=True)
+    if CORRECTED:
+        fig.tight_layout(rect=[0, 0.025 + 0.022 * n_lines, 1, 1])
+    else:
+        fig.tight_layout()
     fig.savefig(out, dpi=200)
     plt.close(fig)
     return out
@@ -132,7 +178,8 @@ def fig_cross_domain(df: pd.DataFrame, out: Path) -> Optional[Path]:
         if not vals:
             ax.axis("off")
             continue
-        bp = _boxplot(ax, vals, labels, patch_artist=True, widths=0.5)
+        tick_labels = [f"{lab}\nn={v.size}" for lab, v in zip(labels, vals)] if CORRECTED else labels
+        bp = _boxplot(ax, vals, tick_labels, patch_artist=True, widths=0.5)
         for patch, lab in zip(bp["boxes"], labels):
             patch.set_facecolor(PALETTE["decision"] if lab == "leo_ntn" else PALETTE["accent"])
             patch.set_alpha(0.65)
@@ -166,6 +213,13 @@ def fig_escalation_quality(df: pd.DataFrame, out: Path) -> Optional[Path]:
                color=PALETTE["conventional"])
         ax.bar(x + w / 2, np.nan_to_num(lay), w, label="Velorona decision layer",
                color=PALETTE["decision"])
+        if CORRECTED:
+            # an undefined metric (no persistent fault / no escalation) is NOT zero: mark it explicitly
+            for xi, c, l in zip(x, conv, lay):
+                for off, v in ((-w / 2, c), (w / 2, l)):
+                    if pd.isna(v):
+                        ax.text(xi + off, 0.02 * ax.get_ylim()[1] + 0.012, "n/a", ha="center", va="bottom",
+                                fontsize=7.5, color=PALETTE["footer"], style="italic")
         ax.set_ylabel(label, fontsize=9)
         _style(ax)
     axes[0].legend(frameon=False, fontsize=9)
@@ -173,8 +227,9 @@ def fig_escalation_quality(df: pd.DataFrame, out: Path) -> Optional[Path]:
     axes[1].set_xticklabels(scen, rotation=30, ha="right", fontsize=8)
     fig.suptitle("Escalation quality: is the escalation about a real, persistent fault?",
                  fontsize=12, x=0.01, ha="left")
-    _footer(fig, "Medians across seeds. NaN (no escalation by either arm) plotted as zero. "
-                 "Regenerated from data/runs.csv by replot.py.")
+    _footer(fig, ("Medians across seeds. n/a = metric undefined (no persistent fault, or no escalation by the arm); not zero. "
+                  if CORRECTED else "Medians across seeds. NaN (no escalation by either arm) plotted as zero. ")
+                + "Regenerated from data/runs.csv by replot.py.")
     fig.tight_layout(rect=[0, 0.02, 1, 0.95])
     fig.savefig(out, dpi=200)
     plt.close(fig)
