@@ -48,15 +48,28 @@ BODY = "#B3BFCA"       # table body / strong labels
 MUTED = "#AAB8C2"      # tick + axis labels
 FAINT = "#8794A0"      # footers, whiskers, de-emphasised marks
 
+# Colour roles (one rule for the whole article):
+#   brand blue  = LEO/NTN series, and the decision-layer arm where arms are compared
+#   gold        = microwave series (second series), and the highlighted "degenerate" comparator
+#   neutral     = conventional arm, pooled comparator configurations, reference lines
+# Colour separates series only; it never encodes better/worse. The two roles of gold sit in different figures
+# (domain figures vs comparator figures) and every caption says which is meant.
 DARK_PALETTE = {
-    "conventional": "#AAB8C2",
-    "decision": "#5F98D1",   # LEO/NTN series and the decision arm (Velorona accent)
-    "accent": "#7AAEE3",     # microwave series, "default" markers (Velorona secondary)
-    "warn": "#C6A15B",       # ticket (AID Edge gold)
-    "bad": "#C6A15B",        # zero-reference lines and the degenerate case
+    "conventional": "#AEBBC5",
+    "decision": "#68A9E0",   # brand blue
+    "accent": "#C6A15B",     # AID Edge gold: microwave series, timeline markers
+    "warn": "#C6A15B",       # ticket marker
+    "bad": "#E6EDF3",        # service-impact marker (neutral highlight; gold and blue already carry roles)
+    "zero": "#8794A0",       # zero-reference lines
+    "pooled": "#AEBBC5",     # pooled comparator configurations (no domain split)
+    "degenerate": "#C6A15B", # the degenerate comparator, highlighted
     "grid": "#1B252C",
-    "median": "#DCE4EB",
-    "footer": FAINT,
+    "median": "#E6EDF3",
+    "footer": "#A3B0BB",
+    "box_alpha": 0.85,
+    # fig 15: scenarios inside one panel share the panel's domain hue (blue family for LEO/NTN, gold family for microwave)
+    "scenario_cycle": {"leo_ntn": ["#68A9E0", "#9CC8EE", "#4B86BC", "#C9DDF0", "#8AA9C4"],
+                       "microwave": ["#C6A15B", "#DDBF85", "#9E7E3F", "#EBD9B0", "#B8A57F"]},
 }
 
 GEIST_FILES = ["Geist-Regular.ttf", "Geist-Medium.ttf", "Geist-SemiBold.ttf"]
@@ -128,6 +141,7 @@ def _wrap_footer(fig) -> float:
         return 0.0
     r = _renderer(fig)
     t.set_va("bottom")
+    t.set_fontsize(9)
     t.set_position((0.01, 0.008))
     W = fig.get_figwidth() * fig.dpi * 0.965
     w = t.get_window_extent(r).width

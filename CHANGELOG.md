@@ -1,5 +1,12 @@
 # Changelog
 
+## Blue-and-gold figure palette (presentation only; content version stays 1.1)
+
+- One colour rule for the article figures: brand blue `#68A9E0` = LEO/NTN series (and the decision-layer arm where arms are compared); gold `#C6A15B` = microwave series and the highlighted "degenerate" comparator; neutrals = conventional arm, pooled comparator configurations and reference lines. Colour separates series; it does not encode better or worse. Box fills are more opaque so gold reads as gold on the dark plate.
+- The severity chart uses a blue family in the LEO/NTN panel and a gold family in the microwave panel (lines also differ by style); the window chart gains a LEO/NTN vs microwave legend; in-figure footers are larger.
+- Captions: figure label (gold), title and description are separate levels.
+- Light-theme figure code reads the new palette keys with fallbacks, so the published-data figures are pixel-identical.
+
 ## Article reading refinements and version labels (2026-10-12; presentation only, content version stays 1.1)
 
 - `article/article.css`: a final block, using the same `html[data-brand]` selectors as the shared foundation (`ui-foundation.css`), so it wins over the foundation's marketing-copy text geometry: tighter heading leading and measures (section titles no longer wrap into stranded short lines), prose measure 62ch -> 70ch for technical text, the dashed notice box replaced by a hairline box with a gold rule, figure captions on a 78ch measure, more air in table rows, mobile heading sizes. No new colours; the foundation's left-anchored layout is kept.
