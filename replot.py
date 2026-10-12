@@ -63,16 +63,29 @@ def _boxplot(ax, data, tick_labels, horizontal=False, **kwargs):
         return ax.boxplot(data, labels=tick_labels, **kwargs)
 
 
-def _footer(fig, text: str) -> None:
+# Set by main(): which data directory is being plotted, and whether it is the corrected-engine set
+# (detected by the presence of the like-for-like window column).
+DATA_LABEL = "data"
+CORRECTED = False
+ORIGINAL_WINDOW_NOTE = (" Window = ORIGINAL definition: the layer's clock starts at its first WAIT, ESCALATE or ACT output "
+                        "(see CORRECTIONS.md).")
+
+
+def _footer(fig, text: str, original_window: bool = False) -> None:
+    if DATA_LABEL != "data":
+        text = text.replace("data/", DATA_LABEL + "/")
+    if CORRECTED:
+        text = "CORRECTED ENGINE (see CORRECTIONS.md). " + text + (ORIGINAL_WINDOW_NOTE if original_window else "")
     fig.text(0.01, 0.01, text, fontsize=7.5, color=PALETTE["footer"], ha="left")
 
 
-def fig_pre_escalation_window(df: pd.DataFrame, out: Path) -> Optional[Path]:
-    d = df[df["lead_gain_min"].notna()]
+def fig_pre_escalation_window(df: pd.DataFrame, out: Path, col: str = "lead_gain_min") -> Optional[Path]:
+    like_for_like = col == "escalation_window_min"
+    d = df[df[col].notna()]
     if d.empty:
         return None
     scenarios = sorted(d["scenario"].unique())
-    data = [d[d["scenario"] == s]["lead_gain_min"].values for s in scenarios]
+    data = [d[d["scenario"] == s][col].values for s in scenarios]
     fig, ax = plt.subplots(figsize=(11, 0.55 * len(scenarios) + 2.6))
     bp = _boxplot(ax, data, scenarios, horizontal=True, patch_artist=True, widths=0.6)
     for patch, s in zip(bp["boxes"], scenarios):
@@ -81,12 +94,18 @@ def fig_pre_escalation_window(df: pd.DataFrame, out: Path) -> Optional[Path]:
     for med in bp["medians"]:
         med.set_color(PALETTE["median"])
     ax.axvline(0, color=PALETTE["bad"], linewidth=1, linestyle=":")
-    ax.set_xlabel("pre-escalation window (min)  =  conventional escalation - decision-layer actionable")
+    if like_for_like:
+        ax.set_xlabel("like-for-like window (min)  =  conventional escalation - decision-layer ESCALATE/ACT")
+        head = "Like-for-like pre-escalation window by scenario"
+    else:
+        ax.set_xlabel("pre-escalation window (min)  =  conventional escalation - decision-layer actionable")
+        head = "Pre-escalation window by scenario" + (" (ORIGINAL definition)" if CORRECTED else "")
     _style(ax)
-    ax.set_title(f"Pre-escalation window by scenario (n={d.groupby('scenario').size().min()}"
+    ax.set_title(f"{head} (n={d.groupby('scenario').size().min()}"
                  f"-{d.groupby('scenario').size().max()} seeds each)", fontsize=12, loc="left")
     _footer(fig, "Box = IQR, line = median, whiskers = 1.5 IQR. Values below zero mean the "
-                 "conventional baseline escalated FIRST. Regenerated from data/runs.csv by replot.py.")
+                 "conventional baseline escalated FIRST. Regenerated from data/runs.csv by replot.py.",
+            original_window=CORRECTED and not like_for_like)
     fig.tight_layout()
     fig.savefig(out, dpi=200)
     plt.close(fig)
@@ -98,7 +117,8 @@ def fig_cross_domain(df: pd.DataFrame, out: Path) -> Optional[Path]:
         return None
     fig, axes = plt.subplots(1, 3, figsize=(13, 4))
     metrics = [
-        ("lead_gain_min", "pre-escalation window (min)"),
+        (("escalation_window_min", "like-for-like pre-escalation window (min)") if CORRECTED
+         else ("lead_gain_min", "pre-escalation window (min)")),
         ("time_to_correct_diagnosis_min", "time to correct diagnosis (min)"),
         ("n_ambiguous_decisions", "ambiguous decisions per run"),
     ]
@@ -222,6 +242,7 @@ def fig_timeline(row: pd.Series, out: Path) -> Optional[Path]:
         ("fault onset", row.get("t_fault_onset"), PALETTE["grid"]),
         ("first detectable", row.get("t_first_detectable"), PALETTE["accent"]),
         ("decision layer actionable", row.get("t_decision_layer_actionable"), PALETTE["decision"]),
+        ("decision layer ESCALATE/ACT", row.get("t_decision_layer_escalation"), PALETTE["accent"]),
         ("conventional escalation", row.get("t_conventional_escalation"), PALETTE["conventional"]),
         ("ticket exists", row.get("t_ticket"), PALETTE["warn"]),
         ("service impact", row.get("t_service_impact"), PALETTE["bad"]),
@@ -251,8 +272,11 @@ def fig_timeline(row: pd.Series, out: Path) -> Optional[Path]:
     ax.spines["right"].set_visible(False)
     ax.spines["left"].set_visible(False)
     title = f"{row['domain']} / {row['scenario']} (seed {row['seed']})"
+    lfl = row.get("escalation_window_min")
     if pre == pre:
         title += f" - pre-escalation window {pre:.0f} min"
+        if CORRECTED:
+            title += " (original definition)" + (f", like-for-like {lfl:.0f} min" if lfl == lfl else ", like-for-like n/a")
     ax.set_title(title, fontsize=12, loc="left")
     _footer(fig, "Single run from data/runs.csv. Simulated network; see docs for stated "
                  "assumptions and limitations. Regenerated by replot.py.")
@@ -293,7 +317,7 @@ def fig_severity_sensitivity(df: pd.DataFrame, out: Path) -> Optional[Path]:
                  fontsize=13, x=0.01, ha="left")
     _footer(fig, "15 seeds per point. leo_low_elevation excluded (declared severity is 0 -- pure "
                  "orbital geometry, no severity to scale). Regenerated from "
-                 "data/sensitivity_severity.csv by replot.py.")
+                 "data/sensitivity_severity.csv by replot.py.", original_window=True)
     fig.tight_layout(rect=[0, 0.03, 1, 0.93])
     fig.savefig(out, dpi=200)
     plt.close(fig)
@@ -332,7 +356,7 @@ def fig_comparator_sensitivity(df: pd.DataFrame, out: Path) -> Optional[Path]:
                  "perfect, instantaneous, unsmoothed threshold monitor. Window shown WITHOUT its "
                  "paired error rates for space -- see fig10 and README for the FPR/unnecessary-"
                  "dispatch pairing this study requires. Regenerated from "
-                 "data/sensitivity_comparator.csv by replot.py.")
+                 "data/sensitivity_comparator.csv by replot.py.", original_window=True)
     fig.tight_layout(rect=[0, 0.03, 1, 0.93])
     fig.savefig(out, dpi=200)
     plt.close(fig)
@@ -438,7 +462,7 @@ def fig_latency_precision_tradeoff(df: pd.DataFrame, out: Path) -> Optional[Path
                  "error rates are invariant to comparator tuning -- plotted against its OWN "
                  "escalation FPR, its points cluster near a single x-value while spanning the SAME "
                  "window values as the conventional curve. It does not lie on the conventional "
-                 "trade-off curve. Regenerated from data/sensitivity_comparator.csv by replot.py.")
+                 "trade-off curve. Regenerated from data/sensitivity_comparator.csv by replot.py.", original_window=True)
     fig.tight_layout(rect=[0, 0.05, 1, 0.92])
     fig.savefig(out, dpi=200)
     plt.close(fig)
@@ -465,7 +489,10 @@ def main(argv: Optional[List[str]] = None) -> int:
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    global DATA_LABEL, CORRECTED
+    DATA_LABEL = str(data_dir).rstrip("/")
     df = pd.read_csv(data_dir / "runs.csv")
+    CORRECTED = "escalation_window_min" in df.columns
     coverage = pd.read_csv(data_dir / "coverage_comparison.csv")
 
     made: List[Path] = []
@@ -475,6 +502,19 @@ def main(argv: Optional[List[str]] = None) -> int:
         (fig_escalation_quality, "fig03_escalation_quality.png", df),
         (fig_economic_exposure, "fig04_economic_exposure.png", df),
     ]:
+        if CORRECTED and fn is fig_economic_exposure:
+            # the illustrative exposure model credits the layer with the ORIGINAL lead (a WAIT counts), so it
+            # overstates avoided exposure where the layer only waited; not drawn for the corrected set
+            print("skipped fig04_economic_exposure.png: exposure model uses the original lead definition (see CORRECTIONS.md)")
+            continue
+        if CORRECTED and fn is fig_pre_escalation_window:
+            r = fn(arg, out_dir / name, col="escalation_window_min")          # like-for-like is the primary figure
+            if r:
+                made.append(r)
+            r = fn(arg, out_dir / "fig01b_pre_escalation_window_original_definition.png")
+            if r:
+                made.append(r)
+            continue
         r = fn(arg, out_dir / name)
         if r:
             made.append(r)

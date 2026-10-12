@@ -27,7 +27,7 @@ OBSERVE -> DETECT -> CORRELATE -> DIAGNOSE -> ESTIMATE DECISION RISK
 - **WAIT / ESCALATE / RECOMMEND ACTION** — the decision gate: a list of
   *named* checks, each with a pass/fail and a human-readable reason.
 - **VERIFY** — did the recommendation hold up against what actually
-  happened?
+  happened? *(Correction, 2026-10: in the version that produced the published results this stage did not reliably resolve — the recorded flag was set from the recommendation's own prediction rather than from later evidence. The corrected engine judges it on post-deadline evidence; see CORRECTIONS.md.)*
 
 The decision layer is read-only by construction: `RECOMMEND_ACTION` is a
 recommendation carried to a human with its own audit trail, never an

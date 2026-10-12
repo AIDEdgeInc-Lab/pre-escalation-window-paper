@@ -1,9 +1,19 @@
 # Corrections and evidence levels
 
-*Prepared 2026-10-12 for review. This file records problems found in the published
-study after release. **The paper, the figures and the files in `data/` have not been
-regenerated**; they still show the original numbers. Where a number changes, this
-file says so.*
+*Updated 2026-10-12. This file records problems found in the published study after
+release. **The files in `data/` and `figures/` are kept exactly as published** (previous model
+version) and are labelled as such; the corrected-engine results are in `data/corrected/`,
+`figures/corrected/` and the first two sections of the README. The paper's figures
+(`article/figures/`) and the interactive demo are produced by tooling that is not in this
+repository and still show the previous model version (they carry a notice).*
+
+## Where to find what
+
+| Artefact | Model version | Status |
+|---|---|---|
+| `data/*.csv`, `figures/*.png`, README "as published" sections | previous | unchanged, labelled "previous model version" |
+| `data/corrected/`, `figures/corrected/`, README "corrected engine" sections | corrected | new; regenerated from the same seeds and scenarios, with `PROVENANCE.json` |
+| `article/`, `method/`, `summary/`, `index.html`, `demo/` | previous numbers | corrections notice at the top; text claims amended |
 
 ## 1. The rain model did not use ITU-R P.838-3 coefficients
 
@@ -16,7 +26,7 @@ revision of P.838 shows what the transcribed table actually was:
 - for 6–10 GHz it additionally had **decimal-place errors** (values ~10x too small
   even for those older revisions). No scenario in this study operates at 6–10 GHz.
 
-The simulation engine now implements the P.838-3 analytic fit. At the study's
+The simulation engine now implements the P.838-3 analytic fit. Its constants come from the `itur` package, so that package is not an independent check of them; seven rows of ITU Table 5 (6, 8, 12, 15, 20, 30 and 40 GHz, all four columns) and kH at 10 GHz were compared with excerpts of the ITU document and agree to within 1.05×10⁻⁴ relative (rounding of the 4-figure table). Other frequencies, and everything above 40 GHz, were not checked; this study uses 18, 20 and 30 GHz. At the study's
 frequencies (R = 42 mm/h, horizontal polarisation) specific attenuation changes by
 −6.2% (18 GHz), −4.0% (20 GHz) and +2.1% (30 GHz).
 
@@ -43,7 +53,7 @@ warm-up variants −146 / −34 / −154 min, conventional unnecessary dispatch 
 all identical to the published values, so the H1 (REVISED) conclusion is reproduced. In the severity sweep, the 55 of
 60 (scenario × severity) cells in which the conventional arm escalated in at least 10 of 15 seeds in both runs
 shift by at most 5 minutes; in the remaining low-severity cells the window rests on 3–9 seeds and moves by up to
-150 minutes, so those cells should not be quoted.
+152 minutes, so those cells should not be quoted.
 
 ## 2. The "pre-escalation window" compares different events
 
@@ -102,6 +112,7 @@ change materially (3/90 → 2/90).
   is the simulator's own clear-sky model, so it has zero model error by construction.
   Sensitivity to a wrong model has since been measured in simulation (not published
   here); the published LEO results should be read as "with a perfect geometry model".
+- **VERIFY.** In the published version the VERIFY stage did not reliably resolve: the recorded flag was set from the recommendation's own prediction on the first undetected sample after a deadline that moved with every new recommendation, and a persisting finding was never judged. The corrected engine judges a prediction on evidence after its deadline (confirmed, refuted, or unresolved when there is no valid evidence). `verified` means "the layer's prediction matched later telemetry", not field ground truth.
 - **Missing or stale data.** The version that produced the published results had no
   handling for missing, stale or invalid telemetry: a feed that went silent was
   reported as "no deviation". A data-quality gate now exists in the engine; the
