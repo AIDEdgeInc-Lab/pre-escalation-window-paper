@@ -105,7 +105,7 @@
 **Not published:**
 - The interactive demo's TypeScript source, page templates and build tooling (including the generator for `method/`).
 - The simulation engine: the network models, the physics implementation, the conventional-monitoring model, and the decision layer's feature extraction, rule engine and hypothesis cards.
-- The decision layer's threshold constants, condition predicates and hypothesis-card content, with the exception of a few values stated in the documentation because the results cannot be interpreted without them (3-sigma control limits, the 120-minute warm-up, and the 3.0 dB / 5-sample figures in the residual analysis in `docs/LIMITATIONS.md`).
+- The decision layer's threshold constants, condition predicates and hypothesis-card content, with the exception of a few values stated in the documentation because the results cannot be interpreted without them (3-sigma control limits, the 120-minute warm-up, the 3.0 dB / 5-sample figures in the residual analysis in `docs/LIMITATIONS.md`, and the 20-sample minimum baseline mentioned in `CORRECTIONS.md`).
 - Any internal architecture or planning document.
 
 ## License
