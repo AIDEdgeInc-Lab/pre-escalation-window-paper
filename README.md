@@ -86,6 +86,10 @@
 - `leo_low_elevation` is the only scenario in which the conventional arm never escalates, in any of the 30 seeds — its pre-escalation window is undefined for every seed as a result. The decision layer nonetheless escalated unnecessarily in 1 of 30 seeds, part of the residual above.
 <!-- FINDINGS:END -->
 
+## Versions
+
+Current: **1.1** (corrected-engine results, 2026-10-12). Earlier versions are preserved, unchanged, under [`versions/`](versions/) and linked from the homepage (`versions/1.0/`, `versions/0.1.0/`). They show the previous model version and are historical records, not current results. To add a release: append it to `VERSIONS` in [`build_version_archive.py`](build_version_archive.py), run it, and commit the new snapshot.
+
 ## Live demo
 
 [researchlab.aidedgeinc.com](https://researchlab.aidedgeinc.com/) — landing page, [full article](https://researchlab.aidedgeinc.com/article/), [interactive demo](https://researchlab.aidedgeinc.com/demo/), and [method](https://researchlab.aidedgeinc.com/method/).

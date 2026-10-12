@@ -1,5 +1,12 @@
 # Changelog
 
+## Version archive (2026-10-12, not a research-content release; content version stays 1.1)
+
+- Homepage "Research versions": current version first, earlier versions as compact entries that open preserved copies under `versions/<id>/`.
+- `versions/1.0/` = site at commit `9f4f42d` (2026-10-08, last state before the corrections); `versions/0.1.0/` = site at commit `036498b` (first commit with the article, method and demo pages; initial artifact commit `c9f4517`, 2026-08-18). Built by `build_version_archive.py` from `git archive`; the only changes are an archived-version notice, `noindex`, removal of canonical/og:url metadata, and root-absolute links re-pointed inside the snapshot. Figures, numbers and claims are untouched.
+- Identity caveat: the 2026-10-07 commit `1e28176` recorded 0.1.0 as the only tagged release; "1.0" is the content label the article carried from the 2026-09-25 restructure (whose changelog entry below says "unreleased"). The homepage says so.
+- A deployment identifier is not a research version: redeploying does not change the version.
+
 ## 1.1 — corrected-engine revision (2026-10-12)
 
 - Corrected-engine data (`data/corrected/`), figures (`figures/corrected/`, `article/figures/corrected/`) and the per-scenario like-for-like table published beside the previous-model set. Banners on article, summary, method; a Corrected-results section in the article. Engine commit `58ce16a` (private).

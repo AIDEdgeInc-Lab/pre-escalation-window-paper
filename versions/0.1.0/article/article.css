@@ -1,0 +1,150 @@
+/* Long-form research paper page. Uses the same vendored tokens as the instrument and the
+ * method page (../tokens.css) — no new colours, no new spacing values. Prose column is
+ * narrow for readability; figures and wide tables break out of it. */
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: var(--plane-0);
+  color: var(--text-1);
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.68;
+}
+
+.paper-shell { max-width: 1060px; margin: 0 auto; padding: 32px 24px 128px; }
+.paper-col { max-width: 720px; }
+
+/* ---------- nav + header ---------- */
+.paper-nav { display: flex; gap: 24px; margin-bottom: 48px; }
+.paper-nav a { color: var(--color-noc-decision); font-size: 0.9rem; text-decoration: none; }
+.paper-nav a:hover { text-decoration: underline; }
+
+.paper-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-2); margin: 0 0 8px; }
+.paper-header h1 { font-size: 2.1rem; font-weight: 650; color: var(--text-0); margin: 0 0 12px; line-height: 1.25; text-wrap: balance; max-width: 20ch; }
+.paper-header h2 { font-size: 1.15rem; font-weight: 500; color: var(--text-1); margin: 0 0 16px; max-width: 46ch; }
+.paper-header .paper-lede { font-size: 1rem; color: var(--text-1); max-width: 62ch; }
+.paper-header .paper-meta { font-size: 0.82rem; color: var(--text-2); margin-top: 16px; }
+
+.doc-banner {
+  font-size: 0.88rem; color: var(--text-1);
+  background: var(--color-noc-modelled-soft);
+  border: 1px dashed var(--color-noc-modelled-outline);
+  border-radius: 8px; padding: 16px; line-height: 1.55; max-width: 720px;
+}
+.doc-banner strong { color: var(--text-0); }
+
+/* ---------- table of contents ---------- */
+.paper-toc {
+  margin: 48px 0; padding: 24px;
+  border: 1px solid var(--border-default); border-radius: 8px;
+  background: var(--surface-1);
+}
+.paper-toc p { margin: 0 0 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-2); }
+.paper-toc ol { margin: 0; padding-left: 0; list-style: none; columns: 2; column-gap: 32px; }
+.paper-toc li { margin-bottom: 8px; font-size: 0.88rem; break-inside: avoid; }
+.paper-toc a { color: var(--color-noc-decision); text-decoration: none; }
+.paper-toc a:hover { text-decoration: underline; }
+
+/* ---------- body ---------- */
+.paper-body h1 {
+  font-size: 1.45rem; color: var(--text-0); font-weight: 650;
+  margin: 96px 0 24px; padding-top: 24px;
+  border-top: 1px solid var(--border-default);
+  text-wrap: balance;
+}
+.paper-body h2 { font-size: 1.12rem; color: var(--text-0); font-weight: 650; margin: 48px 0 16px; text-wrap: balance; }
+.paper-body h3 { font-size: 1rem; color: var(--text-0); font-weight: 600; margin: 32px 0 12px; }
+.paper-body p, .paper-body ul, .paper-body ol { max-width: 720px; }
+.paper-body li { margin-bottom: 8px; }
+.paper-body strong { color: var(--text-0); font-weight: 600; }
+.paper-body a { color: var(--color-noc-decision); }
+.paper-body hr { border: none; border-top: 1px solid var(--border-recessed); margin: 64px 0 0; }
+
+.paper-body code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.86em; background: var(--surface-2);
+  padding: 1px 5px; border-radius: 3px; color: var(--text-0);
+  overflow-wrap: anywhere;
+}
+.paper-body pre {
+  background: var(--surface-1); border: 1px solid var(--border-default);
+  border-radius: 8px; padding: 16px 24px; overflow-x: auto;
+  font-size: 0.84rem; line-height: 1.55; max-width: 1000px;
+}
+.paper-body pre code { background: none; padding: 0; color: var(--text-1); }
+
+.paper-body blockquote {
+  border-left: 2px solid var(--cyan-500);
+  margin: 24px 0; padding: 8px 0 8px 24px;
+  color: var(--text-0); font-size: 1.02rem; max-width: 680px;
+}
+.paper-body blockquote p { margin: 8px 0; }
+.paper-body blockquote strong { color: var(--cyan-300); }
+
+/* ---------- tables ---------- */
+.paper-body table {
+  border-collapse: collapse; font-size: 0.85rem; margin: 24px 0;
+  display: block; overflow-x: auto; max-width: 1000px;
+}
+.paper-body th, .paper-body td {
+  text-align: left; padding: 8px 16px 8px 0;
+  border-bottom: 1px solid var(--border-recessed);
+  vertical-align: top;
+}
+.paper-body td { min-width: 0; }
+.paper-body thead th {
+  color: var(--text-2); font-weight: 600; font-size: 0.76rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border-default); white-space: nowrap;
+}
+.paper-body tbody tr:hover { background: rgba(255, 255, 255, 0.015); }
+
+/* ---------- figures ---------- */
+figure.fig { margin: 48px 0; max-width: 1000px; }
+figure.fig img {
+  width: 100%; height: auto; display: block;
+  background: var(--plane-1);
+  border: 1px solid var(--border-default); border-radius: 8px;
+}
+figure.fig figcaption {
+  margin-top: 12px; font-size: 0.82rem; line-height: 1.55;
+  color: var(--text-2); max-width: 860px;
+}
+figure.fig figcaption strong { color: var(--text-1); }
+.fig-num {
+  display: inline-block; font-weight: 700; color: var(--cyan-400);
+  letter-spacing: 0.04em; margin-right: 8px; font-size: 0.78rem; text-transform: uppercase;
+}
+.fig-tag {
+  display: inline-block; margin-left: 8px; padding: 1px 8px;
+  border: 1px dashed var(--color-noc-modelled-outline); border-radius: 4px;
+  font-size: 0.68rem; letter-spacing: 0.1em; color: var(--text-2); white-space: nowrap;
+}
+.fig-tag-concept { border-style: solid; border-color: var(--border-default); }
+.fig-tag-illustrative { border-color: rgba(242, 168, 60, 0.5); color: var(--amber-300); }
+
+/* ---------- callouts ---------- */
+.callout {
+  border: 1px solid var(--border-default); border-left: 2px solid var(--amber-400);
+  border-radius: 8px; background: var(--surface-1);
+  padding: 16px 24px; font-size: 0.9rem; color: var(--text-1); max-width: 720px;
+}
+.callout strong { color: var(--amber-300); }
+
+.doc-footer {
+  margin-top: 96px; padding-top: 24px;
+  border-top: 1px solid var(--border-default);
+  color: var(--text-2); font-size: 0.8rem; line-height: 1.7;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 720px) {
+  .paper-shell { padding: 24px 16px 96px; }
+  .paper-header h1 { font-size: 1.6rem; }
+  .paper-toc ol { columns: 1; }
+  .paper-body h1 { margin-top: 64px; }
+}
+
+:focus-visible { outline: 2px solid var(--color-noc-decision); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }

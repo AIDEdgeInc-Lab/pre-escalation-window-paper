@@ -95,6 +95,15 @@
   .updates p:last-child{margin:0}
   .updates a{color:var(--cyan-deep)}
   .updates .tbd{color:var(--gold-light)}
+  .updates .current{border:1px solid var(--gold-line); background:var(--panel); border-radius:10px; padding:16px 20px; font-size:var(--ui-fs-small); margin:0 0 18px}
+  .updates .primary{font-weight:600}
+  .updates .prev-h{font-size:var(--ui-fs-body); font-weight:600; margin:0 0 8px; color:var(--text)}
+  .updates .prev-note{color:var(--muted); font-weight:400; font-size:var(--ui-fs-small); margin-left:8px}
+  .updates ul.prev{list-style:none; padding:0; margin:0; display:grid; gap:8px}
+  .updates ul.prev li{display:flex; gap:12px; align-items:flex-start; border:1px solid var(--border); background:transparent; padding:10px 14px}
+  .updates .chip{flex:none; display:inline-flex; flex-direction:column; align-items:center; min-width:64px; padding:4px 10px; border:1px solid var(--border); border-radius:999px; text-decoration:none; color:var(--text); line-height:1.25}
+  .updates .chip span{color:var(--muted); font-size:var(--ui-fs-label)}
+  .updates .chip:hover,.updates .chip:focus-visible{border-color:var(--cyan-deep)}
   .new{display:inline-block; margin-left:8px; padding:0 7px; border:1px solid var(--gold-line); border-radius:999px; background:var(--gold-soft); color:var(--gold-light); font-size:var(--ui-fs-label); font-weight:500; letter-spacing:.08em; line-height:18px; vertical-align:1px}
   footer{border-top:1px solid var(--border); padding-top:24px; color:var(--muted); font-size:var(--ui-fs-small)}
   footer a{color:var(--cyan-deep)}
@@ -122,7 +131,7 @@
   <div class="wrap">
     <p class="eyebrow">AID Edge Inc. — Published Research</p>
     <h1>The Pre-Escalation Window</h1>
-    <p class="callout" role="note"><strong>Corrections (2026-10).</strong> The numbers on this site come from the previous model version: a superseded rain-coefficient table, and a &ldquo;pre-escalation window&rdquo; whose layer-side clock starts at its first WAIT. Effect and corrected-engine results: <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.</p>
+    <p class="callout" role="note"><strong>Corrections (2026-10).</strong> Version 1.1 reports corrected-engine results (a rain-coefficient table that was not P.838-3, and a &ldquo;pre-escalation window&rdquo; whose layer-side clock started at its first WAIT): see <a href="/article/#corrected-results">Corrected results</a> in the article. The body of the article, summary and method pages, the demo, and Figures 14 and 16 still show the previous model version and say so. Details: <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">CORRECTIONS.md</a>.</p>
     <p class="lede">A comparative decision-intelligence study of terrestrial microwave backhaul and LEO/NTN — is there a measurable window during which operational degradation can be detected and acted on before conventional monitoring escalates?</p>
 
     <div class="callout">
@@ -130,28 +139,25 @@
     </div>
 
     <section class="updates" aria-labelledby="updates-h">
-      <h2 id="updates-h">Research Updates</h2>
-      <p class="sub">Release history, newest first. Research content versions and simulation software versions are tracked separately.</p>
-      <ol>
+      <h2 id="updates-h">Research versions</h2>
+      <p class="sub">The current version is always shown first. Earlier versions are kept as preserved copies and are never removed. Research content versions, deployments and the private simulation engine are versioned separately.</p>
+      <div class="current">
+        <p class="t">Version 1.1 <span class="new">CURRENT VERSION</span></p>
+        <p class="meta"><b>Released:</b> 2026-10-12 &middot; <b>Engine commit (private):</b> <code>58ce16a</code> &middot; <b>Data:</b> <code>data/corrected/</code></p>
+        <p>Corrected-engine results: ITU-R P.838-3 rain model, a data-quality gate, an evidence-based VERIFY stage, and the pre-escalation window under both the original and a like-for-like definition (6 positive, 2 negative and 3 self-clearing scenarios out of 11 like-for-like). Simulation only; no field or operator validation.</p>
+        <p><a class="primary" href="/article/">Read the current paper &#8594;</a> &middot; <a href="/article/#corrected-results">Corrected results</a> &middot; <a href="/summary/">Summary</a> &middot; <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">What was corrected</a></p>
+      </div>
+      <h3 class="prev-h">Previous versions <span class="prev-note">preserved as published, not current</span></h3>
+      <ul class="prev">
         <li>
-          <p class="t">Corrected-engine revision</p>
-          <p class="meta"><b>Research content version:</b> 1.1 (revision of 1.0) &middot; <b>Date:</b> 2026-10-12 &middot; <b>Engine commit (private repository):</b> <code>58ce16a</code> &middot; <b>Dataset:</b> <code>data/corrected/</code> (hashes in its <code>PROVENANCE.json</code>)</p>
-          <p>Corrects the rain-coefficient table (ITU-R P.838-3), adds a data-quality gate and an evidence-based VERIFY stage, and reports the pre-escalation window under both the original and a like-for-like definition. Corrected data and figures are published beside the previous-model set. Simulation only; no field or operator validation.</p>
-          <p><a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">CORRECTIONS.md</a> &middot; <a href="/article/#corrected-results">Corrected results</a></p>
+          <a class="chip" href="/versions/1.0/article/"><b>v1.0</b><span>Sep 2026</span></a>
+          <p>Landing restructure and executive summary (label from 2026-09-25; the repository listed 0.1.0 as its only tagged release). Copy of the site at <code>9f4f42d</code>, the last state before the corrections: previous-model results. <a href="/versions/1.0/">Home</a> &middot; <a href="/versions/1.0/summary/">Summary</a> &middot; <a href="/versions/1.0/method/">Method</a> &middot; <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/tree/9f4f42d">Source commit</a></p>
         </li>
         <li>
-          <p class="t">Landing-page restructure and version reconciliation</p>
-          <p class="meta"><b>Research content version:</b> 1.0 &middot; <b>Status:</b> released &middot; <b>Date:</b> 2026-09-25 (merged to <code>main</code>) &middot; <b>Simulation software version:</b> no tagged release</p>
-          <p>Reconciles the article's Version 1.0 with the README and citation entry (previously 0.1.0), and adds the Executive Summary / Research Overview. Findings are framed as comparator-dependent: H1 held at the default comparator (pooled median window 13 min) and inverted against a degenerate comparator (&minus;146 min). Simulation only; no operator data.</p>
-          <p><a href="/summary/">Executive Summary / Research Overview</a> &middot; <a href="/article/">Full technical paper</a></p>
+          <a class="chip" href="/versions/0.1.0/article/"><b>v0.1.0</b><span>Aug 2026</span></a>
+          <p>Initial public release, 2026-08-18 (artifact commit <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/tree/c9f4517"><code>c9f4517</code></a>). Copy of the first commit with the article, method and demo pages (<code>036498b</code>). <a href="/versions/0.1.0/">Home</a> &middot; <a href="/versions/0.1.0/method/">Method</a> &middot; <a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/tree/036498b">Source commit</a></p>
         </li>
-        <li>
-          <p class="t">Initial public release of the research artifacts</p>
-          <p class="meta"><b>Research content version:</b> 0.1.0 &middot; <b>Date:</b> 2026-08-18 &middot; <b>Simulation software version:</b> no tagged release (simulation engine not published)</p>
-          <p>Published methodology, results, figures and the data needed to regenerate the figures for The Pre-Escalation Window.</p>
-          <p><a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/commit/c9f4517">Initial public commit on GitHub</a> &middot; <a href="/method/">Method, hypotheses &amp; limitations</a></p>
-        </li>
-      </ol>
+      </ul>
     </section>
 
     <ul class="links">

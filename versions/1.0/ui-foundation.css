@@ -1,0 +1,431 @@
+/* AID Edge Research - UI foundation layer (docs/ui/BRIEF.md section 4).
+   Loaded LAST on index, summary, method and article pages, after tokens.css / brand.css / page styles, and
+   keyed on <html data-brand="aidedge"> (AID Edge Research uses the AID Edge theme: gold #C7A96B).
+   tokens.css and brand.css are NOT edited (vendored/generated); this file overrides them through selectors.
+   DATA COLORS ARE NOT TOUCHED: chart/figure/plot colors, --cyan-*, --amber-*, --color-noc-* and the
+   evidence/status tags keep their current values. Requires ui-tokens.css. */
+
+/* ---- 1. Typography ---------------------------------------------------------------------------- */
+html[data-brand='aidedge'] body {
+  font-family: var(--ui-font-sans);
+  font-size: var(--ui-fs-body);
+  line-height: var(--ui-lh-body);
+}
+html[data-brand='aidedge'] code,
+html[data-brand='aidedge'] pre,
+html[data-brand='aidedge'] kbd,
+html[data-brand='aidedge'] samp { font-family: var(--ui-font-mono); }
+
+/* Eyebrows / labels: Geist Mono 12px uppercase, 0.08em tracking */
+html[data-brand='aidedge'] .eyebrow,
+html[data-brand='aidedge'] .paper-eyebrow,
+html[data-brand='aidedge'] .method-eyebrow,
+html[data-brand='aidedge'] .paper-toc p {
+  font-family: var(--ui-font-mono);
+  font-size: var(--ui-fs-label);
+  font-weight: var(--ui-weight-medium);
+  letter-spacing: var(--ui-label-tracking);
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+html[data-brand='aidedge'] h1, html[data-brand='aidedge'] h2, html[data-brand='aidedge'] h3, html[data-brand='aidedge'] h4,
+html[data-brand='aidedge'] strong, html[data-brand='aidedge'] b { font-weight: var(--ui-weight-semibold); }
+
+/* ---- 2. Colors and contrast ------------------------------------------------------------------- */
+html[data-brand='aidedge'] {
+  /* surfaces and lines */
+  --plane-0: var(--ui-bg);
+  --plane-1: var(--ui-surface);
+  --border-default: var(--ui-hairline);
+  --border: var(--ui-hairline);
+  --border-strong: var(--ui-hairline-strong);
+  /* text hierarchy by color: headings / body / supporting / metadata (all >= 4.5:1) */
+  --text-0: var(--ui-text-1);
+  --text-1: var(--ui-text-2);
+  --text-2: var(--ui-text-3);
+  --text-3: var(--ui-text-4);
+  /* page-local aliases used by the inline page styles */
+  --bg: var(--ui-bg);
+  --panel: var(--ui-surface);
+  --text: var(--ui-text-1);
+  --body: var(--ui-text-2);
+  --muted: var(--ui-text-3);
+  /* DATA COLOR PINNED: tokens.css derives this from --text-1; keep its current value (#B3BFCA). */
+  --color-noc-conventional: #B3BFCA;
+}
+/* the faint blue atmosphere belongs to Velorona; AID Edge pages sit on the flat background */
+html[data-brand='aidedge'] body:not(:has(#instrument-root)) { background: var(--ui-bg); }
+html[data-brand='aidedge'] ::selection { background: color-mix(in srgb, var(--ui-accent) 35%, transparent); color: var(--ui-text-1); }
+
+/* Accent (champagne gold) only on: eyebrows, key links, active nav, icons, focus. */
+html[data-brand='aidedge'] .eyebrow,
+html[data-brand='aidedge'] .links span.arrow,
+html[data-brand='aidedge'] .cards .head .arrow { color: var(--ui-accent); }
+html[data-brand='aidedge'] a,
+html[data-brand='aidedge'] .paper-nav a, html[data-brand='aidedge'] .paper-toc a, html[data-brand='aidedge'] .paper-body a,
+html[data-brand='aidedge'] .method-nav a, html[data-brand='aidedge'] .method-toc a, html[data-brand='aidedge'] .method-section a,
+html[data-brand='aidedge'] .updates a, html[data-brand='aidedge'] footer a,
+html[data-brand='aidedge'] .site-footer a, html[data-brand='aidedge'] .doc-footer a, html[data-brand='aidedge'] .method-footer a { color: var(--ui-accent); }
+html[data-brand='aidedge'] nav.main a { color: var(--ui-text-3); }
+html[data-brand='aidedge'] nav.main a:hover { color: var(--ui-accent); }
+html[data-brand='aidedge'] .links a { color: var(--ui-text-1); }
+html[data-brand='aidedge'] .links a:hover, html[data-brand='aidedge'] .cards a:hover { border-color: var(--ui-accent); }
+html[data-brand='aidedge'] blockquote { border-left-color: var(--ui-accent); }
+html[data-brand='aidedge'] blockquote strong, html[data-brand='aidedge'] .paper-body blockquote strong { color: var(--ui-text-1); }
+html[data-brand='aidedge'] :focus-visible,
+html[data-brand='aidedge'] a:focus-visible,
+html[data-brand='aidedge'] summary:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 3px; }
+
+/* ---- 3. Grid, alignment, spacing ------------------------------------------------------------- */
+/* One container (1200) with 48/32/20 gutters. Narrow reading columns keep their measure but are
+   anchored to the SAME left edge as the container, so every block on a page shares one left edge. */
+html[data-brand='aidedge'] .wrap,
+html[data-brand='aidedge'] .method-shell,
+html[data-brand='aidedge'] .paper-shell {
+  box-sizing: border-box;
+  margin-left: max(0px, calc((100% - var(--ui-container)) / 2));
+  margin-right: auto;
+  padding-left: var(--ui-gutter);
+  padding-right: var(--ui-gutter);
+}
+html[data-brand='aidedge'] .wrap { max-width: calc(820px + 2 * var(--ui-gutter)); }
+html[data-brand='aidedge'] .method-shell { max-width: calc(760px + 2 * var(--ui-gutter)); }
+html[data-brand='aidedge'] .paper-shell { max-width: var(--ui-container); }
+
+/* Section rhythm: 96 / 72 / 56 top and bottom, 12px eyebrow -> heading, 16px heading -> lead, 24px between cards. */
+html[data-brand='aidedge'] main section,
+html[data-brand='aidedge'] .method-section {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: var(--ui-section-pad);
+  padding-bottom: var(--ui-section-pad);
+}
+html[data-brand='aidedge'] main section .eyebrow { margin: 0 0 var(--ui-gap-eyebrow-h2); }
+html[data-brand='aidedge'] .method-section > h1:first-child,
+html[data-brand='aidedge'] main section > h2:first-child { margin-top: 0; }
+html[data-brand='aidedge'] .updates { margin-bottom: 0; }
+html[data-brand='aidedge'] .links, html[data-brand='aidedge'] .cards, html[data-brand='aidedge'] .updates ol { gap: var(--ui-gap-cards); }
+html[data-brand='aidedge'] .links { margin-bottom: 0; }
+html[data-brand='aidedge'] .method-footer { margin-top: 0; }
+
+/* ---- 4. Text geometry ------------------------------------------------------------------------ */
+html[data-brand='aidedge'] h1, html[data-brand='aidedge'] h2, html[data-brand='aidedge'] h3 { text-wrap: balance; }
+html[data-brand='aidedge'] h1 { max-width: var(--ui-measure-h1); }
+html[data-brand='aidedge'] h2 { max-width: var(--ui-measure-h2); }
+html[data-brand='aidedge'] p, html[data-brand='aidedge'] li { text-wrap: pretty; }
+html[data-brand='aidedge'] p,
+html[data-brand='aidedge'] .method-section p,
+html[data-brand='aidedge'] .method-section ul,
+html[data-brand='aidedge'] .method-section ol,
+html[data-brand='aidedge'] .paper-body p,
+html[data-brand='aidedge'] .paper-body li { max-width: var(--ui-measure-p); line-height: var(--ui-lh-body); }
+html[data-brand='aidedge'] .links a { align-items: flex-start; }
+html[data-brand='aidedge'] .links, html[data-brand='aidedge'] .cards { align-items: stretch; }
+
+/* ---- 5. Components ---------------------------------------------------------------------------- */
+/* Card: --ui-surface, 1px hairline, radius 16, padding 32 (24 mobile). */
+html[data-brand='aidedge'] .callout,
+html[data-brand='aidedge'] .updates li,
+html[data-brand='aidedge'] .links a,
+html[data-brand='aidedge'] .cards a,
+html[data-brand='aidedge'] .cta,
+html[data-brand='aidedge'] .paper-toc {
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-hairline);
+  border-radius: var(--ui-card-radius);
+  padding: var(--ui-card-pad);
+}
+html[data-brand='aidedge'] .links a, html[data-brand='aidedge'] .cards a { padding-top: var(--ui-space-5); padding-bottom: var(--ui-space-5); }
+html[data-brand='aidedge'] .cta { border-color: var(--ui-accent-line); }
+
+/* Eyebrow: 6px accent dot + mono label; dot aligns with the FIRST line. */
+html[data-brand='aidedge'] .eyebrow,
+html[data-brand='aidedge'] .paper-eyebrow,
+html[data-brand='aidedge'] .method-eyebrow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  color: var(--ui-accent);
+}
+html[data-brand='aidedge'] .eyebrow::before,
+html[data-brand='aidedge'] .paper-eyebrow::before,
+html[data-brand='aidedge'] .method-eyebrow::before {
+  content: '';
+  flex: none;
+  width: var(--ui-eyebrow-dot);
+  height: var(--ui-eyebrow-dot);
+  border-radius: 50%;
+  background: var(--ui-accent);
+  transform: translateY(-0.1em);
+}
+
+/* Text link: accent, 15px / 500; underline on hover. */
+html[data-brand='aidedge'] .updates a, html[data-brand='aidedge'] .footer-links a {
+  font-size: var(--ui-fs-button);
+  font-weight: var(--ui-weight-medium);
+}
+
+/* Accordion: one style. Hairline separators, "+" rotating to "x", no native marker. */
+html[data-brand='aidedge'] details {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--ui-hairline);
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+}
+html[data-brand='aidedge'] details:last-of-type { border-bottom: 1px solid var(--ui-hairline); }
+html[data-brand='aidedge'] details > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-space-4);
+  list-style: none;
+  padding: var(--ui-space-4) 0;
+  min-height: 44px;
+  font-weight: var(--ui-weight-medium);
+}
+html[data-brand='aidedge'] details > summary::-webkit-details-marker { display: none; }
+html[data-brand='aidedge'] details > summary::marker { content: ''; }
+html[data-brand='aidedge'] details > summary::after {
+  content: '+';
+  flex: none;
+  color: var(--ui-accent);
+  font-size: 1.25rem;
+  line-height: 1;
+  transition: transform 220ms var(--ui-ease);
+}
+html[data-brand='aidedge'] details[open] > summary::after { transform: rotate(45deg); }
+html[data-brand='aidedge'] details[open] > summary { border-bottom: 0; margin-bottom: 0; }
+html[data-brand='aidedge'] details > *:not(summary) { padding-bottom: var(--ui-space-4); }
+
+@media (max-width: 639px) {
+  html[data-brand='aidedge'] .callout,
+  html[data-brand='aidedge'] .updates li,
+  html[data-brand='aidedge'] .cta,
+  html[data-brand='aidedge'] .paper-toc { padding: var(--ui-card-pad); }
+}
+
+/* ---- 6. Header and footer visuals ------------------------------------------------------------- */
+/* Header (summary page top bar is the sticky one): 85% background + blur, hairline after 8px of scroll. */
+html[data-brand='aidedge'] .topbar {
+  background: var(--ui-header-bg);
+  -webkit-backdrop-filter: blur(var(--ui-header-blur));
+  backdrop-filter: blur(var(--ui-header-blur));
+  border-bottom: 1px solid transparent;
+}
+html[data-brand='aidedge'] .topbar.is-scrolled { border-bottom-color: var(--ui-hairline); }
+
+/* Footer: flat surface, 1px accent hairline (40%) across the top, radial accent glow <= 6% in one corner. */
+html[data-brand='aidedge'] footer,
+html[data-brand='aidedge'] .site-footer,
+html[data-brand='aidedge'] .doc-footer,
+html[data-brand='aidedge'] .method-footer {
+  position: relative;
+  background-color: var(--ui-surface);
+  background-image: radial-gradient(circle at 100% 0%, var(--ui-accent-glow), transparent 55%);
+  border: 0;
+  border-image: none;
+  border-top: 1px solid var(--ui-accent-line);
+  margin-top: var(--ui-space-7);
+  padding: var(--ui-space-6);
+  border-radius: 0;
+  color: var(--ui-text-2);
+  font-size: var(--ui-fs-small);
+}
+html[data-brand='aidedge'] footer a, html[data-brand='aidedge'] .site-footer a,
+html[data-brand='aidedge'] .method-footer a { color: var(--ui-text-2); }
+html[data-brand='aidedge'] footer a:hover, html[data-brand='aidedge'] .site-footer a:hover,
+html[data-brand='aidedge'] .method-footer a:hover { color: var(--ui-text-1); text-decoration: underline; text-underline-offset: 3px; }
+html[data-brand='aidedge'] .footer-links a { border-left-color: var(--ui-hairline-strong); }
+
+/* ---- 7. Motion -------------------------------------------------------------------------------- */
+/* Edge sweep: the ONE signature effect. A thin light travels once (700ms, ease-out, no loop) along the
+   border of interactive cards on hover/focus. Invisible at rest. */
+@property --edge-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+html[data-brand='aidedge'] .links a,
+html[data-brand='aidedge'] .cards a { position: relative; isolation: isolate; }
+html[data-brand='aidedge'] .links a::after,
+html[data-brand='aidedge'] .cards a::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 2px;
+  opacity: 0;
+  background: conic-gradient(
+    from var(--edge-angle),
+    transparent 0deg,
+    transparent 255deg,
+    color-mix(in srgb, var(--ui-accent) 70%, transparent) 285deg,
+    color-mix(in srgb, var(--ui-accent) 35%, white) 315deg,
+    color-mix(in srgb, var(--ui-accent) 70%, transparent) 345deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  filter: drop-shadow(0 0 4px var(--ui-accent));
+  pointer-events: none;
+  z-index: 2;
+}
+html[data-brand='aidedge'] .links a:hover::after, html[data-brand='aidedge'] .links a:focus-visible::after,
+html[data-brand='aidedge'] .cards a:hover::after, html[data-brand='aidedge'] .cards a:focus-visible::after {
+  animation: ui-edge-sweep var(--ui-sweep-duration) var(--ui-ease-out) 1;
+}
+@keyframes ui-edge-sweep {
+  0%   { --edge-angle: 0deg;   opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { --edge-angle: 360deg; opacity: 0; }
+}
+
+/* Section reveal: opacity 0 -> 1 + 8px rise, 400ms, once. Hidden only when ui-foundation.js is running
+   (it sets html.js), so content stays visible if JS fails. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(var(--ui-reveal-rise));
+  transition: opacity var(--ui-reveal-duration) var(--ui-ease-out), transform var(--ui-reveal-duration) var(--ui-ease-out);
+}
+.js [data-reveal].is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-brand='aidedge'], html[data-brand='aidedge'] * , html[data-brand='aidedge'] *::before, html[data-brand='aidedge'] *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .js [data-reveal] { opacity: 1; transform: none; }
+}
+
+
+/* ---- 8. Site chrome: shared header (AID Edge IA) and five-column footer ------------------------ */
+html[data-brand='aidedge'] { --site-header-h: 72px; }
+.ui-wrap { max-width: var(--ui-container); margin: 0 auto; padding-inline: var(--ui-gutter); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--ui-header-bg);
+  -webkit-backdrop-filter: blur(var(--ui-header-blur)); backdrop-filter: blur(var(--ui-header-blur));
+  border-bottom: 1px solid transparent; transition: border-color 220ms var(--ui-ease);
+}
+.site-header.is-scrolled { border-bottom-color: var(--ui-hairline); }
+.site-header .nav-shell { display: flex; align-items: center; justify-content: space-between; gap: var(--ui-space-4); min-height: var(--site-header-h); }
+.site-header .brand-text { font-size: var(--ui-fs-h3); font-weight: var(--ui-weight-semibold); letter-spacing: -0.01em; color: var(--ui-text-1); text-decoration: none; white-space: nowrap; }
+.site-header .nav-right { display: flex; align-items: center; gap: var(--ui-space-4); }
+.site-header .nav-list { display: flex; align-items: center; gap: var(--ui-space-5); }
+.site-header .nav-list ul { list-style: none; display: flex; gap: var(--ui-space-5); margin: 0; padding: 0; }
+.site-header .nav-dropdown-trigger {
+  display: inline-flex; align-items: center; gap: 0.3rem; background: none; border: none; padding: 0; cursor: pointer;
+  font: inherit; font-size: var(--ui-fs-small); font-weight: var(--ui-weight-medium); color: var(--ui-text-2);
+  transition: color 220ms var(--ui-ease);
+}
+.site-header .nav-dropdown-trigger:hover, .site-header .has-dropdown.dropdown-open .nav-dropdown-trigger { color: var(--ui-text-1); }
+.site-header .nav-caret { width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid currentColor; }
+.site-header .has-dropdown { position: relative; }
+.site-header .nav-list .has-dropdown .dropdown-menu {
+  display: none; list-style: none; flex-direction: column; gap: 0; margin: 0; padding: 0.5rem;
+  position: absolute; top: calc(100% + 0.75rem); left: 0; min-width: 300px; max-width: 340px;
+  background: var(--ui-surface); border: 1px solid var(--ui-hairline-strong); border-radius: var(--ui-card-radius); z-index: 60;
+}
+.site-header .has-dropdown.dropdown-open .dropdown-menu { display: block; }
+.site-header .dropdown-menu a { display: block; padding: 0.6rem 0.75rem; border-radius: 8px; color: var(--ui-text-2); text-decoration: none; font-size: var(--ui-fs-small); font-weight: var(--ui-weight-medium); }
+.site-header .dropdown-menu a:hover { color: var(--ui-text-1); background: var(--ui-bg); }
+.site-header .dropdown-menu a.active { color: var(--ui-accent); }
+.site-header .dd-note { display: block; margin-top: 0.1rem; font-size: var(--ui-fs-label); font-weight: 400; color: var(--ui-text-3); }
+.site-header .dd-label .ext { color: var(--ui-text-3); }
+.site-header .nav-cta {
+  display: inline-flex; align-items: center; justify-content: center; padding: 0.45rem 1.4rem;
+  border: 1px solid var(--ui-accent-line); border-radius: 999px; background: transparent; color: var(--ui-text-1);
+  font-size: 0.875rem; font-weight: 500; line-height: 1.5; white-space: nowrap; text-decoration: none; transition: border-color 220ms var(--ui-ease);
+}
+/* The visible capsule stays low-profile; an invisible band extends the hit area to 44px. */
+.site-header .nav-cta::before { content: ''; position: absolute; inset: -0.4rem 0; }
+.site-header .nav-cta:hover, .site-header .nav-cta:focus-visible { border-color: var(--ui-accent); }
+.site-header a:focus-visible, .site-header button:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
+/* the summary page's own section bar sits under the site header */
+html[data-brand='aidedge'] .topbar { top: var(--site-header-h); z-index: 40; }
+
+.site-header .nav-toggle { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--ui-hairline-strong); background: transparent; cursor: pointer; }
+.site-header .nav-toggle-bar { display: block; width: 18px; height: 2px; margin: 0 auto; background: var(--ui-text-1); border-radius: 2px; transition: transform 220ms var(--ui-ease); }
+.site-header .nav-toggle[aria-expanded='true'] .nav-toggle-bar:nth-child(1) { transform: translateY(3.5px) rotate(45deg); }
+.site-header .nav-toggle[aria-expanded='true'] .nav-toggle-bar:nth-child(2) { transform: translateY(-3.5px) rotate(-45deg); }
+
+@media (max-width: 1023px) {
+  html[data-brand='aidedge'] { --site-header-h: 64px; }
+  .site-header .nav-toggle { display: flex; }
+  /* Opaque panel hanging from the sticky header. */
+  .site-header .nav-list {
+    position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0;
+    background: var(--ui-surface); border-bottom: 1px solid var(--ui-hairline-strong);
+    padding: var(--ui-space-2) var(--ui-gutter) var(--ui-space-4); display: none; max-height: calc(100dvh - 4rem); overflow-y: auto;
+  }
+  .site-header .nav-list.nav-open { display: flex; }
+  .site-header .nav-list ul { flex-direction: column; gap: 0; }
+  .site-header .nav-list .nav-dropdown-trigger { display: flex; width: 100%; justify-content: space-between; padding: 0.85rem 0; border-bottom: 1px solid var(--ui-hairline); font-size: var(--ui-fs-body); color: var(--ui-text-1); }
+  .site-header .nav-list .has-dropdown .dropdown-menu { position: static; min-width: 0; max-width: none; background: none; border: none; border-radius: 0; padding: 0; }
+  .site-header .nav-list .dropdown-menu a { padding: 0.75rem 0 0.75rem 1rem; border-bottom: 1px solid var(--ui-hairline); border-radius: 0; }
+  .site-header .nav-list .nav-cta { margin-top: var(--ui-space-4); align-self: stretch; }
+}
+
+html[data-brand='aidedge'] footer.site-footer {
+  position: relative; overflow: hidden; margin-top: var(--ui-space-9); padding: var(--ui-space-8) 0 var(--ui-space-6);
+  background-color: var(--ui-surface); background-image: none; border: 0; border-top: 1px solid var(--ui-accent-line); border-radius: 0;
+}
+footer.site-footer::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 100% 0%, var(--ui-accent-glow), transparent 55%); pointer-events: none; }
+footer.site-footer .ui-wrap { position: relative; }
+.footer-cols { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--ui-space-7) var(--ui-space-6); }
+.footer-heading { margin: 0 0 var(--ui-space-4); font-family: var(--ui-font-mono); font-size: var(--ui-fs-label); font-weight: var(--ui-weight-medium); letter-spacing: var(--ui-label-tracking); text-transform: uppercase; line-height: 1.4; color: var(--ui-text-3); }
+.footer-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--ui-space-3); }
+html[data-brand='aidedge'] footer.site-footer a { color: var(--ui-text-2); font-size: var(--ui-fs-small); text-decoration: none; }
+html[data-brand='aidedge'] footer.site-footer a:hover, html[data-brand='aidedge'] footer.site-footer a:focus-visible { color: var(--ui-text-1); text-decoration: underline; text-underline-offset: 3px; }
+.footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--ui-space-2) var(--ui-space-5); margin-top: var(--ui-space-8); padding-top: var(--ui-space-5); border-top: 1px solid var(--ui-hairline); }
+.footer-copyright, .footer-legal { margin: 0; max-width: none; font-size: var(--ui-fs-small); color: var(--ui-text-3); }
+html[data-brand='aidedge'] footer.site-footer .footer-legal a, html[data-brand='aidedge'] footer.site-footer .footer-copyright a { color: var(--ui-text-3); }
+@media (max-width: 1023px) { .footer-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 639px) { .footer-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ui-space-6) var(--ui-space-5); } .footer-bottom { flex-direction: column; margin-top: var(--ui-space-7); } }
+
+/* Inline code never drops below the 12px floor. */
+html[data-brand='aidedge'] code { font-size: max(12px, 0.9em); }
+
+/* ---- Contextual page ending: one line and one button, before the footer ---- */
+.page-cta { padding: var(--ui-section-pad) 0 0; }
+.page-cta-inner { display: flex; flex-direction: column; align-items: center; gap: var(--ui-space-4); max-width: var(--ui-cta-block-max); margin: 0 auto; padding-top: var(--ui-space-7); border-top: 1px solid var(--ui-hairline); text-align: center; }
+.page-cta-line { margin: 0; max-width: none; color: var(--ui-text-2); font-size: var(--ui-fs-body); text-wrap: balance; }
+.page-cta .btn-primary {
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-width: 7rem; padding: 0.45rem 1.6rem;
+  border: 1px solid var(--ui-accent-line); border-radius: 999px; background: transparent; color: var(--ui-text-1);
+  font-size: 0.875rem; font-weight: 500; line-height: 1.5; white-space: nowrap; text-decoration: none; transition: border-color 220ms var(--ui-ease);
+}
+.page-cta .btn-primary::before { content: ''; position: absolute; inset: -0.4rem 0; }
+.page-cta .btn-primary:hover { border-color: var(--ui-accent); }
+.page-cta .btn-primary:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
+
+/* ---- Touch targets (tablet and phone): at least 44px ---- */
+@media (max-width: 1023px) {
+  .footer-col ul { gap: 0; }
+  footer.site-footer .footer-col a, footer.site-footer .footer-legal a { display: inline-block; min-width: 44px; padding-block: 0.8rem; }
+}
+@media (max-width: 1023px) {
+  .site-header .brand-text { display: inline-flex; align-items: center; min-height: 44px; }
+  .paper-nav a, .method-nav a, .topbar nav a, .topbar p a, footer.site-footer .footer-copyright a { display: inline-block; min-width: 44px; padding-block: 0.7rem; }
+  html[data-brand='aidedge'] summary { display: flex; align-items: center; min-height: 44px; }
+}
+
+/* PRIMARY CTA capsule: the previous low-profile geometry plus the restored continuous edge light (shared ring + edge-travel):
+   one light segment travels slowly along the border (8s linear), half opacity at rest, brighter on hover/focus. */
+@property --edge-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+.site-header .nav-cta, .page-cta .btn-primary { position: relative; isolation: isolate; }
+.site-header .nav-cta::after, .page-cta .btn-primary::after {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; opacity: 0.9;
+  background: conic-gradient(from var(--edge-angle), transparent 0deg, transparent 255deg, var(--ui-accent-line) 280deg,
+    color-mix(in srgb, var(--ui-accent) 62%, white) 305deg, var(--ui-accent-line) 330deg, transparent 345deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--ui-accent) 45%, transparent)); pointer-events: none; z-index: 2;
+  transition: opacity 450ms var(--ui-ease); animation: edge-travel 6.8s linear infinite;
+}
+.site-header .nav-cta:hover::after, .site-header .nav-cta:focus-visible::after, .page-cta .btn-primary:hover::after, .page-cta .btn-primary:focus-visible::after { opacity: 1; }
+@keyframes edge-travel { to { --edge-angle: 360deg; } }
+@media (prefers-reduced-motion: reduce) { .site-header .nav-cta::after, .page-cta .btn-primary::after { animation: none !important; opacity: 0; } }
