@@ -140,3 +140,23 @@ the 120-minute warm-up was given an *empty* baseline (median 0, sigma 0). New se
 contexts now learn a baseline from their own first 20 valid samples. This only affects
 LEO runs (it changes the layer's F1 in 25 of the 330 runs and its first-actionable time in
 16; the conventional arm is untouched) and is included in the "corrected engine" column above.
+
+## Per-scenario windows, corrected engine (30 seeds each; `data/corrected/runs.csv`)
+
+Median in minutes over runs with a resolved window; "n/a" = no run resolved. Original = clock starts at the layer's first WAIT/ESCALATE/ACT; like-for-like = layer's first ESCALATE/ACT.
+
+| Domain | Scenario | Original | Like-for-like | Like-for-like: positive / negative / unresolved runs |
+|---|---|---|---|---|
+| LEO/NTN | leo_gateway_side | 8 | 8 | 30 / 0 / 0 |
+| LEO/NTN | leo_ground_rain | 6 | n/a | 0 / 0 / 30 |
+| LEO/NTN | leo_hidden_in_rain | 6 | -109 | 0 / 30 / 0 |
+| LEO/NTN | leo_low_elevation | n/a | n/a | 0 / 0 / 30 |
+| LEO/NTN | leo_pointing | 250 | 250 | 6 / 0 / 24 |
+| LEO/NTN | leo_rf_subsystem | 189 | 189 | 28 / 0 / 2 |
+| Microwave | mw_config_change | 11 | 11 | 30 / 0 / 0 |
+| Microwave | mw_directional_hardware | 12 | 12 | 30 / 0 / 0 |
+| Microwave | mw_hidden_in_storm | 14 | -1 | 12 / 15 / 0 (3 runs equal 0) |
+| Microwave | mw_interference | 21 | 21 | 30 / 0 / 0 |
+| Microwave | mw_rain_cell | 16 | 11 | 1 / 0 / 29 |
+
+Scenario medians are positive in 10 of 11 under the original definition and in 7 of 11 like-for-like (`mw_rain_cell` from one resolved run). Pooled like-for-like median: 11 min over 215 of 330 runs. Pooling across scenarios is descriptive only, not a performance claim. Simulation only; no field validation.
