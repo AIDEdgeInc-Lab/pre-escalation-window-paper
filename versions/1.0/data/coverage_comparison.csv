@@ -1,0 +1,36 @@
+metric,microwave,leo_ntn
+aggregate_edge_capacity_mbps,12073.6,n/a
+altitude_km,n/a,550.0
+availability_target,0.9999,n/a
+band_ghz,18.0,n/a
+beams_needed_to_cover_region,n/a,2
+beams_per_satellite,n/a,8
+capacity_available_over_region_mbps,n/a,43.3
+capacity_per_hop_mbps,548.8,n/a
+capacity_vs_demand_ratio,3.35,0.012
+demand_sites,12,n/a
+engineered_hop_km,18.32,n/a
+fade_margin_db,35.0,n/a
+footprint_radius_km,n/a,940.5
+geographic_coverage_km2,10000.0,2774092.8
+handovers_per_hour,n/a,13.4
+hop_limited_by,rain,n/a
+instantaneous_service_coverage_km2,10000.0,10000.0
+max_pass_duration_min,n/a,4.49
+mean_site_spacing_km,28.87,n/a
+min_elevation_deg,n/a,25.0
+orbital_period_min,n/a,95.5
+protection_hops,6,n/a
+radio_hops_required,22,n/a
+radios_required,56,n/a
+rain_limited_hop_km,18.32,n/a
+rain_rate_001_mm_h,42.0,n/a
+region_share_of_footprint,n/a,0.0036
+relay_sites_required,11,n/a
+satellite_capacity_mbps,n/a,12000.0
+satellites_for_continuous_coverage,n/a,307
+satellites_over_region_at_a_time,n/a,1
+service_continuity_mechanism,protection path / ACM downshift,inter-satellite handover every pass
+terrain_limited_hop_km,45.0,n/a
+top_acm_profile,4096QAM 5/6,n/a
+total_nodes,23,n/a

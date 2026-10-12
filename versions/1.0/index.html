@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en" data-brand="aidedge">
+<head>
+<meta name="robots" content="noindex">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AID Edge Research | The Pre-Escalation Window</title>
+<link rel="icon" href="data:,">
+<meta name="description" content="Published methodology, results, figures and data for The Pre-Escalation Window: a comparative decision-intelligence study of terrestrial microwave backhaul and LEO/NTN.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://researchlab.aidedgeinc.com/#website",
+      "name": "AID Edge Research",
+      "url": "https://researchlab.aidedgeinc.com/",
+      "publisher": {
+        "@id": "https://aidedgeinc.com/#org"
+      }
+    },
+    {
+      "@type": "CollectionPage",
+      "@id": "https://researchlab.aidedgeinc.com/#research",
+      "name": "AID Edge Research",
+      "url": "https://researchlab.aidedgeinc.com/",
+      "description": "The papers, methods and data behind our products.",
+      "isPartOf": {
+        "@id": "https://researchlab.aidedgeinc.com/#website"
+      },
+      "publisher": {
+        "@id": "https://aidedgeinc.com/#org"
+      }
+    },
+    {
+      "@type": "ResearchProject",
+      "@id": "https://researchlab.aidedgeinc.com/#pre-escalation-window",
+      "name": "The Pre-Escalation Window",
+      "description": "A comparative decision-intelligence study of terrestrial microwave backhaul and LEO/NTN — is there a measurable window during which operational degradation can be detected and acted on before conventional monitoring escalates? The networks are simulated — no result here is evidence about a real operator's network.",
+      "url": "https://researchlab.aidedgeinc.com/",
+      "isPartOf": {
+        "@id": "https://researchlab.aidedgeinc.com/#research"
+      },
+      "subjectOf": {
+        "@id": "https://researchlab.aidedgeinc.com/article/#article"
+      }
+    }
+  ]
+}
+</script>
+<link rel="stylesheet" href="./ui-tokens.css">
+<link rel="preload" href="/versions/1.0/fonts/Geist-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/versions/1.0/fonts/Geist-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="./brand.css">
+<style>
+  :root{
+    --bg:var(--plane-0); --panel:var(--plane-1); --border:var(--border-default);
+    --text:var(--text-0); --body:var(--text-1); --muted:var(--text-2);
+    --cyan:var(--cyan-300); --cyan-deep:var(--cyan-500); --amber:var(--gold);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--body);
+    font:16px/1.6 var(--font-sans);
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:64px 24px 96px}
+  .eyebrow{color:var(--cyan); font-size:var(--ui-fs-small); letter-spacing:.06em; text-transform:uppercase; margin:0 0 16px}
+  h1{color:var(--text); font-size:var(--ui-fs-h1); line-height:1.25; margin:0 0 16px; font-weight:600}
+  .lede{color:var(--body); font-size:var(--ui-fs-body); margin:0 0 40px; max-width:60ch}
+  .callout{
+    border:1px solid var(--border); background:var(--panel); border-radius:12px;
+    padding:20px 24px; margin:0 0 40px;
+  }
+  .callout p{margin:0; color:var(--body); font-size:var(--ui-fs-small)}
+  .callout strong{color:var(--text)}
+  .links{list-style:none; padding:0; margin:0 0 48px; display:grid; gap:12px}
+  .links a{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    border:1px solid var(--border); background:var(--panel); border-radius:10px;
+    padding:16px 20px; color:var(--text); text-decoration:none; font-size:var(--ui-fs-body);
+  }
+  .links a:hover{border-color:var(--cyan-deep)}
+  .links span.arrow{color:var(--cyan); flex:none}
+  .links .label small{display:block; color:var(--muted); font-weight:400; margin-top:2px; font-size:var(--ui-fs-small)}
+  .updates{margin:0 0 40px}
+  .updates h2{font-size:var(--ui-fs-h2); margin:0 0 4px; font-weight:600}
+  .updates .sub{color:var(--muted); font-size:var(--ui-fs-small); margin:0 0 14px}
+  .updates ol{list-style:none; padding:0; margin:0; display:grid; gap:10px}
+  .updates li{border:1px solid var(--border); background:var(--panel); border-radius:10px; padding:14px 18px; font-size:var(--ui-fs-small)}
+  .updates .t{font-weight:600; font-size:var(--ui-fs-body); margin:0 0 4px; color:var(--text)}
+  .updates .meta{color:var(--muted); font-size:var(--ui-fs-small); margin:0 0 6px}
+  .updates .meta b{color:var(--text); font-weight:500}
+  .updates p{margin:0 0 6px; color:var(--body)}
+  .updates p:last-child{margin:0}
+  .updates a{color:var(--cyan-deep)}
+  .updates .tbd{color:var(--gold-light)}
+  .new{display:inline-block; margin-left:8px; padding:0 7px; border:1px solid var(--gold-line); border-radius:999px; background:var(--gold-soft); color:var(--gold-light); font-size:var(--ui-fs-label); font-weight:500; letter-spacing:.08em; line-height:18px; vertical-align:1px}
+  footer{border-top:1px solid var(--border); padding-top:24px; color:var(--muted); font-size:var(--ui-fs-small)}
+  footer a{color:var(--cyan-deep)}
+</style>
+<link rel="stylesheet" href="./ui-foundation.css">
+</head>
+<body>
+<div role="note" style="margin:0;padding:10px 16px;font:14px/1.45 system-ui,sans-serif;background:#1b1608;color:#f0e4c0;border-bottom:1px solid #8a7335"><strong>Archived version 1.0</strong> &mdash; a preserved copy of the site as it stood immediately before the 2026-10 corrections (last commit before the correction work began) (9f4f42d, 2026-10-08). Its results use the previous model version (superseded rain-coefficient table; the pre-escalation window counts the layer's first WAIT as a lead) and its VERIFY stage did not reliably resolve. Kept unchanged as historical record. <a style="color:#ffd76a" href="/">Current version</a> &middot; <a style="color:#ffd76a" href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/blob/main/CORRECTIONS.md">What was corrected</a></div>
+
+<header class="site-header">
+  <div class="ui-wrap nav-shell">
+    <a class="brand-text" href="/versions/1.0/">AID Edge Research</a>
+    <div class="nav-right">
+      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Toggle menu"><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span></button>
+      <nav aria-label="Primary" id="primaryNav" class="nav-list">
+        <ul>
+          <li class="has-dropdown"><button type="button" class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">Products<span class="nav-caret" aria-hidden="true"></span></button><ul class="dropdown-menu"><li><a href="https://velorona.ai/"><span class="dd-label">Velorona <span class="ext" aria-hidden="true">↗</span></span><span class="dd-note">Degradation Intelligence for Network Operations</span><span class="visually-hidden"> (external site)</span></a></li><li><a href="https://map.velorona.ai/"><span class="dd-label">Velorona Map <span class="ext" aria-hidden="true">↗</span></span><span class="dd-note">Geospatial &amp; Environmental Intelligence for telecom links</span><span class="visually-hidden"> (external site)</span></a></li></ul></li>
+          <li class="has-dropdown"><button type="button" class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">Tools<span class="nav-caret" aria-hidden="true"></span></button><ul class="dropdown-menu"><li><a href="https://plugins.qgis.org/plugins/velorona/"><span class="dd-label">Velorona for QGIS <span class="ext" aria-hidden="true">↗</span></span><span class="dd-note">Link analysis inside QGIS. A separate desktop tool.</span><span class="visually-hidden"> (external site)</span></a></li><li><a href="https://aidedgeinc.com/tools/#public-libraries"><span class="dd-label">AEI SDK &amp; Libraries</span><span class="dd-note">Python libraries from our engineering work. Some are public; some are proprietary.</span></a></li></ul></li>
+          <li class="has-dropdown"><button type="button" class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">Research<span class="nav-caret" aria-hidden="true"></span></button><ul class="dropdown-menu"><li><a href="/versions/1.0/" class="active" aria-current="page"><span class="dd-label">AID Edge Research</span><span class="dd-note">The papers, methods and data behind our products.</span></a></li><li><a href="https://aidedgeinc.com/publications/"><span class="dd-label">Publications</span></a></li><li><a href="https://aidedgeinc.com/research-lab/#standards-publications"><span class="dd-label">Standards &amp; IEEE</span></a></li></ul></li>
+          <li class="has-dropdown"><button type="button" class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">Company<span class="nav-caret" aria-hidden="true"></span></button><ul class="dropdown-menu"><li><a href="https://aidedgeinc.com/about/"><span class="dd-label">About</span></a></li><li><a href="https://aidedgeinc.com/news-events/"><span class="dd-label">News &amp; Events</span></a></li></ul></li>
+        </ul>
+        <a class="nav-cta" href="https://aidedgeinc.com/contact/">Contact</a>
+      </nav>
+    </div>
+  </div>
+</header>
+  <div class="wrap">
+    <p class="eyebrow">AID Edge Inc. — Published Research</p>
+    <h1>The Pre-Escalation Window</h1>
+    <p class="lede">A comparative decision-intelligence study of terrestrial microwave backhaul and LEO/NTN — is there a measurable window during which operational degradation can be detected and acted on before conventional monitoring escalates?</p>
+
+    <div class="callout">
+      <p><strong>Honest labelling.</strong> The networks are simulated — no result here is evidence about a real operator's network. The simulation engine itself is not published; this repository contains the published results, method description, figures, and the data needed to regenerate the figures. Full detail in the README below.</p>
+    </div>
+
+    <section class="updates" aria-labelledby="updates-h">
+      <h2 id="updates-h">Research Updates</h2>
+      <p class="sub">Release history, newest first. Research content versions and simulation software versions are tracked separately.</p>
+      <ol>
+        <li>
+          <p class="t">Landing-page restructure and version reconciliation</p>
+          <p class="meta"><b>Research content version:</b> 1.0 &middot; <b>Status:</b> <span class="tbd">pending publication (not yet released)</span> &middot; <b>Date:</b> <span class="tbd">[to be confirmed at publication]</span> &middot; <b>Simulation software version:</b> no tagged release</p>
+          <p>Reconciles the article's Version 1.0 with the README and citation entry (previously 0.1.0), and adds the Executive Summary / Research Overview. Findings are framed as comparator-dependent: H1 held at the default comparator (pooled median window 13 min) and inverted against a degenerate comparator (&minus;146 min). Simulation only; no operator data.</p>
+          <p><a href="/versions/1.0/summary/">Executive Summary / Research Overview</a> &middot; <a href="/versions/1.0/article/">Full technical paper</a></p>
+        </li>
+        <li>
+          <p class="t">Initial public release of the research artifacts</p>
+          <p class="meta"><b>Research content version:</b> 0.1.0 &middot; <b>Date:</b> 2026-08-18 &middot; <b>Simulation software version:</b> no tagged release (simulation engine not published)</p>
+          <p>Published methodology, results, figures and the data needed to regenerate the figures for The Pre-Escalation Window.</p>
+          <p><a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper/commit/c9f4517">Initial public commit on GitHub</a> &middot; <a href="/versions/1.0/method/">Method, hypotheses &amp; limitations</a></p>
+        </li>
+      </ol>
+    </section>
+
+    <ul class="links">
+      <li><a href="/versions/1.0/summary/">
+        <span class="label">Executive Summary / Research Overview <span class="new">NEW</span><small>Findings, how the study works, limitations and citation on one page, with links into the full evidence</small></span>
+        <span class="arrow">&#8594;</span>
+      </a></li>
+      <li><a href="/versions/1.0/article/">
+        <span class="label">Full research article<small>The complete written analysis, Parts I–XIII</small></span>
+        <span class="arrow">&#8594;</span>
+      </a></li>
+      <li><a href="/versions/1.0/method/">
+        <span class="label">Method, hypotheses &amp; limitations<small>Full method description, hypothesis cards, and limitations</small></span>
+        <span class="arrow">&#8594;</span>
+      </a></li>
+      <li><a href="/versions/1.0/demo/">
+        <span class="label">Interactive demo<small>Live instrument — explore the microwave and LEO/NTN scenarios directly</small></span>
+        <span class="arrow">&#8594;</span>
+      </a></li>
+      <li><a href="https://github.com/AIDEdgeInc-Lab/pre-escalation-window-paper">
+        <span class="label">Research repository (GitHub)<small>Methodology, limitations, hypotheses, source data, figures — start here</small></span>
+        <span class="arrow">&#8594;</span>
+      </a></li>
+    </ul>
+
+  </div>
+<footer class="site-footer">
+  <div class="ui-wrap">
+    <div class="footer-cols"><nav class="footer-col" aria-label="Products"><h2 class="footer-heading">Products</h2><ul><li><a href="https://velorona.ai/">Velorona</a></li><li><a href="https://map.velorona.ai/">Velorona Map</a></li></ul></nav><nav class="footer-col" aria-label="Tools"><h2 class="footer-heading">Tools</h2><ul><li><a href="https://plugins.qgis.org/plugins/velorona/">Velorona for QGIS</a></li><li><a href="https://aidedgeinc.com/tools/#public-libraries">AEI SDK &amp; Libraries</a></li></ul></nav><nav class="footer-col" aria-label="Research"><h2 class="footer-heading">Research</h2><ul><li><a href="/versions/1.0/">AID Edge Research</a></li><li><a href="https://aidedgeinc.com/publications/">Publications</a></li><li><a href="https://aidedgeinc.com/research-lab/#standards-publications">Standards &amp; IEEE</a></li></ul></nav><nav class="footer-col" aria-label="Company"><h2 class="footer-heading">Company</h2><ul><li><a href="https://aidedgeinc.com/about/">About</a></li><li><a href="https://aidedgeinc.com/news-events/">News &amp; Events</a></li></ul></nav><nav class="footer-col" aria-label="Contact"><h2 class="footer-heading">Contact</h2><ul><li><a href="https://aidedgeinc.com/contact/">Contact</a></li></ul></nav></div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2026 AID Edge Inc.</p>
+      <p class="footer-legal"><a href="https://github.com/AIDEdgeInc-Lab">GitHub</a> &middot; <a href="https://aidedgeinc.com/privacy-policy/">Privacy</a> &middot; <a href="https://aidedgeinc.com/terms-of-use/">Terms</a></p>
+    </div>
+  </div>
+</footer>
+<script src="./ui-foundation.js" defer></script>
+</body>
+</html>
