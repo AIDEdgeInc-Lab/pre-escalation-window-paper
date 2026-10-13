@@ -193,10 +193,15 @@ def _fix_table(fig) -> Bbox | None:
     H = fig.get_figheight() * fig.dpi
     tb = ax.tables[0].get_window_extent(r)
     t = _footer(fig)
+    _wrap_footer(fig)                       # same text object; wraps long footers to the canvas
     t.set_va("top"); t.set_position((0.01, tb.y0 / H - 0.012))
     fb = t.get_window_extent(r)
     y0_in = max(0.0, (fb.y0 - 0.5 * fig.dpi * 0.25) / fig.dpi)
-    return Bbox([[0, y0_in], [fig.get_figwidth(), fig.get_figheight()]])
+    y1_in = fig.get_figheight()
+    title = ax.title
+    if title.get_text():                      # crop the empty band above the title
+        y1_in = min(y1_in, (title.get_window_extent(r).y1 + 0.25 * fig.dpi) / fig.dpi)
+    return Bbox([[0, y0_in], [fig.get_figwidth(), y1_in]])
 
 
 PALETTE_LEGEND_FS = DARK_PALETTE["legend_fs"]
@@ -225,7 +230,7 @@ def _fix(fig):
         _fix_timeline(fig)
     else:
         top = {"Does the window survive": 0.93, "Latency vs. precision": 0.92,
-               "Where does the pre-escalation window": 0.93}
+               "Where does the pre-escalation window": 0.93, "Self-clearing runs": 0.93}
         rect_top = next((v for k, v in top.items() if key.startswith(k)), None)
         if key.startswith(("Pre-escalation window by scenario", "Like-for-like pre-escalation window")):
             rect_top = 1.0
