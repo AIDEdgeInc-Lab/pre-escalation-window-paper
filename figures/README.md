@@ -14,7 +14,7 @@ from the corrected-engine files, with these differences from the published set:
 
 `article/figures/*.png` (fig06-fig16) are the previous-model figures. They are produced by `python replot_dark.py` (which wraps `replot.py`), so
 the generator is in this repository. Corrected-engine versions of the figures that have one are in `article/figures/corrected/`
-(`python replot_dark.py --data data/corrected --out <dir>`). Figures 14 and 16 have no corrected counterpart (see above). Re-running the generator on `data/`
+(`python replot_dark.py --data data/corrected --out <dir>`). Figure 14 now has a corrected counterpart (`fig14-residual-diagnosis.png`, two runs, from `data/corrected/sensitivity_residual_trace.csv`); the body's Figure 14 stays as the previous-model figure and is tagged PREVIOUS MODEL. Figure 16 has no corrected counterpart (the exposure model uses the original lead definition) and is tagged PREVIOUS MODEL. Re-running the generator on `data/`
 reproduces the published figures in content but not pixel-for-pixel (matplotlib/font versions differ). The interactive demo data is built by tooling not in this repository and still shows the previous model version.
 
 ## Colour roles (dark article figures; defined once in `replot_dark.py`, as roles of `replot.PALETTE`)

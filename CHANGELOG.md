@@ -1,5 +1,12 @@
 # Changelog
 
+## Completion pass: Figures 5 and 14, claim and link checks, CI (content version stays 1.1)
+
+- Figure 5 (corrected set): metrics that do not apply to a domain show "—" instead of `nan`; the figure is cropped to the table, with hairline borders and a wrapped footer. Published-data output is unchanged (pixel-identical to the published PNGs).
+- Figure 14: `data/corrected/sensitivity_residual_trace.csv` added (corrected engine `58ce16a`, engine's own `diagnose_residual` on its residual cases; sha256 in `PROVENANCE.json`, verified by `check_claims.py`). Under the corrected engine two self-clearing runs remain (`mw_rain_cell` seed 10, `leo_low_elevation` seed 1), not three. Added to the article as Figures C7 (coverage table) and C8 (residuals). The body's Figures 14 and 16 are kept and tagged PREVIOUS MODEL; nothing is replaced.
+- `check_links.py` (internal links and assets; external links reported separately) and `.github/workflows/checks.yml` (runs `check_claims.py` and `check_links.py`; no secrets, no deployment).
+- ITU-R P.838-3 / P.530-19: still NOT VERIFIED against the official recommendations (`itu.int` was unreachable from the build environment).
+
 ## Dark figures without pale fills; one alignment system for the article (presentation only; content version stays 1.1)
 
 - Figures 9, 11 and 13 (and 8, 12 where they share the roles): the conventional / pooled series are a dark slate `#6E7883` instead of a light grey, the degenerate comparator is a deep-navy hatched box with a thin light edge instead of a near-white one, and median lines are dark instead of white. Blue, gold and the data are unchanged.

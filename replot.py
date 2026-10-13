@@ -332,6 +332,13 @@ def fig_economic_exposure(df: pd.DataFrame, out: Path) -> Optional[Path]:
     return _finish(fig, out)
 
 
+def _cell(v) -> str:
+    """Table cell text; corrected set shows an em dash where a metric does not apply."""
+    if CORRECTED and pd.isna(v):
+        return "\u2014"
+    return str(v)
+
+
 def fig_coverage_derivation(coverage: pd.DataFrame, out: Path) -> Optional[Path]:
     if coverage.empty:
         return None
@@ -340,8 +347,10 @@ def fig_coverage_derivation(coverage: pd.DataFrame, out: Path) -> Optional[Path]
     area_km2 = float(area_row["microwave"].iloc[0]) if not area_row.empty else None
     fig, ax = plt.subplots(figsize=(11, 0.32 * len(rows) + 1.6))
     ax.axis("off")
+    if CORRECTED:
+        ax.set_position([0.01, 0.0, 0.98, 0.93])
     table = ax.table(
-        cellText=[[r["metric"], str(r["microwave"]), str(r["leo_ntn"])] for r in rows],
+        cellText=[[r["metric"], _cell(r["microwave"]), _cell(r["leo_ntn"])] for r in rows],
         colLabels=["metric", "microwave backhaul", "LEO / NTN"],
         loc="upper center",
         cellLoc="left",
@@ -356,7 +365,40 @@ def fig_coverage_derivation(coverage: pd.DataFrame, out: Path) -> Optional[Path]
     _footer(fig, "Coverage != capacity != availability. Every value is DERIVED from stated "
                  "assumptions; no fixed satellite-to-microwave ratio is asserted. "
                  "Regenerated from data/coverage_comparison.csv by replot.py.")
+    if CORRECTED:
+        return _finish_table(fig, ax, table, out)
     return _finish(fig, out)
+
+
+def _finish_table(fig, ax, table, out: Path) -> Path:
+    """Corrected set: hairline borders, figure cropped to the table, footer wrapped beneath it."""
+    for (row, _col), cell in table.get_celld().items():
+        cell.set_edgecolor(PALETTE["grid"])
+        cell.set_linewidth(0.5)
+        if row == 0:
+            cell.set_text_props(fontweight="bold")
+            cell.set_facecolor(PALETTE["grid"])
+    if THEME == "dark":                      # replot_dark restyles the table and lays out the footer itself
+        fig.savefig(out, dpi=200)
+        plt.close(fig)
+        return out
+    ax.set_in_layout(False)                  # the invisible axes must not set the crop
+    fig.canvas.draw()
+    tb = table.get_window_extent(fig.canvas.get_renderer())
+    _wrap_footer(fig)
+    foot = next(t for t in fig.texts if t.get_text())
+    foot.set_va("top")
+    foot.set_position((0.01, (tb.y0 - 0.12 * fig.dpi) / (fig.get_figheight() * fig.dpi)))
+    from matplotlib.transforms import Bbox
+    fig.canvas.draw()
+    r = fig.canvas.get_renderer()
+    fb = foot.get_window_extent(r)
+    tt = ax.title.get_window_extent(r)
+    pad = 0.25 * fig.dpi
+    box = Bbox([[0, (fb.y0 - pad) / fig.dpi], [fig.get_figwidth(), (tt.y1 + pad) / fig.dpi]])
+    fig.savefig(out, dpi=200, bbox_inches=box)
+    plt.close(fig)
+    return out
 
 
 def fig_timeline(row: pd.Series, out: Path) -> Optional[Path]:
@@ -532,7 +574,8 @@ def fig_residual_diagnosis(trace_df: pd.DataFrame, out: Path) -> Optional[Path]:
         ax.set_ylabel(col)
         _style(ax)
     axes[-1].set_xlabel("operational time (min)")
-    fig.suptitle("The three self-clearing runs on which the decision layer escalated unnecessarily",
+    fig.suptitle("Self-clearing runs on which the decision layer escalated unnecessarily"
+                 if CORRECTED else "The three self-clearing runs on which the decision layer escalated unnecessarily",
                  fontsize=12, x=0.01, ha="left")
     _footer(fig, "Vertical line = the step at which the layer first escalated or recommended action. "
                  "See docs/LIMITATIONS.md for the diagnosis of each. Regenerated from "

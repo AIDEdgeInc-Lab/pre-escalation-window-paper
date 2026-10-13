@@ -35,6 +35,7 @@
     "coverage_comparison.csv": "f8199a8dae9e5f604ff7397f04010a6452b0675c1d9655e4b999402fbcfe98b3",
     "runs.csv": "38f9d0edf84e060eb7c9533457d66827d1c077ef4b9afcf68d752e371e046fcf",
     "sensitivity_comparator.csv": "4a1bbdc8a688a6814b2061e1fc3756d175fdcb7bee587bffb441ff48b6710da9",
+    "sensitivity_residual_trace.csv": "4acbc6d9edc2110c23f1fd8d87411b09cbd6d0e7325d9c284b73a6fd90776506",
     "sensitivity_severity.csv": "f11211e88dace4bb66328e3c41877ef62db31add69f90c08a042b066eb96c59a",
     "sensitivity_warmup.csv": "d4ea9322d678fae45428f38a375226ce47e89a7df2afa9232ee689bd5a4eb86c",
     "summary.csv": "4e51cfb543bda1252d552cce9e2d42eb7a1b48b7eb3153ba55f9cd1f1a1c5be0"
@@ -52,5 +53,6 @@
     },
     "figure_generation": "python replot.py --data data/corrected --out figures/corrected ; python replot_dark.py --data data/corrected --out <dir> (article variants)",
     "claim_check": "python check_claims.py"
-  }
+  },
+  "residual_trace": "sensitivity_residual_trace.csv was produced from the corrected engine (58ce16a) by the engine's own diagnose_residual() on RESIDUAL_CASES (mw_rain_cell seed 10; leo_low_elevation seed 1), read-only. Same columns as the published data/sensitivity_residual_trace.csv. Added after the 1.1 data release; the six earlier file hashes are unchanged."
 }

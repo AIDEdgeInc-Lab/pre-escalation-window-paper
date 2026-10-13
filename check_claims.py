@@ -39,5 +39,9 @@ sc = r[r.gt_self_clearing.astype(bool)]
 check("self-clearing runs", len(sc), 90)
 v = r["verified_first"]
 check("first recommendation: consistent / inconsistent / unresolved", (int((v == True).sum()), int((v == False).sum()), int(r.verify_outcome_first.eq("SUPERSEDED").sum())), (266, 4, 37))
+tr = pd.read_csv(D / "sensitivity_residual_trace.csv")
+check("residual trace cases", sorted(tr.groupby(["scenario", "seed"]).size().index.tolist()), [("leo_low_elevation", 1), ("mw_rain_cell", 10)])
+first = {k: int(g[g.action.isin(["ESCALATE", "RECOMMEND_ACTION"])].t_min.iloc[0]) for k, g in tr.groupby("scenario")}
+check("residual first escalation (min)", first, {"leo_low_elevation": 175, "mw_rain_cell": 174})
 print("\nALL PASSED" if not fails else f"\n{len(fails)} FAILED: {fails}")
 sys.exit(1 if fails else 0)
