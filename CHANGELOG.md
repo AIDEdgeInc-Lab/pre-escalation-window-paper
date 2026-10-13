@@ -1,5 +1,18 @@
 # Changelog
 
+## Figure design correction: one palette definition, explicit roles (presentation only; content version stays 1.1)
+
+- `replot.py` palette rewritten as semantic roles (`series_leo`, `series_mw`, `arm_*`, `pooled`, `special`, `reference`, `event_*`, ...), one meaning per key, no `.get(..., fallback)` lookups; `replot_dark.py` replaces values only. The duplicated and overloaded keys introduced by the previous palette change (`accent`, `bad`, `warn`, `decision` reused for unrelated meanings; a global colour cycle plus a per-domain cycle) are removed. Light-theme output from the published data is pixel-identical.
+- Blue = LEO/NTN (and the decision layer in LEO/NTN scenarios), gold = microwave (and the decision layer in microwave scenarios), neutral = conventional/pooled/reference, near-white + hatch = the degenerate comparator. Gold no longer has a second meaning.
+- Severity chart: one hue per panel, scenarios told apart by line style and marker (no shade families). Escalation-quality chart: the legend sits above the plot and names all three bar colours. Timeline figures: labels staggered on four rows so clustered events no longer overprint. Legends and footers larger.
+- Phones: figures keep a legible 1100 px width and pan inside their own box (the page never scrolls sideways) instead of being squeezed to ~350 px; tapping opens the full-resolution file.
+
+## Light corrected figures follow the same system (presentation only; content version stays 1.1)
+
+- `replot.LIGHT_BRAND`: the corrected-set light figures (`figures/corrected/`) use the same semantic roles as the dark theme in white-background tones (blue `#2A68A8`, AID Edge deep gold `#8F6A2D`, grey `#5B6772`, near-black + hatch for the degenerate comparator). Selected by theme (`replot.THEME`), so figures from the published `data/` are unchanged and remain pixel-identical to the published PNGs.
+- Footer text in the corrected set is wrapped to the canvas and the plot area keeps clear of it (`_finish`); the escalation-quality legend sits above the plot in both themes; timeline labels are staggered, masked against the stems and de-overlapped in both themes, and the pale "fault onset" mark is visible on white.
+- Figure 09 (cross-domain) needed no change.
+
 ## Blue-and-gold figure palette (presentation only; content version stays 1.1)
 
 - One colour rule for the article figures: brand blue `#68A9E0` = LEO/NTN series (and the decision-layer arm where arms are compared); gold `#C6A15B` = microwave series and the highlighted "degenerate" comparator; neutrals = conventional arm, pooled comparator configurations and reference lines. Colour separates series; it does not encode better or worse. Box fills are more opaque so gold reads as gold on the dark plate.

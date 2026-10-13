@@ -48,28 +48,23 @@ BODY = "#B3BFCA"       # table body / strong labels
 MUTED = "#AAB8C2"      # tick + axis labels
 FAINT = "#8794A0"      # footers, whiskers, de-emphasised marks
 
-# Colour roles (one rule for the whole article):
-#   brand blue  = LEO/NTN series, and the decision-layer arm where arms are compared
-#   gold        = microwave series (second series), and the highlighted "degenerate" comparator
-#   neutral     = conventional arm, pooled comparator configurations, reference lines
-# Colour separates series only; it never encodes better/worse. The two roles of gold sit in different figures
-# (domain figures vs comparator figures) and every caption says which is meant.
+# Colour roles for the dark theme (keys are replot.PALETTE's semantic roles; one meaning each):
+#   brand blue  #68A9E0 = LEO/NTN series, and the decision layer in LEO/NTN scenarios
+#   gold        #C6A15B = microwave series, and the decision layer in microwave scenarios
+#   neutral             = conventional monitoring, pooled comparator configurations, reference lines, chart furniture
+#   near-white + hatch  = the one highlighted special case (the degenerate comparator), and the median line
+# Colour separates series only; it never encodes better or worse. No other accent colour is used.
+BLUE, GOLD, NEUTRAL, WHITE = "#68A9E0", "#C6A15B", "#AEBBC5", "#E6EDF3"
 DARK_PALETTE = {
-    "conventional": "#AEBBC5",
-    "decision": "#68A9E0",   # brand blue
-    "accent": "#C6A15B",     # AID Edge gold: microwave series, timeline markers
-    "warn": "#C6A15B",       # ticket marker
-    "bad": "#E6EDF3",        # service-impact marker (neutral highlight; gold and blue already carry roles)
-    "zero": "#8794A0",       # zero-reference lines
-    "pooled": "#AEBBC5",     # pooled comparator configurations (no domain split)
-    "degenerate": "#C6A15B", # the degenerate comparator, highlighted
-    "grid": "#1B252C",
-    "median": "#E6EDF3",
-    "footer": "#A3B0BB",
-    "box_alpha": 0.85,
-    # fig 15: scenarios inside one panel share the panel's domain hue (blue family for LEO/NTN, gold family for microwave)
-    "scenario_cycle": {"leo_ntn": ["#68A9E0", "#9CC8EE", "#4B86BC", "#C9DDF0", "#8AA9C4"],
-                       "microwave": ["#C6A15B", "#DDBF85", "#9E7E3F", "#EBD9B0", "#B8A57F"]},
+    "series_leo": BLUE, "series_mw": GOLD,
+    "arm_conventional": NEUTRAL, "arm_decision_leo": BLUE, "arm_decision_mw": GOLD,
+    "pooled": NEUTRAL, "special": "#F2F5F7", "special_hatch": "///",
+    "reference": FAINT, "grid": "#1B252C", "median": WHITE, "footer": "#A3B0BB",
+    "box_alpha": 0.85, "legend_fs": 10, "legend_fs_small": 9, "scenario_lines": "domain",
+    "event_onset": FAINT, "event_detect": WHITE, "event_actionable_leo": BLUE, "event_actionable_mw": GOLD,
+    "event_escalate_leo": BLUE, "event_escalate_mw": GOLD, "event_ticket": FAINT, "event_impact": WHITE,
+    "trace": BLUE, "marginal": WHITE,
+    "timeline_levels": [0.45, -0.45, 1.25, -1.25], "timeline_height": 5.0,
 }
 
 GEIST_FILES = ["Geist-Regular.ttf", "Geist-Medium.ttf", "Geist-SemiBold.ttf"]
@@ -101,12 +96,8 @@ def _fonts(geist_dir: str | None) -> str | None:
 
 def _apply_theme(family: str | None) -> None:
     replot.PALETTE.update(DARK_PALETTE)
-    from cycler import cycler
+    replot.THEME = "dark"
     rc = {
-        # Multi-scenario line charts (fig 15): brand blues, AID Edge gold and neutrals, told apart by line style as well as
-        # colour; replaces matplotlib's default saturated blue/orange/green/red/purple cycle.
-        "axes.prop_cycle": (cycler(color=["#99C6F3", "#5F98D1", "#C6A15B", "#DCE4EB", "#8794A0"])
-                            + cycler(linestyle=["-", "--", "-.", ":", "-"])),
         "figure.facecolor": PLATE, "savefig.facecolor": PLATE, "axes.facecolor": PANEL,
         "text.color": TEXT, "axes.labelcolor": MUTED, "axes.edgecolor": BORDER,
         "xtick.color": MUTED, "ytick.color": MUTED,
@@ -208,12 +199,19 @@ def _fix_table(fig) -> Bbox | None:
     return Bbox([[0, y0_in], [fig.get_figwidth(), fig.get_figheight()]])
 
 
+PALETTE_LEGEND_FS = DARK_PALETTE["legend_fs"]
+
+
 def _fix_escalation_legend(fig):
     top, bottom = fig.axes[0], fig.axes[1]
-    handles, labels = top.get_legend_handles_labels()
-    if top.get_legend():
-        top.get_legend().remove()
-    bottom.legend(handles, labels, loc="upper center", ncol=2, frameon=False, fontsize=9)
+    legend = top.get_legend()
+    if legend is None:
+        return
+    handles = list(legend.legend_handles)
+    labels = [t.get_text() for t in legend.get_texts()]
+    legend.remove()
+    top.legend(handles, labels, loc="lower right", bbox_to_anchor=(1.0, 1.02), ncol=len(handles), frameon=False,
+               fontsize=PALETTE_LEGEND_FS)          # above the plot area, clear of the bars
 
 
 def _fix(fig):
