@@ -1,5 +1,10 @@
 # Changelog
 
+## Dark figures without pale fills; one alignment system for the article (presentation only; content version stays 1.1)
+
+- Figures 9, 11 and 13 (and 8, 12 where they share the roles): the conventional / pooled series are a dark slate `#6E7883` instead of a light grey, the degenerate comparator is a deep-navy hatched box with a thin light edge instead of a near-white one, and median lines are dark instead of white. Blue, gold and the data are unchanged.
+- Article layout: two shared edges. Prose, notices, lists, quotes, the lede and captions end at one reading edge (680 px; `ch` units gave three different right edges because they scale with each element's font size); figures, the contents block and tables span the container, ending at the same right edge as the header. Figures are now the full container width (1104 px instead of 1000 px). Prose stays left-aligned: justified text without reliable hyphenation opens wide word gaps.
+
 ## Figure design correction: one palette definition, explicit roles (presentation only; content version stays 1.1)
 
 - `replot.py` palette rewritten as semantic roles (`series_leo`, `series_mw`, `arm_*`, `pooled`, `special`, `reference`, `event_*`, ...), one meaning per key, no `.get(..., fallback)` lookups; `replot_dark.py` replaces values only. The duplicated and overloaded keys introduced by the previous palette change (`accent`, `bad`, `warn`, `decision` reused for unrelated meanings; a global colour cycle plus a per-domain cycle) are removed. Light-theme output from the published data is pixel-identical.

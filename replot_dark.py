@@ -54,16 +54,16 @@ FAINT = "#8794A0"      # footers, whiskers, de-emphasised marks
 #   neutral             = conventional monitoring, pooled comparator configurations, reference lines, chart furniture
 #   near-white + hatch  = the one highlighted special case (the degenerate comparator), and the median line
 # Colour separates series only; it never encodes better or worse. No other accent colour is used.
-BLUE, GOLD, NEUTRAL, WHITE = "#68A9E0", "#C6A15B", "#AEBBC5", "#E6EDF3"
+BLUE, GOLD, NEUTRAL, WHITE = "#68A9E0", "#C6A15B", "#6E7883", "#E6EDF3"   # NEUTRAL: a dark slate, not a light grey (no large pale fills)
 DARK_PALETTE = {
     "series_leo": BLUE, "series_mw": GOLD,
     "arm_conventional": NEUTRAL, "arm_decision_leo": BLUE, "arm_decision_mw": GOLD,
-    "pooled": NEUTRAL, "special": "#F2F5F7", "special_hatch": "///",
-    "reference": FAINT, "grid": "#1B252C", "median": WHITE, "footer": "#A3B0BB",
+    "pooled": NEUTRAL, "special": "#17293B", "special_edge": "#8EA4BA", "special_hatch": "///",
+    "reference": FAINT, "grid": "#1B252C", "median": "#0B151B", "footer": "#A3B0BB",
     "box_alpha": 0.85, "legend_fs": 10, "legend_fs_small": 9, "scenario_lines": "domain",
-    "event_onset": FAINT, "event_detect": WHITE, "event_actionable_leo": BLUE, "event_actionable_mw": GOLD,
-    "event_escalate_leo": BLUE, "event_escalate_mw": GOLD, "event_ticket": FAINT, "event_impact": WHITE,
-    "trace": BLUE, "marginal": WHITE,
+    "event_onset": FAINT, "event_detect": "#B8C7D6", "event_actionable_leo": BLUE, "event_actionable_mw": GOLD,
+    "event_escalate_leo": BLUE, "event_escalate_mw": GOLD, "event_ticket": FAINT, "event_impact": "#B8C7D6",
+    "trace": BLUE, "marginal": "#B8C7D6",
     "timeline_levels": [0.45, -0.45, 1.25, -1.25], "timeline_height": 5.0,
 }
 

@@ -209,3 +209,19 @@ figure.fig a.fig-open:hover img { border-color: var(--gold-line); }
   figure.fig a.fig-open img { width: 1100px; max-width: none; height: auto; }
   figure.fig a.fig-open::after { content: "Swipe to pan \00b7 tap to open full resolution"; display: block; position: sticky; left: 0; padding: 8px 0 0; font-size: 12px; color: var(--ui-text-3); }
 }
+
+/* ==== Alignment system (final pass) ======================================================================
+ * Two edges only, both shared with the site header: the left edge of the container, and either
+ *   - the reading edge  (--measure: 680px)  for prose, notices, lists, quotes and captions, or
+ *   - the container's right edge             for figures, the contents block and tables.
+ * px, not ch: ch scales with each element's font size, which gave notices, captions and body text three different right edges.
+ * Prose stays left-aligned (ragged right): justified text without reliable hyphenation opens wide word gaps in a 70-character column.
+ * Vertical rhythm: 16 paragraph, 24 heading -> content, 48 figure block, 56 / 88 section breaks. */
+html[data-brand='aidedge'] .paper-shell { --measure: 680px; }
+html[data-brand='aidedge'] .paper-shell .paper-body p, html[data-brand='aidedge'] .paper-shell .paper-body li,
+html[data-brand='aidedge'] .paper-shell .paper-body ul, html[data-brand='aidedge'] .paper-shell .paper-body ol,
+html[data-brand='aidedge'] .paper-shell .paper-body blockquote, html[data-brand='aidedge'] .paper-shell p.doc-banner,
+html[data-brand='aidedge'] .paper-shell .callout, html[data-brand='aidedge'] .paper-shell .paper-header .paper-lede { max-width: var(--measure); }
+figure.fig { max-width: none; }
+figure.fig figcaption { max-width: var(--measure); }
+.paper-body table { max-width: 100%; }
