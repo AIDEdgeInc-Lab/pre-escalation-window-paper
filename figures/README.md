@@ -23,7 +23,7 @@ reproduces the published figures in content but not pixel-for-pixel (matplotlib/
 |---|---|---|
 | `series_leo`, `arm_decision_leo` | brand blue `#68A9E0` | LEO/NTN series; the decision layer in LEO/NTN scenarios |
 | `series_mw`, `arm_decision_mw` | AID Edge gold `#C6A15B` | microwave series; the decision layer in microwave scenarios |
-| `arm_conventional`, `pooled`, `reference`, grid, footers | neutral greys | conventional monitoring; comparator configurations pooled across domains; zero lines; chart furniture |
-| `special` (+ hatch), `median`, `event_detect`, `event_impact` | near-white | the highlighted degenerate comparator; median lines; first-detectable and service-impact timeline marks |
+| `arm_conventional`, `pooled`, `reference`, grid, footers | dark slate `#6E7883` and greys | conventional monitoring; comparator configurations pooled across domains; zero lines; chart furniture (no large pale fills on the dark plate) |
+| `special` (+ hatch), `median`, `event_*` | deep navy `#17293B` with a hatched `#8EA4BA` edge; dark median line | the highlighted degenerate comparator; median lines; timeline marks |
 
 Colour separates series; it never encodes better or worse. The light theme has two palettes. Figures regenerated from the published `data/` keep the original values (pixel-identical to the published PNGs). The corrected-set light figures (`figures/corrected/`) use the same roles in tones that hold up on white (`replot.LIGHT_BRAND`): blue `#2A68A8` (5.8:1 contrast on white), AID Edge deep gold `#8F6A2D` (4.9:1), grey `#5B6772`, near-black `#0B1620` + hatch for the degenerate comparator.

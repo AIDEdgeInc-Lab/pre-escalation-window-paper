@@ -34,6 +34,7 @@ PALETTE = {
     # -- pooled comparator configurations (no domain split) and the one highlighted special case (degenerate comparator)
     "pooled": "#2E8FBB",
     "special": "#B2453D",
+    "special_edge": "#000000",
     "special_hatch": "",              # fill pattern for the special case (the dark theme uses one, so it differs from pooled boxes)
     # -- reference marks and chart furniture
     "reference": "#B2453D",           # zero-reference lines
@@ -65,7 +66,7 @@ PALETTE = {
 LIGHT_BRAND = {
     "series_leo": "#2A68A8", "series_mw": "#8F6A2D",
     "arm_conventional": "#5B6772", "arm_decision_leo": "#2A68A8", "arm_decision_mw": "#8F6A2D",
-    "pooled": "#5B6772", "special": "#0B1620", "special_hatch": "///",
+    "pooled": "#5B6772", "special": "#0B1620", "special_edge": "#0B1620", "special_hatch": "///",
     "reference": "#5B6772", "median": "#0B1620", "box_alpha": 0.85, "legend_fs": 9, "legend_fs_small": 8,
     "scenario_lines": "domain", "timeline_levels": [0.45, -0.45, 1.25, -1.25], "timeline_height": 5.0,
     "event_onset": "#5B6772", "event_detect": "#0B1620", "event_actionable_leo": "#2A68A8", "event_actionable_mw": "#8F6A2D",
@@ -486,6 +487,7 @@ def fig_comparator_sensitivity(df: pd.DataFrame, out: Path) -> Optional[Path]:
             patch.set_alpha(PALETTE["box_alpha"])
             if lab == "degenerate":
                 patch.set_hatch(PALETTE["special_hatch"])
+                patch.set_edgecolor(PALETTE["special_edge"])
         for med in bp["medians"]:
             med.set_color(PALETTE["median"])
         ax.axhline(0, color=PALETTE["reference"], linewidth=1, linestyle=":")
