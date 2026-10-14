@@ -7,7 +7,7 @@
       <path d="M0,0 L10,5 L0,10 z" fill="#8794A0"/>
     </marker>
     <marker id="a5a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#C6A15B"/>
+      <path d="M0,0 L10,5 L0,10 z" fill="#C2AA73"/>
     </marker>
   </defs>
   <rect width="1000" height="560" fill="#081116"/>
@@ -30,8 +30,8 @@
   </g>
 
   <!-- read-only boundary -->
-  <line x1="222" y1="66" x2="222" y2="416" stroke="#C6A15B" stroke-width="1.4" stroke-dasharray="6 5" opacity="0.8"/>
-  <text x="232" y="434" font-size="11" fill="#C6A15B">READ-ONLY BOUNDARY — no code path writes to a network</text>
+  <line x1="222" y1="66" x2="222" y2="416" stroke="#C2AA73" stroke-width="1.4" stroke-dasharray="6 5" opacity="0.8"/>
+  <text x="232" y="434" font-size="11" fill="#C2AA73">READ-ONLY BOUNDARY — no code path writes to a network</text>
   <g stroke="#8794A0" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#a5g)">
     <line x1="196" y1="93" x2="248" y2="120"/>
     <line x1="196" y1="141" x2="248" y2="128"/>
@@ -77,13 +77,13 @@
   <g fill="rgba(122,174,227,0.10)" stroke="#5F98D1">
     <rect x="252" y="230" width="168" height="64" rx="6"/>
   </g>
-  <rect x="440" y="230" width="168" height="64" rx="6" fill="rgba(198,161,91,0.12)" stroke="#C6A15B"/>
+  <rect x="440" y="230" width="168" height="64" rx="6" fill="rgba(194,170,115,0.12)" stroke="#C2AA73"/>
   <g fill="rgba(122,174,227,0.10)" stroke="#5F98D1">
     <rect x="816" y="230" width="160" height="64" rx="6"/>
   </g>
   <g font-size="12.5" fill="#F5F7FA">
     <text x="266" y="254" font-size="11.6">ESTIMATE DECISION RISK</text>
-    <text x="454" y="254" fill="#D8BC84">DECISION GATE</text>
+    <text x="454" y="254" fill="#C2AA73">DECISION GATE</text>
     <text x="830" y="254">VERIFY</text>
   </g>
   <g font-size="10" fill="#AAB8C2">
@@ -109,7 +109,7 @@
     <text x="642" y="274">ESCALATE</text>
     <text x="642" y="310">RECOMMEND ACTION</text>
   </g>
-  <g stroke="#C6A15B" stroke-width="1.4" marker-end="url(#a5a)">
+  <g stroke="#C2AA73" stroke-width="1.4" marker-end="url(#a5a)">
     <line x1="610" y1="248" x2="624" y2="233"/>
     <line x1="610" y1="262" x2="624" y2="269"/>
     <line x1="610" y1="276" x2="624" y2="305"/>
@@ -117,10 +117,10 @@
   <line x1="798" y1="262" x2="812" y2="262" stroke="#7AAEE3" stroke-width="1.6" marker-end="url(#a5)"/>
 
   <!-- human -->
-  <rect x="628" y="342" width="348" height="48" rx="6" fill="rgba(198,161,91,0.08)" stroke="rgba(198,161,91,0.45)"/>
-  <text x="642" y="362" font-size="12" fill="#D8BC84">HUMAN OPERATOR — every output carries its audit trail</text>
+  <rect x="628" y="342" width="348" height="48" rx="6" fill="rgba(194,170,115,0.08)" stroke="rgba(194,170,115,0.45)"/>
+  <text x="642" y="362" font-size="12" fill="#C2AA73">HUMAN OPERATOR — every output carries its audit trail</text>
   <text x="642" y="380" font-size="10.5" fill="#AAB8C2">A recommendation a VP cannot audit is one a VP cannot sign.</text>
-  <line x1="712" y1="322" x2="712" y2="338" stroke="#C6A15B" stroke-width="1.4" marker-end="url(#a5a)"/>
+  <line x1="712" y1="322" x2="712" y2="338" stroke="#C2AA73" stroke-width="1.4" marker-end="url(#a5a)"/>
 
   <!-- feedback -->
   <path d="M976 262 L992 262 L992 420 L336 420 L336 300" fill="none" stroke="#8794A0" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#a5g)"/>

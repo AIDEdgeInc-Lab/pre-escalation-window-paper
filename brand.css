@@ -6,7 +6,7 @@
  *   Velorona   bg #05090C, elevated #081116, accent #5F98D1, secondary #7AAEE3,
  *              strong #99C6F3, deep #224B75, text #F5F7FA, muted #AAB8C2, faint #7C8790,
  *              neutral slate border rgba(96,108,118,.22), glow-wash rgba(90,165,220,.14)
- *   AID Edge   gold #C6A15B, light gold #D8BC84, deep gold #8F6A2D
+ *   AID Edge   gold #C2AA73, deep gold #8F6A2D
  *   Type       Geist Sans (400/500/600) + Geist Mono, self-hosted (SIL OFL, see /fonts)
  *
  * Load AFTER tokens.css (a generated, vendored file that must not be hand-edited). This file
@@ -56,11 +56,11 @@
   --blue-deep: #224B75;
 
   /* AID Edge gold (replaces the orange amber-300/400) */
-  --gold: #C6A15B;
-  --gold-light: #D8BC84;
+  --gold: #C2AA73;
+  --gold-light: #C2AA73;  /* one gold: the light tint is unified with --gold */
   --gold-deep: #8F6A2D;
-  --gold-soft: rgba(198, 161, 91, 0.10);
-  --gold-line: rgba(198, 161, 91, 0.32);
+  --gold-soft: rgba(194, 170, 115, 0.10);
+  --gold-line: rgba(194, 170, 115, 0.32);
   --amber-300: var(--gold-light);
   --amber-400: var(--gold);
 

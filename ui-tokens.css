@@ -93,7 +93,7 @@
 
 /* One accent per property: the only brand difference. Accent is for eyebrows, primary CTA, active nav,
    key links, icons and the edge sweep. Never body text or large fills. */
-:root[data-brand='aidedge']  { --ui-accent: #C7A96B; }
+:root[data-brand='aidedge']  { --ui-accent: #C2AA73; }
 :root[data-brand='velorona'] { --ui-accent: #6A94D4; /* softened from #4B8DFF (final polish) */ }
 :root[data-brand='map']      { --ui-accent: #2EC4D6; }
 

@@ -7,14 +7,14 @@
       <path d="M0,0 L10,5 L0,10 z" fill="#8794A0"/>
     </marker>
     <marker id="a2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#C6A15B"/>
+      <path d="M0,0 L10,5 L0,10 z" fill="#C2AA73"/>
     </marker>
   </defs>
   <rect width="1000" height="760" fill="#081116"/>
 
   <text x="30" y="34" font-size="14" fill="#F5F7FA" font-weight="600">Terrestrial microwave — fixed infrastructure, changing propagation</text>
   <g font-size="11" letter-spacing="0.06em">
-    <text x="140" y="62" fill="#C6A15B" text-anchor="middle">DECISION EVIDENCE</text>
+    <text x="140" y="62" fill="#C2AA73" text-anchor="middle">DECISION EVIDENCE</text>
     <text x="500" y="62" fill="#7AAEE3" text-anchor="middle">PHYSICAL MECHANISM</text>
     <text x="855" y="62" fill="#AAB8C2" text-anchor="middle">WHAT MONITORING OBSERVES</text>
   </g>
@@ -100,12 +100,12 @@
 
   <!-- decision column -->
   <g>
-    <g fill="rgba(198,161,91,0.08)" stroke="rgba(198,161,91,0.45)">
+    <g fill="rgba(194,170,115,0.08)" stroke="rgba(194,170,115,0.45)">
       <rect x="25" y="274" width="255" height="60" rx="6"/>
       <rect x="25" y="354" width="255" height="60" rx="6"/>
       <rect x="25" y="434" width="255" height="76" rx="6"/>
     </g>
-    <g font-size="12" fill="#D8BC84">
+    <g font-size="12" fill="#C2AA73">
       <text x="39" y="294">Symmetric across both directions?</text>
       <text x="39" y="374">Do peer hops in the same weather agree?</text>
       <text x="39" y="454">Independent environmental corroboration?</text>
@@ -119,7 +119,7 @@
       <text x="39" y="485">clear sky ⇒ look at the radio</text>
       <text x="39" y="499">— evidence a threshold never uses</text>
     </g>
-    <g stroke="#C6A15B" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#a2a)">
+    <g stroke="#C2AA73" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#a2a)">
       <line x1="336" y1="296" x2="284" y2="296"/>
       <line x1="336" y1="360" x2="284" y2="376"/>
       <line x1="336" y1="424" x2="284" y2="456"/>
