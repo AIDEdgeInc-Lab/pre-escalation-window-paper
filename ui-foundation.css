@@ -1,6 +1,6 @@
 /* AID Edge Research - UI foundation layer (docs/ui/BRIEF.md section 4).
    Loaded LAST on index, summary, method and article pages, after tokens.css / brand.css / page styles, and
-   keyed on <html data-brand="aidedge"> (AID Edge Research uses the AID Edge theme: gold #C7A96B).
+   keyed on <html data-brand="aidedge"> (AID Edge Research uses the AID Edge theme: gold #C2AA73).
    tokens.css and brand.css are NOT edited (vendored/generated); this file overrides them through selectors.
    DATA COLORS ARE NOT TOUCHED: chart/figure/plot colors, --cyan-*, --amber-*, --color-noc-* and the
    evidence/status tags keep their current values. Requires ui-tokens.css. */
@@ -138,6 +138,18 @@ html[data-brand='aidedge'] .paper-toc {
 html[data-brand='aidedge'] .links a, html[data-brand='aidedge'] .cards a { padding-top: var(--ui-space-5); padding-bottom: var(--ui-space-5); }
 html[data-brand='aidedge'] .cta { border-color: var(--ui-accent-line); }
 
+/* Notices: one box on every page, as wide as the text column it sits in (--measure exists only inside the article, so there it keeps the
+   prose measure; elsewhere the page's own reading column). Two tiers: .callout is a card (radius 16, card padding); .doc-banner and
+   .method-banner are compact inline banners (radius 8, 16/24 padding). The correction banner carries the gold rule on every page;
+   the method banner keeps its dashed border because it marks modelled data, not a correction. */
+html[data-brand='aidedge'] .callout,
+html[data-brand='aidedge'] .doc-banner,
+html[data-brand='aidedge'] .method-banner { box-sizing: border-box; max-width: var(--measure, none); margin-block: var(--ui-space-5); }
+html[data-brand='aidedge'] .doc-banner,
+html[data-brand='aidedge'] .method-banner { padding: var(--ui-space-4) var(--ui-space-5); border-radius: 8px; line-height: 1.55; }
+html[data-brand='aidedge'] .doc-banner { background: var(--ui-surface); border: 1px solid var(--ui-hairline); border-left: 2px solid var(--gold-line); }
+html[data-brand='aidedge'] .method-header h1 { line-height: 1.15; letter-spacing: -0.01em; }
+
 /* Eyebrow: 6px accent dot + mono label; dot aligns with the FIRST line. */
 html[data-brand='aidedge'] .eyebrow,
 html[data-brand='aidedge'] .paper-eyebrow,
@@ -200,6 +212,7 @@ html[data-brand='aidedge'] details[open] > summary { border-bottom: 0; margin-bo
 html[data-brand='aidedge'] details > *:not(summary) { padding-bottom: var(--ui-space-4); }
 
 @media (max-width: 639px) {
+  html[data-brand='aidedge'] .doc-banner, html[data-brand='aidedge'] .method-banner { padding: var(--ui-space-3) var(--ui-space-4); }
   html[data-brand='aidedge'] .callout,
   html[data-brand='aidedge'] .updates li,
   html[data-brand='aidedge'] .cta,
@@ -315,13 +328,14 @@ html[data-brand='aidedge'] { --site-header-h: 72px; }
 .site-header .brand-text { font-size: var(--ui-fs-h3); font-weight: var(--ui-weight-semibold); letter-spacing: -0.01em; color: var(--ui-text-1); text-decoration: none; white-space: nowrap; }
 .site-header .brand-text { display: inline-flex; gap: 0.28em; line-height: 1; }
 .site-header .brand-text .brand-accent { color: var(--ui-accent); }
-/* Brand lockup + parent-company cue: same structure and proportions as the Velorona Map header (brand-group, wordmark, parent-cue). */
+/* Brand lockup + parent-company cue: same structure and proportions as the Velorona Map header (brand-group, wordmark, parent-cue).
+   Cue text colour and divider use the Map header's exact values (#AAB8C2, rgba(96,108,118,0.4)); only the sweep accent is Research Lab gold. */
 .site-header .brand-group { display: flex; align-items: center; gap: 0.75rem; min-width: 0; }
-.site-header .parent-cue { font-size: 0.75rem; line-height: 1.3; color: var(--ui-text-3); text-decoration: none; padding-left: 0.75rem; border-left: 1px solid var(--ui-hairline-strong); transition: color 160ms var(--ui-ease); }
+.site-header .parent-cue { font-size: 0.75rem; line-height: 1.3; color: #AAB8C2; text-decoration: none; padding-left: 0.75rem; border-left: 1px solid rgba(96, 108, 118, 0.4); transition: color 160ms var(--ui-ease); }
 .site-header .parent-cue:hover, .site-header .parent-cue:focus-visible { color: var(--ui-text-1); text-decoration: underline; text-underline-offset: 3px; }
 /* Clickability cue (same recipe as the Map and velorona.ai headers): a slow accent light along a hairline under the label; background-position only. */
-.site-header .parent-cue-text { position: relative; display: inline-block; color: var(--ui-text-3); background: linear-gradient(100deg, transparent 0 42%, color-mix(in srgb, var(--ui-accent) 55%, white) 50%, transparent 58% 100%) 120% 0 / 260% 100% no-repeat; -webkit-background-clip: text; background-clip: text; animation: cue-text 9s ease-in-out infinite; }
-@supports (background-clip: text) { .site-header .parent-cue-text { -webkit-text-fill-color: transparent; background-color: var(--ui-text-3); } }
+.site-header .parent-cue-text { position: relative; display: inline-block; color: #AAB8C2; background: linear-gradient(100deg, transparent 0 42%, color-mix(in srgb, var(--ui-accent) 55%, white) 50%, transparent 58% 100%) 120% 0 / 260% 100% no-repeat; -webkit-background-clip: text; background-clip: text; animation: cue-text 9s ease-in-out infinite; }
+@supports (background-clip: text) { .site-header .parent-cue-text { -webkit-text-fill-color: transparent; background-color: #AAB8C2; } }
 .site-header .parent-cue-text::after { content: ''; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ui-accent) 85%, white), transparent) -60% 0 / 45% 100% no-repeat, color-mix(in srgb, var(--ui-accent) 28%, transparent); animation: cue-line 9s ease-in-out infinite; pointer-events: none; }
 @keyframes cue-line { 0% { background-position: -60% 0, 0 0; } 70%, 100% { background-position: 160% 0, 0 0; } }
 @keyframes cue-text { 0% { background-position: 120% 0; } 70%, 100% { background-position: -20% 0; } }
@@ -338,6 +352,9 @@ html[data-brand='aidedge'] { --site-header-h: 72px; }
 .site-header .nav-dropdown-trigger:hover, .site-header .has-dropdown.dropdown-open .nav-dropdown-trigger { color: var(--ui-text-1); }
 .site-header .nav-caret { width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid currentColor; }
 .site-header .has-dropdown { position: relative; }
+.site-header .nav-list ul > li > a { font-size: var(--ui-fs-small); font-weight: var(--ui-weight-medium); color: var(--ui-text-2); text-decoration: none; white-space: nowrap; transition: color 220ms var(--ui-ease); }
+.site-header .nav-list ul > li > a:hover { color: var(--ui-text-1); }
+.site-header .nav-list ul > li > a[aria-current='page'] { color: var(--ui-accent); }
 .site-header .nav-list .has-dropdown .dropdown-menu {
   display: none; list-style: none; flex-direction: column; gap: 0; margin: 0; padding: 0.5rem;
   position: absolute; top: calc(100% + 0.75rem); left: 0; min-width: 300px; max-width: 340px;
@@ -378,6 +395,7 @@ html[data-brand='aidedge'] .topbar { top: var(--site-header-h); z-index: 40; }
   .site-header .nav-list.nav-open { display: flex; }
   .site-header .nav-list ul { flex-direction: column; gap: 0; }
   .site-header .nav-list .nav-dropdown-trigger { display: flex; width: 100%; justify-content: space-between; padding: 0.85rem 0; border-bottom: 1px solid var(--ui-hairline); font-size: var(--ui-fs-body); color: var(--ui-text-1); }
+  .site-header .nav-list ul > li > a { display: block; padding: 0.85rem 0; border-bottom: 1px solid var(--ui-hairline); font-size: var(--ui-fs-body); color: var(--ui-text-1); }
   .site-header .nav-list .has-dropdown .dropdown-menu { position: static; min-width: 0; max-width: none; background: none; border: none; border-radius: 0; padding: 0; }
   .site-header .nav-list .dropdown-menu a { padding: 0.75rem 0 0.75rem 1rem; border-bottom: 1px solid var(--ui-hairline); border-radius: 0; }
   .site-header .nav-list .nav-cta { margin-top: var(--ui-space-4); align-self: stretch; }

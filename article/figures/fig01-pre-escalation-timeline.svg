@@ -46,7 +46,7 @@
     <text x="120" y="310" text-anchor="middle">physical onset</text>
     <text x="232" y="332" text-anchor="middle">first detectable</text>
     <text x="352" y="310" text-anchor="middle" fill="#99C6F3">layer actionable</text>
-    <text x="560" y="332" text-anchor="middle" fill="#C6A15B">conventional escalation</text>
+    <text x="560" y="332" text-anchor="middle" fill="#C2AA73">conventional escalation</text>
     <text x="640" y="310" text-anchor="middle">ticket</text>
     <text x="780" y="332" text-anchor="middle">service impact</text>
     <text x="900" y="310" text-anchor="middle">recovery</text>
