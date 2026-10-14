@@ -313,7 +313,20 @@ html[data-brand='aidedge'] { --site-header-h: 72px; }
 .site-header.is-scrolled { border-bottom-color: var(--ui-hairline); }
 .site-header .nav-shell { display: flex; align-items: center; justify-content: space-between; gap: var(--ui-space-4); min-height: var(--site-header-h); }
 .site-header .brand-text { font-size: var(--ui-fs-h3); font-weight: var(--ui-weight-semibold); letter-spacing: -0.01em; color: var(--ui-text-1); text-decoration: none; white-space: nowrap; }
-.site-header .brand-text .brand-accent { color: var(--ui-accent); margin-left: 0.28em; }
+.site-header .brand-text { display: inline-flex; gap: 0.28em; line-height: 1; }
+.site-header .brand-text .brand-accent { color: var(--ui-accent); }
+/* Brand lockup + parent-company cue: same structure and proportions as the Velorona Map header (brand-group, wordmark, parent-cue). */
+.site-header .brand-group { display: flex; align-items: center; gap: 0.75rem; min-width: 0; }
+.site-header .parent-cue { font-size: 0.75rem; line-height: 1.3; color: var(--ui-text-3); text-decoration: none; padding-left: 0.75rem; border-left: 1px solid var(--ui-hairline-strong); transition: color 160ms var(--ui-ease); }
+.site-header .parent-cue:hover, .site-header .parent-cue:focus-visible { color: var(--ui-text-1); text-decoration: underline; text-underline-offset: 3px; }
+/* Clickability cue (same recipe as the Map and velorona.ai headers): a slow accent light along a hairline under the label; background-position only. */
+.site-header .parent-cue-text { position: relative; display: inline-block; color: var(--ui-text-3); background: linear-gradient(100deg, transparent 0 42%, color-mix(in srgb, var(--ui-accent) 55%, white) 50%, transparent 58% 100%) 120% 0 / 260% 100% no-repeat; -webkit-background-clip: text; background-clip: text; animation: cue-text 9s ease-in-out infinite; }
+@supports (background-clip: text) { .site-header .parent-cue-text { -webkit-text-fill-color: transparent; background-color: var(--ui-text-3); } }
+.site-header .parent-cue-text::after { content: ''; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ui-accent) 85%, white), transparent) -60% 0 / 45% 100% no-repeat, color-mix(in srgb, var(--ui-accent) 28%, transparent); animation: cue-line 9s ease-in-out infinite; pointer-events: none; }
+@keyframes cue-line { 0% { background-position: -60% 0, 0 0; } 70%, 100% { background-position: 160% 0, 0 0; } }
+@keyframes cue-text { 0% { background-position: 120% 0; } 70%, 100% { background-position: -20% 0; } }
+.site-header .parent-cue:hover .parent-cue-text, .site-header .parent-cue:focus-visible .parent-cue-text { -webkit-text-fill-color: var(--ui-text-1); background: none; }
+@media (prefers-reduced-motion: reduce) { .site-header .parent-cue-text { background: none; -webkit-text-fill-color: currentColor; animation: none; } .site-header .parent-cue-text::after { animation: none; } }
 .site-header .nav-right { display: flex; align-items: center; gap: var(--ui-space-4); }
 .site-header .nav-list { display: flex; align-items: center; gap: var(--ui-space-5); }
 .site-header .nav-list ul { list-style: none; display: flex; gap: var(--ui-space-5); margin: 0; padding: 0; }
@@ -409,7 +422,8 @@ html[data-brand='aidedge'] code { font-size: max(12px, 0.9em); }
   footer.site-footer .footer-col a, footer.site-footer .footer-legal a { display: inline-block; min-width: 44px; padding-block: 0.8rem; }
 }
 @media (max-width: 1023px) {
-  .site-header .brand-text { display: inline-flex; align-items: center; min-height: 44px; }
+  .site-header .brand-text { display: inline-flex; align-items: center; min-height: 44px; font-size: 1.125rem; }
+  .site-header .parent-cue { display: inline-flex; align-items: center; min-height: 44px; }
   .paper-nav a, .method-nav a, .topbar nav a, .topbar p a, footer.site-footer .footer-copyright a { display: inline-block; min-width: 44px; padding-block: 0.7rem; }
   html[data-brand='aidedge'] summary { display: flex; align-items: center; min-height: 44px; }
 }
