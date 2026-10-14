@@ -64,3 +64,5 @@ footer.site-footer .footer-legal a, footer.site-footer .footer-copyright a { col
 footer.site-footer .footer-col .channel-link:hover, footer.site-footer .footer-col .channel-link:focus-visible { color: var(--ui-text-1); text-decoration: none; }
 .footer-col .channel-link:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 1px; }
 @media (max-width: 1023px) { footer.site-footer .footer-col .channel-link { min-width: 44px; min-height: 44px; padding: 0; } }
+/* Phone: the Get in touch column sits alone on the last row of the two-column grid, so let it span the row; the four 44px icons then stay in one line. */
+@media (max-width: 639px) { .footer-cols > .footer-col:last-child { grid-column: 1 / -1; } }
