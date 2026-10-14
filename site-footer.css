@@ -57,3 +57,10 @@ footer.site-footer .footer-legal a, footer.site-footer .footer-copyright a { col
 .site-header .nav-cta:hover::after, .site-header .nav-cta:focus-visible::after, .page-cta .btn-primary:hover::after, .page-cta .btn-primary:focus-visible::after { opacity: 1; }
 @keyframes edge-travel { to { --edge-angle: 360deg; } }
 @media (prefers-reduced-motion: reduce) { .site-header .nav-cta::after, .page-cta .btn-primary::after { animation: none !important; opacity: 0; } }
+
+/* Official channel icons in the footer Get in touch column (same marks and sizes as ChannelIcons.astro on aidedgeinc.com). */
+.footer-col .channel-icons { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 0.15rem; margin: var(--ui-space-4) 0 0 -0.4rem; padding: 0; }
+.footer-col .channel-link { display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; padding: 0; border-radius: 999px; color: var(--ui-text-3); }
+footer.site-footer .footer-col .channel-link:hover, footer.site-footer .footer-col .channel-link:focus-visible { color: var(--ui-text-1); text-decoration: none; }
+.footer-col .channel-link:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 1px; }
+@media (max-width: 1023px) { footer.site-footer .footer-col .channel-link { min-width: 44px; min-height: 44px; padding: 0; } }
